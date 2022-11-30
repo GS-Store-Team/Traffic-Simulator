@@ -1,0 +1,24 @@
+.my__menu{
+    width: 400px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: cadetblue;
+
+    margin-left: auto;
+    margin-right: auto;
+    position: relative
+}
+
+.my__button{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: gold;
+    border-radius: 5px;
+    border: 0;
+    height: 30px;
+
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translate(10%, -50%)
+}
