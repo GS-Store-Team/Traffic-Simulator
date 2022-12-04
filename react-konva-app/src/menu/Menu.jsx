@@ -9,6 +9,12 @@ const Menu = (props) => {
                 className={classes.my__button}>
                 Add Building
             </button>
+
+            <button
+                onClick={props.addRoad}
+                className={classes.my__button}>
+                Add Road
+            </button>
         </div>
     );
 };

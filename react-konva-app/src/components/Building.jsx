@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {Circle, Rect, Group} from "react-konva";
+import {ceilPosition} from "./utils/Utils";
 const Building = (props) => {
 
     const building = props.building
 
     const [visible, setVisible] = useState(false);
-    const [stroke, setStroke] = useState(true);
+    const [stroke, setStroke] = useState(false);
 
     const drawArea = () => {
         setVisible(true);
@@ -33,10 +34,7 @@ const Building = (props) => {
                     y={building.y}
                     width={building.width}
                     height={building.height}
-                    fill={building.fill}
-                    strokeWidth={building.widthStroke}
-                    strokeEnabled={stroke}
-                    stroke={building.stroke}
+                    fill={stroke? building.enter: building.fill}
                     shadowBlur={building.shadowBlur}
                     onMouseEnter={fullSelect}
                     onMouseLeave={eraseStroke}
@@ -46,7 +44,7 @@ const Building = (props) => {
                         x={25}
                         y={25}
                         strokeWidth={1}
-                        stroke={"grey"}
+                        stroke={"black"}
                         radius={60}
                         visible={visible}
                         onMouseLeave={eraseArea}
@@ -69,12 +67,12 @@ const Building = (props) => {
                 />
 
     const group =   <Group
-                        draggable={true} >
+                        draggable={true}
+                        onDragMove={(e) => ceilPosition(e)}>
                         {area}
                         {exit}
                         {rect}
                     </Group>
-
     return (
         group
     );
