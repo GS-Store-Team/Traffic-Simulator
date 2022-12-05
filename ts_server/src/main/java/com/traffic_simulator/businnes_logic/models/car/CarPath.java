@@ -39,7 +39,7 @@ public class CarPath {
     public int calculateTrafficWeight() {
         int weight = 0;
         for (GraphObject graphObject : path) {
-            weight += graphObject.getTrafficWeight();
+            //weight += graphObject.getTrafficWeight();
         }
 
         return weight;

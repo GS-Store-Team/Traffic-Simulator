@@ -48,7 +48,7 @@ public class Road extends GraphObject {
     private int computeNaturalWeightByCoordinates() {
         int weight = 0;
 
-        @// TODO: 04.12.2022 Создать класс с единым форматом клеток. Это необходимо для корректного расчета их количества, веса дороги.
+        // TODO: 04.12.2022 Создать класс с единым форматом клеток. Это необходимо для корректного расчета их количества, веса дороги.
 
 
         return weight;
