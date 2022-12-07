@@ -1,5 +1,6 @@
 package com.traffic_simulator.businnes_logic.models.car;
 
+import com.traffic_simulator.businnes_logic.models.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,6 @@ public class Car {
 
     private GraphObject currentPoint;
     private boolean hasPath;
-
     public Car(GraphObject start, GraphObject destination) {
         this.navigator = new Navigator();
         this.currentVelocity = 0;

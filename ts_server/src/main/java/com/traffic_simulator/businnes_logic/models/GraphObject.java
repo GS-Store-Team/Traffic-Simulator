@@ -11,10 +11,10 @@ import java.util.*;
 @ToString
 public abstract class GraphObject {
     protected enum ElementColor {WHITE, GRAY, BLACK}
-    protected int naturalWeight;
-    protected Map<Integer, Integer> trafficWeight;
+    protected double naturalWeight;
+    protected Map<Integer, Double> trafficWeight;
     protected ElementColor mark;
-    protected int markWeight;
+    protected double markWeight;
     public GraphObject() {
         this.naturalWeight = 0;
         this.trafficWeight = new HashMap<>();
