@@ -1,13 +1,31 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Circle, Group, Line, Rect} from "react-konva";
 import {ceilPosition, mapCoordinateCeil} from "./utils/Utils";
+import Service from "../API/Service";
 const Road = (props) => {
-
     const road = props.road;
 
     const [visible, setVisible] = useState(false);
     const [stroke, setStroke] = useState(false);
 
+    const [roadState, setRoadState] = useState({
+        //id:0,
+        start:{x:0, y:0},
+        end:{x:0, y:0},
+        //forwardLanesCnt:1,
+        //reverseLanesCnt:1,
+        //offsetX:offsetX,
+        //offsetY:offsetY,
+    })
+
+    useEffect(()=>{
+        fetchNewRoad();
+    },[roadState]);
+    async function fetchNewRoad() {
+        console.log("fetch");
+        console.log(roadState);
+        Service.sendRoad(roadState);
+    }
     const remove = () =>{
         props.rm(road);
     }
@@ -19,6 +37,7 @@ const Road = (props) => {
         radius={road.pointRadius}
         draggable={true}
         onDragMove={(e) =>changerStart(e)}
+        // onDragEnd={(e) => changerStartRoadState(e)}
     />
 
     const circleEnd = <Circle
@@ -34,17 +53,35 @@ const Road = (props) => {
     const [startY, setStartY] = useState(road.y);
     const [endX, setEndX] = useState(road.x+road.offSet);
     const [endY, setEndY] = useState(road.y);
-
     const changerStart = (e) => {
         ceilPosition(e);
         setStartX(e.target.attrs.x);
-        setStartY(e.target.attrs.y)
+        setStartY(e.target.attrs.y);
+
     }
+    // const changerStartRoadState = (e) =>{
+    //     setRoadState({...roadState,
+    //         start:{x:e.target.attrs.x, y:e.target.attrs.y},
+    //     });
+    // }
 
     const changerEnd = (e) => {
         ceilPosition(e);
         setEndX(e.target.attrs.x);
-        setEndY(e.target.attrs.y)
+        setEndY(e.target.attrs.y);
+        // setRoadState({...roadState,
+        //     end:{x:e.target.attrs.x, y:e.target.attrs.y},
+        // });
+    }
+
+    const changerGroup = (e) => {
+        setRoadState({...roadState,
+            start:{x:e.target.attrs.x+startX,
+                y:e.target.attrs.y+startY},
+            end:{x:e.target.attrs.x+endX,
+                y:e.target.attrs.y+endY},
+        });
+       // fetchNewRoad();
     }
 
     const fullSelect = () => {
@@ -108,7 +145,8 @@ const Road = (props) => {
     />
 
     const group =   <Group draggable={true}
-                    onDragMove={(e) => ceilPosition(e)}>
+                    onDragMove={(e) => ceilPosition(e)}
+                    onDragEnd={changerGroup}>
                     {area}
                     {exit}
                     {line}

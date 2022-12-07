@@ -32,8 +32,8 @@ const App = () => {
         y: 50,
         offSet: 100,
         pointRadius:6,
-        pointFill: "red",
-        lineFill: "gray",
+        pointFill: "grey",
+        lineFill: "grey",
         lineStroke: 10,
         enter: "gold",
     }
