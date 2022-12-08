@@ -1,6 +1,5 @@
 package com.traffic_simulator.businnes_logic.models.road;
 
-import com.traffic_simulator.businnes_logic.models.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;

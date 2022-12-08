@@ -1,6 +1,5 @@
 package com.traffic_simulator.businnes_logic.models.road;
 
-import com.traffic_simulator.businnes_logic.models.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.signs.road_signs.RoadSign;
 import com.traffic_simulator.businnes_logic.models.supportive.cell.Cell;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
@@ -10,6 +9,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @ToString
 @Getter
@@ -30,7 +30,7 @@ public class Lane {
 
     private void addCellsByCoordinates() {
         int laneDiagonal = computeDiagonal(startCoordinates, endCoordinates);
-        int cellDiagonal = computeDiagonal(new Coordinates(0, 0), new Coordinates(GlobalSettings.cellWidth, GlobalSettings.cellLength));
+        int cellDiagonal = computeDiagonal(new Coordinates(0, 0), new Coordinates(cellWidth, cellLength));
 
         int cellsAmount = laneDiagonal / cellDiagonal;
 
