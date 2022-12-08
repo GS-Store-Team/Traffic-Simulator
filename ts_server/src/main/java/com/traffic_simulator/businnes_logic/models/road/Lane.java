@@ -1,5 +1,6 @@
 package com.traffic_simulator.businnes_logic.models.road;
 
+import com.traffic_simulator.businnes_logic.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.signs.road_signs.RoadSign;
 import com.traffic_simulator.businnes_logic.models.supportive.cell.Cell;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
@@ -30,7 +31,7 @@ public class Lane {
 
     private void addCellsByCoordinates() {
         int laneDiagonal = computeDiagonal(startCoordinates, endCoordinates);
-        int cellDiagonal = computeDiagonal(new Coordinates(0, 0), new Coordinates(cellWidth, cellLength));
+        int cellDiagonal = computeDiagonal(new Coordinates(0, 0), new Coordinates(GlobalSettings.cellWidth, GlobalSettings.cellLength));
 
         int cellsAmount = laneDiagonal / cellDiagonal;
 
@@ -56,6 +57,13 @@ public class Lane {
     }
 
     public double computeTrafficWeight() {
+        double weight = 0;
+        for (Cell cell : cells) {
+            if (cell.isOccupied()) {
+                weight += 1;
+            }
+        }
 
+        return weight * GlobalSettings.cellTrafficWeightModifier;
     }
 }

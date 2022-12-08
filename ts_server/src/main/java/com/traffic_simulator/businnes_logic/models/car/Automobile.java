@@ -1,5 +1,6 @@
 package com.traffic_simulator.businnes_logic.models.car;
 
+import com.traffic_simulator.businnes_logic.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
 
 public class Automobile extends Car {
