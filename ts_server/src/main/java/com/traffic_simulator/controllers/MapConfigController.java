@@ -15,10 +15,10 @@ public class MapConfigController {
     private final SimulationContext simulationContext;
 
     @GetMapping("/roads/{id}")
-    public ResponseEntity<BuildingDTO> getRoad(@PathVariable("id") long id){
-        BuildingDTO buildingDTO = simulationContext.getBuildingDTOById(id);
-        return buildingDTO != null?
-                ResponseEntity.ok(buildingDTO):
+    public ResponseEntity<RoadDTO> getRoad(@PathVariable("id") long id){
+        RoadDTO roadDTO = simulationContext.getRoadDTOById(id);
+        return roadDTO != null?
+                ResponseEntity.ok(roadDTO):
                 ResponseEntity.notFound().build();
     }
 
