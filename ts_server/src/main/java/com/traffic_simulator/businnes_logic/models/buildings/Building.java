@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 @ToString
 public class Building extends GraphObject {
-    private final String tmp = "Building";
-
     private Coordinates upLeftCorner;
     private Coordinates downRightCorner;
 
@@ -39,5 +40,17 @@ public class Building extends GraphObject {
         this.street = street;
         this.index = index;
         this.parkingZone = parkingZone;
+    }
+
+    /**
+     * Calculate traffic weight.
+     *
+     * @return traffic weight distinguished to lane packs (if it is road).
+     */
+    @Override
+    public Map<Integer, Double> getTrafficWeight() {
+        HashMap<Integer, Double> hm = new HashMap<>();
+        hm.put(0, 0.0);
+        return hm;
     }
 }

@@ -16,15 +16,18 @@ import java.util.List;
 @Getter
 @Setter
 public class Lane {
+
+    private int localId;
     private List<Cell> cells;
     private List<RoadSign> roadSigns;
     private Coordinates startCoordinates;
     private Coordinates endCoordinates;
-    public Lane(Coordinates startCoordinates, Coordinates endCoordinates) {
+    public Lane(int localId, Coordinates startCoordinates, Coordinates endCoordinates) {
         this.cells = new ArrayList<>();
         this.roadSigns = new ArrayList<>();
         this.startCoordinates = startCoordinates;
         this.endCoordinates = endCoordinates;
+        this.localId = localId;
 
         addCellsByCoordinates();
     }

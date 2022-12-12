@@ -25,4 +25,17 @@ public class ParkingZone {
         this.upLeftCorner = upLeftCorner;
         this.downRightCorner = downRightCorner;
     }
+
+    public boolean addCar(Car car) {
+        if (cars.size() + 1 <= capacity) {
+            cars.add(car);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void removeCar(Car car) {
+        cars.remove(car);
+    }
 }

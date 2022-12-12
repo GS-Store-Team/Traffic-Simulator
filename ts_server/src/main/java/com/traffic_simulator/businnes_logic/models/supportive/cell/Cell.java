@@ -9,11 +9,8 @@ import lombok.ToString;
 public class Cell {
     private Coordinates coordinates;
 
-    private static int cellWidth;
-    private static int cellHeight;
-
-    @Setter
-    private boolean occupied;
+    private double trafficWeight;
+    private CellState occupation;
     @Setter
     private Cell nextCell;
     @Setter
@@ -21,6 +18,19 @@ public class Cell {
 
     public Cell(Coordinates coordinates) {
         this.coordinates = coordinates;
-        this.occupied = false;
+        setCellState(CellState.FREE);
+    }
+
+    public void setCellState(CellState state) {
+        occupation = state;
+        setTrafficWeight();
+    }
+
+    protected void setTrafficWeight() {
+        switch (occupation) {
+            case FREE -> trafficWeight = 0;
+            case MARKED -> trafficWeight = 0.1;
+            case OCCUPIED -> trafficWeight = 1;
+        }
     }
 }

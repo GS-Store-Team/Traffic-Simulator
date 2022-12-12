@@ -14,4 +14,12 @@ public class BuildingConnector extends AttachmentPoint {
     public BuildingConnector(Coordinates coordinates) {
         super(coordinates);
     }
+
+    public void addBuilding(Building building) {
+        connectedBuildings.add(building);
+    }
+
+    public void removeBuilding(Building building) {
+        connectedBuildings.remove(building);
+    }
 }

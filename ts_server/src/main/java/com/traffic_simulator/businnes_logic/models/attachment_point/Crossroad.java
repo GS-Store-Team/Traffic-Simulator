@@ -1,34 +1,33 @@
 package com.traffic_simulator.businnes_logic.models.attachment_point;
 
+import com.traffic_simulator.businnes_logic.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.road.Lane;
 import com.traffic_simulator.businnes_logic.models.road.Road;
 import com.traffic_simulator.businnes_logic.models.signs.crossroad_signs.CrossroadSign;
 import com.traffic_simulator.businnes_logic.models.supportive.cell.Cell;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
+import com.traffic_simulator.businnes_logic.models.supportive.cell.CellState;
 import com.traffic_simulator.businnes_logic.models.supportive.cell.CrossroadCell;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
+import java.util.*;
 
 @Getter
 @ToString
 public class Crossroad extends AttachmentPoint {
-    private List<CrossroadCell> cells;
+    private List<List<CrossroadCell>> cellsListMatrix;
     private List<Road> roads;
     private Hashtable<Road, List<Lane>> entryLanes;
     private Hashtable<Road, List<Lane>> outputLanes;
 
     @Setter
     private List<CrossroadSign> roadSigns;
+
     public Crossroad(Coordinates coordinates) {
         super(coordinates);
-        cells = new ArrayList<>();
+        cellsListMatrix = new ArrayList<>();
         roads = new ArrayList<>();
         roadSigns = new ArrayList<>();
 
@@ -52,26 +51,62 @@ public class Crossroad extends AttachmentPoint {
         }
     }
 
-    private void generateCrossroadField() {
+    /**
+     * Generate crossroad cells matrix with sizes equal to the widths of perpendicular roads,
+     * where width is the amount of lanes in road.
+     */
+    private void generateSimpleCrossroadField() {
+        List<Road> roadsSortedByLanes = roads.stream()                  //sort roads by lanes amount
+                .sorted(Comparator.comparingInt(r -> r.getRightLanes().size() + r.getLeftLanes().size()))
+                .toList();
+        Road widestRoad1 = roadsSortedByLanes.get(0);
+        Road widestRoad2 = roadsSortedByLanes.get(0);
 
-    }
+        for (int i = 0; i < roadsSortedByLanes.size(); i++) {           //get two widest roads, which are close to be perpendicular
 
-    private List<Road> collectInAngleRange() {
-        List<Road> result = new ArrayList<>();
-        for (Road road1 : roads) {
-            for (Road road2 : roads) {
-                double cos = computeRoadsAngleCos(road1, road2);
-                if (cos > -0.8 & cos < 0.2) {
-                    result.add(road2);
+            double angleCos = computeRoadsAngleCos(widestRoad1, roads.get(i));
+
+            if (angleCos > -0.3 & angleCos < 0.3) {
+                if (roadsSortedByLanes.get(i).getRightLanes().size() + roadsSortedByLanes.get(i).getLeftLanes().size() >
+                        widestRoad2.getRightLanes().size() + widestRoad2.getLeftLanes().size()) {
+                    widestRoad2 = roadsSortedByLanes.get(i);
                 }
             }
         }
 
-        return result;
+        cellsListMatrix = new ArrayList<>();                             //create empty CrossroadCell matrix with sizes equal to the widths of perpendicular roads
+
+        for (int i = 0; i < widestRoad1.getRightLanes().size() + widestRoad1.getLeftLanes().size(); i++) {          //fill the matrix
+            cellsListMatrix.add(new ArrayList<>());
+            for (int j = 0; j < widestRoad2.getRightLanes().size() + widestRoad2.getLeftLanes().size(); j++) {
+                cellsListMatrix.get(i).add(new CrossroadCell(new Coordinates(i, j)));
+            }
+        }
     }
+
     public void addRoad(Road road) {
-
+        roads.add(road);
+        generateSimpleCrossroadField();
     }
 
-    public void removeRoad(Road road) {}
+    public void removeRoad(Road road) {
+        roads.remove(road);
+        generateSimpleCrossroadField();
+    }
+
+    /**
+     * Calculate traffic weight.
+     *
+     * @return traffic weight distinguished to lane packs (if it is road).
+     */
+    @Override
+    public Map<Integer, Double> getTrafficWeight() {
+        HashMap<Integer, Double> hashMap = new HashMap<>();
+        int occupiedCellsAmount = 0;
+        for (List<CrossroadCell> list : cellsListMatrix) {
+            occupiedCellsAmount += list.stream().filter((Cell c) -> c.getOccupation() == CellState.OCCUPIED).count();
+        }
+        hashMap.put(0, occupiedCellsAmount * GlobalSettings.cellTrafficWeightModifier);
+        return hashMap;
+    }
 }

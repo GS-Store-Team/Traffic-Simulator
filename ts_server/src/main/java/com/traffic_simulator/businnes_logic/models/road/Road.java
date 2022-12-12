@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -35,12 +36,14 @@ public class Road extends GraphObject {
     public void addLanes(int rightLanesAmount, int leftLanesAmount) {
         for (int i = 0; i < rightLanesAmount; i++) {
             rightLanes.add(new Lane(
+                    i + 1,
                     startPoint.getCoordinates(),
                     endPoint.getCoordinates()));
         }
 
         for (int i = 0; i < leftLanesAmount; i++) {
             rightLanes.add(new Lane(
+                    -(i + 1),
                     startPoint.getCoordinates(),
                     endPoint.getCoordinates()));
         }
@@ -50,12 +53,31 @@ public class Road extends GraphObject {
         return rightLanes.get(0).getCells().size() * GlobalSettings.cellNaturalWeightModifier;
     }
 
-    public double computeTrafficWeight(List<Lane> lanes) {
+    private double computeLanePackTrafficWeight(List<Lane> lanes) {
         double weight = 0;
         for (Lane lane : lanes) {
             weight += lane.computeTrafficWeight();
         }
 
         return weight;
+    }
+
+    public double computeRightTrafficWeight() {
+        return computeLanePackTrafficWeight(rightLanes);
+    }
+
+    public double computeLeftTrafficWeight() {
+        return computeLanePackTrafficWeight(leftLanes);
+    }
+
+    /**
+     * Calculate traffic weight.
+     *
+     * @return traffic weight distinguished to lane packs (if it is road).
+     */
+    @Override
+    public Map<Integer, Double> getTrafficWeight() {
+        //To-Do make logic
+        return null;
     }
 }
