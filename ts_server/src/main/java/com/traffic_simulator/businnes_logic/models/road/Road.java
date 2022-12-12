@@ -1,5 +1,6 @@
 package com.traffic_simulator.businnes_logic.models.road;
 
+import com.traffic_simulator.businnes_logic.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
@@ -45,11 +46,15 @@ public class Road extends GraphObject {
         }
     }
 
-    private int computeNaturalWeightByCoordinates() {
-        int weight = 0;
+    public double computeNaturalWeightByCoordinates() {
+        return rightLanes.get(0).getCells().size() * GlobalSettings.cellNaturalWeightModifier;
+    }
 
-        // TODO: 04.12.2022 Создать класс с единым форматом клеток. Это необходимо для корректного расчета их количества, веса дороги.
-
+    public double computeTrafficWeight(List<Lane> lanes) {
+        double weight = 0;
+        for (Lane lane : lanes) {
+            weight += lane.computeTrafficWeight();
+        }
 
         return weight;
     }

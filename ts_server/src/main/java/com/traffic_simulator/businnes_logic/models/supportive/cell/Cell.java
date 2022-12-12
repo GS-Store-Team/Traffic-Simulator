@@ -8,6 +8,10 @@ import lombok.ToString;
 @Getter @ToString
 public class Cell {
     private Coordinates coordinates;
+
+    private static int cellWidth;
+    private static int cellHeight;
+
     @Setter
     private boolean occupied;
     @Setter

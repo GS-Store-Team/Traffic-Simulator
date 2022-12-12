@@ -20,7 +20,6 @@ public class Car {
 
     private GraphObject currentPoint;
     private boolean hasPath;
-
     public Car(GraphObject start, GraphObject destination) {
         this.navigator = new Navigator();
         this.currentVelocity = 0;
