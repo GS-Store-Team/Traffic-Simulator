@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 @Getter
 @ToString
@@ -54,4 +55,23 @@ public class Crossroad extends AttachmentPoint {
     private void generateCrossroadField() {
 
     }
+
+    private List<Road> collectInAngleRange() {
+        List<Road> result = new ArrayList<>();
+        for (Road road1 : roads) {
+            for (Road road2 : roads) {
+                double cos = computeRoadsAngleCos(road1, road2);
+                if (cos > -0.8 & cos < 0.2) {
+                    result.add(road2);
+                }
+            }
+        }
+
+        return result;
+    }
+    public void addRoad(Road road) {
+
+    }
+
+    public void removeRoad(Road road) {}
 }
