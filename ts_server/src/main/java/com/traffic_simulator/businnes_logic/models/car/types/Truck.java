@@ -1,7 +1,8 @@
-package com.traffic_simulator.businnes_logic.models.car;
+package com.traffic_simulator.businnes_logic.models.car.types;
 
 import com.traffic_simulator.businnes_logic.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
+import com.traffic_simulator.businnes_logic.models.car.Car;
 
 public class Truck extends Car {
 

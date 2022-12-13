@@ -29,7 +29,7 @@ public class Cell {
     protected void setTrafficWeight() {
         switch (occupation) {
             case FREE -> trafficWeight = 0;
-            case MARKED -> trafficWeight = 0.1;
+            case MARKED -> trafficWeight = 0;
             case OCCUPIED -> trafficWeight = 1;
         }
     }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,9 @@ public class Road extends GraphObject {
      */
     @Override
     public Map<Integer, Double> getTrafficWeight() {
-        //To-Do make logic
-        return null;
+        HashMap<Integer, Double> hashMap = new HashMap<>();
+        hashMap.put(-1, computeLeftTrafficWeight());
+        hashMap.put(1, computeRightTrafficWeight());
+        return hashMap;
     }
 }

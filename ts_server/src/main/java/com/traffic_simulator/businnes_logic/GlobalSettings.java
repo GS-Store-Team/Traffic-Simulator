@@ -13,9 +13,12 @@ public class GlobalSettings {
     public static double crossroadCellNaturalWeightModifier = 0.5;
 
     public static int automobileLength = 5;
+    public static int truckLength = 10;
+
     public static double automobileMaxAcceleration = 3;
     public static double automobileMinAcceleration = -10;
     public static double truckMaxAcceleration = 3;
     public static double truckMinAcceleration = -8;
 
+    public static int buildingConnectionRadius = 50;
 }

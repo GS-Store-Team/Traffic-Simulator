@@ -16,6 +16,9 @@ public class SimulationContext {
     private List<BuildingDTO> buildingDTOList = new ArrayList<>();
     private List<RoadDTO> roadDTOList = new ArrayList<>();
 
+    {
+
+    }
     public long addBuildingDTO(BuildingDTO buildingDTO){
         buildingDTO.setId(roadId++);
         buildingDTOList.add(buildingDTO);

@@ -1,6 +1,7 @@
 package com.traffic_simulator.businnes_logic.models.attachment_point;
 
 import com.traffic_simulator.businnes_logic.GlobalSettings;
+import com.traffic_simulator.businnes_logic.MyVectorGeometry;
 import com.traffic_simulator.businnes_logic.models.road.Lane;
 import com.traffic_simulator.businnes_logic.models.road.Road;
 import com.traffic_simulator.businnes_logic.models.signs.crossroad_signs.CrossroadSign;
@@ -64,7 +65,7 @@ public class Crossroad extends AttachmentPoint {
 
         for (int i = 0; i < roadsSortedByLanes.size(); i++) {           //get two widest roads, which are close to be perpendicular
 
-            double angleCos = computeRoadsAngleCos(widestRoad1, roads.get(i));
+            double angleCos = MyVectorGeometry.computeRoadsAngleCos(widestRoad1, roads.get(i));
 
             if (angleCos > -0.3 & angleCos < 0.3) {
                 if (roadsSortedByLanes.get(i).getRightLanes().size() + roadsSortedByLanes.get(i).getLeftLanes().size() >
