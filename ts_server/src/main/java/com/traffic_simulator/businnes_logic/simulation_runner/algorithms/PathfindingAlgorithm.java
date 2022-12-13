@@ -1,4 +1,4 @@
-package com.traffic_simulator.businnes_logic.simulation_runner;
+package com.traffic_simulator.businnes_logic.simulation_runner.algorithms;
 
 import com.traffic_simulator.businnes_logic.RoadMap;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
@@ -20,7 +20,7 @@ public abstract class PathfindingAlgorithm {
     }
 
     public List<CarPath> compute(GraphObject start, endsType endsType, calculationType calculationType) {
-        List<CarPath> result = new ArrayList<>();
+        List<CarPath> result;
         List<GraphObject> ends = new ArrayList<>();
 
         switch (endsType) {
