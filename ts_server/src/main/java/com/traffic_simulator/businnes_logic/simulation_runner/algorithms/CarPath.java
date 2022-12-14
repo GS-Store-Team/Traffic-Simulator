@@ -1,4 +1,4 @@
-package com.traffic_simulator.businnes_logic.models.car;
+package com.traffic_simulator.businnes_logic.simulation_runner.algorithms;
 
 import com.traffic_simulator.businnes_logic.models.GraphObject;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
@@ -15,25 +15,20 @@ import java.util.Deque;
 @Setter
 @ToString
 public class CarPath {
-    private GraphObject startPoint;
-    private GraphObject endPoint;
-    private Deque<GraphObject> path;
-    public CarPath(GraphObject startPoint, GraphObject endPoint) {
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
-        this.path = new ArrayDeque<>();
-    }
-
-    public void addGraphObject(GraphObject graphObject) {
-
+    private GraphObject graphObject;
+    private CarPath prevPointInPathCarPath;
+    public CarPath(GraphObject graphObject) {
+        this.graphObject = graphObject;
+        this.prevPointInPathCarPath = null;
     }
 
     public int calculateNaturalWeight() {
         int weight = 0;
-        for (GraphObject graphObject : path) {
-            weight += graphObject.getNaturalWeight();
+        CarPath prevPoint = prevPointInPathCarPath;
+        while (prevPoint != null) {
+            weight += prevPoint.graphObject.getNaturalWeight();
+            prevPoint = prevPoint.prevPointInPathCarPath;
         }
-
         return weight;
     }
 

@@ -2,7 +2,6 @@ package com.traffic_simulator.businnes_logic.simulation_runner.algorithms;
 
 import com.traffic_simulator.businnes_logic.RoadMap;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
-import com.traffic_simulator.businnes_logic.models.car.CarPath;
 
 import java.util.ArrayList;
 import java.util.List;

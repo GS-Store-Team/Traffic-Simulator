@@ -1,5 +1,6 @@
 package com.traffic_simulator.businnes_logic;
 
+import com.traffic_simulator.businnes_logic.beans.SimulationContext;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.businnes_logic.models.attachment_point.Crossroad;
 import com.traffic_simulator.businnes_logic.models.buildings.*;
@@ -10,6 +11,7 @@ import com.traffic_simulator.businnes_logic.models.buildings.types.WorkplaceBuil
 import com.traffic_simulator.businnes_logic.models.road.Road;
 import com.traffic_simulator.businnes_logic.models.supportive.BuildingType;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
+import com.traffic_simulator.dto.MapStateDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +24,7 @@ import java.util.List;
 @Setter
 @ToString
 public class RoadMap {
+    private final SimulationContext simulationContext;
     private String name;
     private String description;
     private List<String> authors;
@@ -33,9 +36,10 @@ public class RoadMap {
     private List<Road> roads;
     private List<Building> buildings;
 
-    public RoadMap(String name, String description, String author) {
+    public RoadMap(String name, String description, String author, SimulationContext simulationContext) {
         this.name = name;
         this.description = description;
+        this.simulationContext = simulationContext;
         this.authors = new ArrayList<>();
         this.authors.add(author);
 
@@ -46,6 +50,19 @@ public class RoadMap {
         this.attachmentPoints = new ArrayList<>();
         this.roads = new ArrayList<>();
         this.buildings = new ArrayList<>();
+    }
+
+    public RoadMap(SimulationContext simulationContext) {
+        this.simulationContext = simulationContext;
+    }
+
+    public MapStateDTO getCurrentMapConfig() {
+        MapStateDTO mapStateDTO = new MapStateDTO(simulationContext.getBuildingDTOList(),
+                simulationContext.getRoadDTOList(),
+                null,
+                null);
+
+        return mapStateDTO;
     }
 
     /**
