@@ -43,27 +43,27 @@ public class CarPath {
         } else if (graphObject.getClass().equals(Building.class)) {
             pathElement = new PathElement(0, graphObject);
         } else if (graphObject.getClass().equals(Road.class)) {
-            if (((Road)graphObject).)
-            pathElement = new PathElement(0, graphObject);
+//            if (((Road)graphObject).)
+//            pathElement = new PathElement(0, graphObject);
 
         }
-        path.addLast(graphObject);
+        //path.addLast(graphObject);
     }
 
     public int calculateNaturalWeight() {
         int weight = 0;
-        for (GraphObject graphObject : path) {
-            weight += graphObject.getNaturalWeight();
-        }
+//        for (GraphObject graphObject : path) {
+//            weight += graphObject.getNaturalWeight();
+//        }
 
         return weight;
     }
 
     public int calculateTrafficWeight() {
         int weight = 0;
-        for (GraphObject graphObject : path) {
-            weight += graphObject.getTrafficWeight();
-        }
+//        for (GraphObject graphObject : path) {
+//            weight += graphObject.getTrafficWeight();
+//        }
 
         return weight;
     }

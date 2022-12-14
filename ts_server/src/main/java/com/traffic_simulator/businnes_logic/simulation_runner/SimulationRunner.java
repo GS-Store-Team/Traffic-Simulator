@@ -1,23 +1,23 @@
 package com.traffic_simulator.businnes_logic.simulation_runner;
 
-import com.traffic_simulator.businnes_logic.beans.SimulationContext;
-import com.traffic_simulator.dto.MapDTO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import com.traffic_simulator.businnes_logic.RoadMap;
+import com.traffic_simulator.dto.SimulationDTO;
 
-@Component
-@RequiredArgsConstructor
-@Lazy
 public class SimulationRunner {
-    private final SimulationContext simulationContext;
+     private final RoadMap roadMap;
 
-    public void start() {
-
+    public SimulationRunner(RoadMap roadMap) {
+        this.roadMap = roadMap;
     }
 
-    public MapDTO getCurrentState() {
+    public void start(){
+        //heavy initialization
+        play();
+    }
+    public void play(){}
+    public void stop(){}
 
-        return null;
+    public SimulationDTO getCurrentSimulationState() {
+        return new SimulationDTO();
     }
 }

@@ -62,9 +62,9 @@ public class Lane {
     public double computeTrafficWeight() {
         double weight = 0;
         for (Cell cell : cells) {
-            if (cell.isOccupied()) {
-                weight += 1;
-            }
+//            if (cell.isOccupied()) {
+//                weight += 1;
+//            }
         }
 
         return weight * GlobalSettings.cellTrafficWeightModifier;

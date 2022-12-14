@@ -1,24 +1,19 @@
 .my__menu{
-    width: 400px;
-    height: 50px;
-    border-radius: 10px;
-    background-color: cadetblue;
-
-    margin-left: auto;
-    margin-right: auto;
-    position: relative
+    height: 40px;
+    background-color: rgba(168, 143, 0, 0.2);
+    width: 100%;
+    display: flex;
+    justify-content: left;
 }
 
 .my__button{
-    margin-left: auto;
-    margin-right: auto;
-    background-color: gold;
-    border-radius: 5px;
+    font-size: 14px;
+    height: 20px;
+    margin: auto 5px;
+    width: 100px;
     border: 0;
-    height: 30px;
-
-    display: block;
-    /*position: absolute;*/
-    /*top: 50%;*/
-    /*transform: translate(10%, -50%)*/
+    background-color: orange;
+}
+.my__button:hover{
+    border: 1px solid black;
 }

@@ -1,0 +1,37 @@
+.my__header{
+    background-color: rgba(0, 169, 143, 0.8);
+    height: 60px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.my__button{
+    padding-top: 5px;
+    font-size: 20px;
+    text-align: center;
+    margin: auto 10px;
+    height: 30px;
+    width: 150px;
+    border: 0;
+    border-radius: 5px;
+    background-color: rgba(143, 0, 168, 0.5);
+    color: white;
+}
+
+.my__button__current{
+    border: 3px solid yellow;
+    padding-top: 5px;
+    font-size: 20px;
+    text-align: center;
+    margin: auto 10px;
+    height: 30px;
+    width: 150px;
+    border-radius: 5px;
+    background-color: rgba(143, 0, 168, 0.5);
+    color: yellow;
+}
+
+.my__button:hover{
+    color: yellow;
+}

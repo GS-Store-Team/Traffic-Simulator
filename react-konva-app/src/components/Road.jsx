@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Circle, Group, Line, Rect} from "react-konva";
-import {ceilPosition, mapCoordinateCeil} from "./utils/Utils";
-import Service from "../API/Service";
+import {ceilPosition, mapCoordinateCeil} from "../utils/Utils";
+import API from "../API.js";
 const Road = (props) => {
     const road = props.road;
 
@@ -22,9 +22,7 @@ const Road = (props) => {
         fetchNewRoad();
     },[roadState]);
     async function fetchNewRoad() {
-        console.log("fetch");
-        console.log(roadState);
-        Service.sendRoad(roadState);
+        //API.sendRoad(roadState);
     }
     const remove = () =>{
         props.rm(road);
@@ -59,19 +57,11 @@ const Road = (props) => {
         setStartY(e.target.attrs.y);
 
     }
-    // const changerStartRoadState = (e) =>{
-    //     setRoadState({...roadState,
-    //         start:{x:e.target.attrs.x, y:e.target.attrs.y},
-    //     });
-    // }
 
     const changerEnd = (e) => {
         ceilPosition(e);
         setEndX(e.target.attrs.x);
         setEndY(e.target.attrs.y);
-        // setRoadState({...roadState,
-        //     end:{x:e.target.attrs.x, y:e.target.attrs.y},
-        // });
     }
 
     const changerGroup = (e) => {
@@ -81,7 +71,6 @@ const Road = (props) => {
             end:{x:e.target.attrs.x+endX,
                 y:e.target.attrs.y+endY},
         });
-       // fetchNewRoad();
     }
 
     const fullSelect = () => {
