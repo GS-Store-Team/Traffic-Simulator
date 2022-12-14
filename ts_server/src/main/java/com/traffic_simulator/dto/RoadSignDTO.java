@@ -1,6 +1,11 @@
 package com.traffic_simulator.dto;
 
-public class RoadSignDTO {
-    private final String tmp = "RoadSign";
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
+public class RoadSignDTO {
+    private long id;
+    private PointDTO location;
 }

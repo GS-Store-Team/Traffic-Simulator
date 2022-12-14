@@ -1,5 +1,5 @@
 
-const mapCell = 10;
+export const mapCell = 10   ;
 export const mapCoordinateCeil = (cord)=> {
     if(cord % mapCell >= (mapCell/2))
         return (Math.floor(cord / mapCell) + 1)* mapCell;

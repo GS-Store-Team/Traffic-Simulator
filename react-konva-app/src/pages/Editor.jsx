@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {Layer, Stage} from "react-konva";
-import BuildingsList from "./components/BuildingsList";
-import Menu from "./menu/Menu";
-import RoadList from "./components/RoadList";
+import Menu from "../menu/Menu.jsx";
+import BuildingsList from "../components/BuildingsList.jsx";
+import RoadList from "../components/RoadList.jsx";
+import {Header} from "../components/header/Header.jsx";
+import {Grid} from "../components/Grid";
 
-const App = () => {
+export const Editor = () => {
     const defaultBuilding = {
         id:0,
         x: 0,
@@ -47,18 +49,21 @@ const App = () => {
         setRoads(roads.filter(r => r.id !== road.id))
     }
 
-  return (
-      <div>
-          <Menu addBuilding={addBuilding} addRoad={addRoad}/>
-          <Stage
-              width={2100}
-              height={1000}>
-              <Layer>
-                  <BuildingsList buildings={buildings} rm={removeBuilding} />
-                  <RoadList roads={roads}  rm={removeRoad}/>
-              </Layer>
-          </Stage>
-      </div>
-  );
+    return (
+        <div>
+            <Header state={false}/>
+            <Menu addBuilding={addBuilding} addRoad={addRoad}/>
+            <Stage
+                width={1920}
+                height={840}>
+                <Layer>
+                    <Grid />
+                </Layer>
+                <Layer>
+                    <BuildingsList buildings={buildings} rm={removeBuilding} />
+                    <RoadList roads={roads}  rm={removeRoad}/>
+                </Layer>
+            </Stage>
+        </div>
+    );
 }
-export default App;

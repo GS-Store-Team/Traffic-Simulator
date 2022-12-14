@@ -1,5 +1,11 @@
 package com.traffic_simulator.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class AttachmentPointDTO {
-    private final String tmp = "AttachmentPoint";
+    private long id;
+    private PointDTO location;
 }

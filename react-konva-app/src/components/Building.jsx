@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Circle, Rect, Group} from "react-konva";
-import {ceilPosition} from "./utils/Utils";
+import {ceilPosition} from "../utils/Utils";
 const Building = (props) => {
 
     const building = props.building
@@ -66,13 +66,18 @@ const Building = (props) => {
                     shadowEnabled={stroke}
                 />
 
+    const move = (e) =>{
+    }
+
     const group =   <Group
                         draggable={true}
-                        onDragMove={(e) => ceilPosition(e)}>
+                        onDragMove={(e) => ceilPosition(e)}
+                        onDragEnd={(e) => move(e)}>
                         {area}
                         {exit}
                         {rect}
                     </Group>
+
     return (
         group
     );

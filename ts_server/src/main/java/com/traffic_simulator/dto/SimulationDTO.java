@@ -7,6 +7,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MapDTO {
+public class SimulationDTO {
     private final String layout = "MapLayout";
 }
