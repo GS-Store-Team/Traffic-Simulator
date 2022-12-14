@@ -19,6 +19,8 @@ import java.util.Map;
 public class AttachmentPoint extends GraphObject {
     protected Coordinates coordinates;
     protected List<Building> connectedBuildings;
+    protected List<Road> roads;
+
     public AttachmentPoint(Coordinates coordinates) {
         super();
         this.coordinates = coordinates;

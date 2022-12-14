@@ -19,7 +19,6 @@ import java.util.*;
 @ToString
 public class Crossroad extends AttachmentPoint {
     private List<List<CrossroadCell>> cellsListMatrix;
-    private List<Road> roads;
     private Hashtable<Road, List<Lane>> entryLanes;
     private Hashtable<Road, List<Lane>> outputLanes;
 

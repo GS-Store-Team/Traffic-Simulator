@@ -2,6 +2,7 @@ package com.traffic_simulator.businnes_logic.simulation_runner.algorithms;
 
 import com.traffic_simulator.businnes_logic.RoadMap;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.CarPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,33 +10,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class PathfindingAlgorithm {
     protected enum calculationType {ALL, NATURAL, TRAFFIC}
-    private enum endsType {BUILDING, ATTACHMENT_POINT, ROAD, ALL}
-    private ConcurrentHashMap<GraphObject, List<CarPath>> endToPathConcurrentHashMap;
-
-    private RoadMap roadMap;
+    protected ConcurrentHashMap<GraphObject, List<CarPathPoint>> endToPathConcurrentHashMap;
+    protected RoadMap roadMap;
     //private GraphObject start;
     public PathfindingAlgorithm(RoadMap roadMap) {
         this.roadMap = roadMap;
     }
 
-    public List<CarPath> compute(GraphObject start, endsType endsType, calculationType calculationType) {
-        List<CarPath> result;
-        List<GraphObject> ends = new ArrayList<>();
+    public List<List<CarPath>> compute(calculationType calculationType) {
+        List<List<CarPath>> result = new ArrayList<>();
 
-        switch (endsType) {
-            case BUILDING -> ends.addAll(roadMap.getBuildings());
-            case ATTACHMENT_POINT -> ends.addAll(roadMap.getAttachmentPoints());
-            case ROAD -> ends.addAll(roadMap.getRoads());
-            case ALL -> {
-                ends.addAll(roadMap.getBuildings());
-                ends.addAll(roadMap.getRoads());
-                ends.addAll(roadMap.getAttachmentPoints());
-            }
+        for (GraphObject start : roadMap.getBuildings()) {
+            result.add(computeCarPath(calculationType, start));
         }
-
-        result = computeCarPath(calculationType, ends);
         return result;
     }
-    abstract List<CarPath> computeCarPath(calculationType calculationType, List<GraphObject> ends);
+    protected abstract List<CarPath> computeCarPath(calculationType calculationType, GraphObject start);
 
 }
