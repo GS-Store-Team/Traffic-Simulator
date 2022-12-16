@@ -1,17 +1,15 @@
 package com.traffic_simulator.businnes_logic.simulation_runner.algorithms;
 
 import com.traffic_simulator.businnes_logic.RoadMap;
-import com.traffic_simulator.businnes_logic.models.GraphObject;
-import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.CarPathsGraph;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.CarPathsBunch;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.Edge;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.Node;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.PathRetriever;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 //TODO Придумать в каком виде извлекать путь
 public class StraightDijkstraAlgorithm extends PathfindingAlgorithm {
-    private List<Node> unmarkedNodes;
 
     /**
      * Common  <a href="https://e-maxx.ru/algo/dijkstra">Dijkstra algorithm</a>.<br>
@@ -22,9 +20,9 @@ public class StraightDijkstraAlgorithm extends PathfindingAlgorithm {
         super(roadMap);
     }
     @Override
-    protected CarPathsGraph computeCarPath(Node start) {
-        CarPathsGraph carPathsGraph = new CarPathsGraph(start);
-        unmarkedNodes = graph.getNodes();
+    protected CarPathsBunch computeCarPath(Node start) {
+        CarPathsBunch carPathsBunch = new CarPathsBunch(start);
+        List<Node> unmarkedNodes = graph.getNodes();
         Node currentNode = start;
 
         while (!unmarkedNodes.isEmpty()) {
@@ -36,13 +34,17 @@ public class StraightDijkstraAlgorithm extends PathfindingAlgorithm {
                     edge.getEnd().setPathPrevNodeEdge(edge);
                 }
             }
+            currentNode.setElementColor(ElementColor.BLACK);
             currentNode = unmarkedNodes.get(0);
             if (currentNode.getWeightMark() == Double.POSITIVE_INFINITY) {              //if there are only unreachable nodes left
                 //TODO Написать исключение для недостижимой вершины в графе -> невалидный граф -> невалидная карта -> корректная симуляция невозможна
             }
         }
 
-        return null;
+        for (Node end : graph.getNodes()) {
+            carPathsBunch.getCarPathsEndsMap().put(end, PathRetriever.retrievePath(start, end));
+        }
+        return carPathsBunch;
     }
 
 }

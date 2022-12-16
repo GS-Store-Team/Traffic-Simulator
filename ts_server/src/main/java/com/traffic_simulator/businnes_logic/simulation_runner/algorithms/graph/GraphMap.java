@@ -14,10 +14,10 @@ import java.util.List;
 @ToString
 @Getter
 public class GraphMap {
-    private List<Node> nodes;
+    private final List<Node> nodes;
     private List<Node> crossroadNodes;
     private List<Node> buildingNodes;
-    private List<Edge> edges;
+    private final List<Edge> edges;
     private final RoadMap roadMap;
 
     //TODO Сделать свои исключения
@@ -30,6 +30,8 @@ public class GraphMap {
      */
     public GraphMap(RoadMap roadMap) {
         this.roadMap = roadMap;
+        this.nodes = new ArrayList<>();
+        this.edges = new ArrayList<>();
         constructGraphMap();
     }
 

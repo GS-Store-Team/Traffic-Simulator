@@ -9,10 +9,10 @@ import java.util.Deque;
 @Getter
 @ToString
 public class CarPath {
-    private Node start;
-    private Deque<Node> nodes;
-    private Deque<Edge> edges;
-    private Node end;
+    private final Node start;
+    private final Deque<Node> nodes;
+    private final Deque<Edge> edges;
+    private final Node end;
 
     public CarPath(Node start, Node end) {
         this.start = start;
