@@ -1,24 +1,23 @@
 package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph;
 
-import com.traffic_simulator.businnes_logic.models.road.Road;
-import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.CarPathPoint;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
-@Setter
 @Getter
 @ToString
 public class CarPath {
-    private List<CarPathPoint> nodes;
-    private HashMap<Road, Integer> sidedRoads;
+    private Node start;
+    private Deque<Node> nodes;
+    private Deque<Edge> edges;
+    private Node end;
 
-    public CarPath() {
-        this.nodes = new ArrayList<>();
-        this.sidedRoads = new HashMap<>();
+    public CarPath(Node start, Node end) {
+        this.start = start;
+        this.nodes = new ArrayDeque<>();
+        this.edges = new ArrayDeque<>();
+        this.end = end;
     }
 }

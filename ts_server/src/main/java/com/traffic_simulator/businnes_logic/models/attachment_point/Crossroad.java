@@ -19,9 +19,6 @@ import java.util.*;
 @ToString
 public class Crossroad extends AttachmentPoint {
     private List<List<CrossroadCell>> cellsListMatrix;
-    private Hashtable<Road, List<Lane>> entryLanes;
-    private Hashtable<Road, List<Lane>> outputLanes;
-
     @Setter
     private List<CrossroadSign> roadSigns;
 
@@ -30,25 +27,6 @@ public class Crossroad extends AttachmentPoint {
         cellsListMatrix = new ArrayList<>();
         roads = new ArrayList<>();
         roadSigns = new ArrayList<>();
-
-        entryLanes = new Hashtable<>();
-        outputLanes = new Hashtable<>();
-
-        setEntryLanes();
-        setOutputLanes();
-
-    }
-
-    private void setEntryLanes() {
-        for (Road road : roads) {
-            entryLanes.put(road, road.getRightLanes());
-        }
-    }
-
-    private void setOutputLanes() {
-        for (Road road : roads) {
-            entryLanes.put(road, road.getLeftLanes());
-        }
     }
 
     /**

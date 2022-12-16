@@ -3,15 +3,14 @@ package com.traffic_simulator.businnes_logic.models.attachment_point;
 import com.traffic_simulator.businnes_logic.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.GraphObject;
 import com.traffic_simulator.businnes_logic.models.buildings.Building;
+import com.traffic_simulator.businnes_logic.models.road.Lane;
 import com.traffic_simulator.businnes_logic.models.road.Road;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -20,12 +19,43 @@ public class AttachmentPoint extends GraphObject {
     protected Coordinates coordinates;
     protected List<Building> connectedBuildings;
     protected List<Road> roads;
+    protected Hashtable<Road, List<Lane>> entryLanes;
+    protected Hashtable<Road, List<Lane>> outputLanes;
+    protected List<Road> endingRoads;
+    protected List<Road> startingRoads;
 
     public AttachmentPoint(Coordinates coordinates) {
-        super();
         this.coordinates = coordinates;
+        this.connectedBuildings = new ArrayList<>();
+        this.roads = new ArrayList<>();
+        this.endingRoads = new ArrayList<>();
+        this.startingRoads = new ArrayList<>();
+
+        setEntryLanes();
+        setOutputLanes();
     }
 
+    protected void dispenseRoadsByEnds() {
+        for (Road road : roads) {
+            if (road.getStartPoint().equals(this)) {
+                startingRoads.add(road);
+            } else if (road.getEndPoint().equals(this)) {
+                endingRoads.add(road);
+            }
+        }
+    }
+
+    protected void setEntryLanes() {
+        for (Road road : roads) {
+            entryLanes.put(road, road.getRightLanes());
+        }
+    }
+
+    protected void setOutputLanes() {
+        for (Road road : roads) {
+            entryLanes.put(road, road.getLeftLanes());
+        }
+    }
     /**
      * Calculate traffic weight.
      *
