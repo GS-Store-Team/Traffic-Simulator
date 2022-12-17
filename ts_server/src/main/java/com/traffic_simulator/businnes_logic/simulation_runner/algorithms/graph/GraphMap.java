@@ -1,6 +1,6 @@
 package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph;
 
-import com.traffic_simulator.businnes_logic.RoadMap;
+import com.traffic_simulator.businnes_logic.models.RoadMap;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.businnes_logic.models.attachment_point.Crossroad;
 import com.traffic_simulator.businnes_logic.models.buildings.Building;
@@ -74,7 +74,7 @@ public class GraphMap {
             Node connectedAttachmentPoint;
             try {
                 connectedAttachmentPoint = nodes.stream()
-                        .filter((Node node) -> node.getRefGraphObject().equals(building.getConnectedPoint()))
+                        .filter((Node node) -> node.getRefMapObject().equals(building.getConnectedPoint()))
                         .toList()
                         .get(0);
             } catch (IndexOutOfBoundsException exc) {
@@ -95,7 +95,7 @@ public class GraphMap {
             Node endNode;
             try {
                 startNode = crossroadNodes.stream()
-                        .filter((Node node) -> node.getRefGraphObject().equals(road.getStartPoint()))
+                        .filter((Node node) -> node.getRefMapObject().equals(road.getStartPoint()))
                         .toList()
                         .get(0);
             } catch (IndexOutOfBoundsException exc) {
@@ -104,7 +104,7 @@ public class GraphMap {
 
             try {
                 endNode = crossroadNodes.stream()
-                        .filter((Node node) -> node.getRefGraphObject().equals(road.getEndPoint()))
+                        .filter((Node node) -> node.getRefMapObject().equals(road.getEndPoint()))
                         .toList()
                         .get(0);
             } catch (IndexOutOfBoundsException exc) {

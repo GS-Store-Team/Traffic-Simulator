@@ -1,14 +1,13 @@
 package com.traffic_simulator.exceptions;
 
-import com.traffic_simulator.businnes_logic.models.GraphObject;
+import com.traffic_simulator.businnes_logic.models.MapObject;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Node;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 
 public class InvalidMapException extends Exception {
-    private List<GraphObject> invalidGraphObjects;
+    private List<MapObject> invalidMapObjects;
     private List<Node> invalidNodes;
 
     /**
@@ -22,9 +21,9 @@ public class InvalidMapException extends Exception {
     public InvalidMapException(String message, List<Node> invalidNodes) {
         super(message);
         this.invalidNodes = invalidNodes;
-        this.invalidGraphObjects = new ArrayList<>();
+        this.invalidMapObjects = new ArrayList<>();
         for (Node node : invalidNodes) {
-            this.invalidGraphObjects.add(node.getRefGraphObject());
+            this.invalidMapObjects.add(node.getRefMapObject());
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.traffic_simulator.businnes_logic.simulation_runner.algorithms;
 
-import com.traffic_simulator.businnes_logic.RoadMap;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.car_path.CarPathsBunch;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.GraphMap;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Edge;

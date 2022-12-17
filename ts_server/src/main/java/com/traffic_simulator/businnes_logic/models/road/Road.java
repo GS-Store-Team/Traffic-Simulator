@@ -2,7 +2,7 @@ package com.traffic_simulator.businnes_logic.models.road;
 
 import com.traffic_simulator.businnes_logic.GlobalSettings;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
-import com.traffic_simulator.businnes_logic.models.GraphObject;
+import com.traffic_simulator.businnes_logic.models.MapObject;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class Road extends GraphObject {
+public class Road extends MapObject {
     private AttachmentPoint startPoint;
     private AttachmentPoint endPoint;
     private List<Lane> rightLanes;

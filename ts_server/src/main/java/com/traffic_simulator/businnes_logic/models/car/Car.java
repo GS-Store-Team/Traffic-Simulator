@@ -1,7 +1,8 @@
 package com.traffic_simulator.businnes_logic.models.car;
 
 import com.traffic_simulator.businnes_logic.GlobalSettings;
-import com.traffic_simulator.businnes_logic.models.GraphObject;
+import com.traffic_simulator.businnes_logic.models.MapObject;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.car_path.CarPath;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,18 +16,18 @@ public class Car {
     private int currentVelocity;
     private int currentAcceleration;
 
-    private GraphObject start;
-    private GraphObject destination;
+    private MapObject start;
+    private MapObject destination;
 
-    private GraphObject currentGraphObject;
-    private boolean hasPath;
-    public Car(GraphObject start, GraphObject destination) {
+    private MapObject currentMapObject;
+    private CarPath path;
+    //TODO Продумать как назначить путь и как сменять клетки и mapobject-ы по пути
+    public Car(MapObject start, MapObject destination) {
         this.currentVelocity = 0;
         this.currentAcceleration = 0;
-        this.hasPath = false;
         this.start = start;
         this.destination = destination;
-        this.currentGraphObject = start;
+        this.currentMapObject = start;
         this.navigator = new Navigator(start, GlobalSettings.automobileMaxAcceleration, GlobalSettings.automobileMinAcceleration);
     }
 

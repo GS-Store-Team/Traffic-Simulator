@@ -1,6 +1,6 @@
 package com.traffic_simulator.businnes_logic.models.buildings;
 
-import com.traffic_simulator.businnes_logic.models.GraphObject;
+import com.traffic_simulator.businnes_logic.models.MapObject;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class Building extends GraphObject {
+public class Building extends MapObject {
     private Coordinates upLeftCorner;
     private Coordinates downRightCorner;
     private Coordinates center;

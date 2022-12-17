@@ -1,7 +1,7 @@
 package com.traffic_simulator.businnes_logic.models.attachment_point;
 
 import com.traffic_simulator.businnes_logic.GlobalSettings;
-import com.traffic_simulator.businnes_logic.models.GraphObject;
+import com.traffic_simulator.businnes_logic.models.MapObject;
 import com.traffic_simulator.businnes_logic.models.buildings.Building;
 import com.traffic_simulator.businnes_logic.models.road.Lane;
 import com.traffic_simulator.businnes_logic.models.road.Road;
@@ -15,7 +15,7 @@ import java.util.*;
 @Getter
 @Setter
 @ToString
-public class AttachmentPoint extends GraphObject {
+public class AttachmentPoint extends MapObject {
     protected Coordinates coordinates;
     protected List<Building> connectedBuildings;
     protected List<Road> roads;

@@ -1,8 +1,5 @@
 package com.traffic_simulator.businnes_logic.models;
 
-import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
-import com.traffic_simulator.businnes_logic.models.buildings.Building;
-import com.traffic_simulator.businnes_logic.models.road.Road;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,10 +9,10 @@ import java.util.*;
 @Setter
 @Getter
 @ToString
-public abstract class GraphObject {
+public abstract class MapObject {
     protected double naturalWeight;
     protected Map<Integer, Double> trafficWeight;
-    public GraphObject() {
+    public MapObject() {
         this.naturalWeight = 0;
         this.trafficWeight = new HashMap<>();
     }

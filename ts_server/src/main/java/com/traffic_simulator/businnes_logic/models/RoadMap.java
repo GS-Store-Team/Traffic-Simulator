@@ -1,5 +1,6 @@
-package com.traffic_simulator.businnes_logic;
+package com.traffic_simulator.businnes_logic.models;
 
+import com.traffic_simulator.businnes_logic.MyVectorGeometry;
 import com.traffic_simulator.businnes_logic.beans.SimulationContext;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.businnes_logic.models.attachment_point.Crossroad;
