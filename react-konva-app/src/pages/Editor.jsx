@@ -1,24 +1,36 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Layer, Stage} from "react-konva";
 import Menu from "../menu/Menu.jsx";
 import BuildingsList from "../components/BuildingsList.jsx";
 import RoadList from "../components/RoadList.jsx";
 import {Header} from "../components/header/Header.jsx";
 import {Grid} from "../components/Grid";
+import {defaultBuilding, defaultRoad, height, width} from "../UI/DefaultObjects.js";
+import {Context} from "../router/AppRouter.jsx";
 
 export const Editor = () => {
-    const defaultBuilding = {
-        id:0,
-        x: 0,
-        y: 0,
-        width: 50,
-        height: 50,
-        fill: "grey",
-        shadowBlur: 0,
-        draggable: true,
-        enter: "gold"
-    }
     const [buildings, setBuildings] = useState([]);
+    const [roads, setRoads] = useState([]);
+    const {setScale} = useContext(Context);
+    const scaleBy = 1.10;
+    const [stage, setStage] = useState({
+        scale: 1,
+        x: width/2,
+        y: height/2
+    });
+
+    const defaultPosition = () => {
+        setScale(1);
+        setStage({scale: 1, x: width/2, y: height/2});
+    }
+    const upscale = () => {
+        setScale(stage.scale*scaleBy*scaleBy);
+        setStage({scale: stage.scale*scaleBy*scaleBy, x: stage.x, y: stage.y});
+    }
+    const downscale = () => {
+        setScale(stage.scale/scaleBy/scaleBy);
+        setStage({scale: stage.scale/scaleBy/scaleBy, x: stage.x, y: stage.y});
+    }
     const addBuilding = () =>{
         const building = {...defaultBuilding};
         building.id = Date.now();
@@ -27,19 +39,6 @@ export const Editor = () => {
     const removeBuilding = (building) =>{
         setBuildings(buildings.filter(b => b.id !== building.id))
     }
-
-    const defaultRoad = {
-        id:0,
-        x: 100,
-        y: 50,
-        offSet: 100,
-        pointRadius:6,
-        pointFill: "grey",
-        lineFill: "grey",
-        lineStroke: 10,
-        enter: "gold",
-    }
-    const [roads, setRoads] = useState([]);
     const addRoad = () =>{
         const road = {...defaultRoad};
         road.id = Date.now();
@@ -49,16 +48,46 @@ export const Editor = () => {
         setRoads(roads.filter(r => r.id !== road.id))
     }
 
+    const handleWheel = (e) => {
+        e.evt.preventDefault();
+        const stage = e.target.getStage();
+        const oldScale = stage.scaleX();
+
+        const mousePointTo = {
+            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
+        };
+
+        const newScale = e.evt.deltaY < 0 ? oldScale * scaleBy : oldScale / scaleBy;
+
+        setStage({
+            scale: newScale,
+            x: (stage.getPointerPosition().x / newScale - mousePointTo.x) * newScale,
+            y: (stage.getPointerPosition().y / newScale - mousePointTo.y) * newScale
+        });
+        setScale(newScale);
+    };
+
     return (
         <div>
             <Header state={false}/>
-            <Menu addBuilding={addBuilding} addRoad={addRoad}/>
+            <Menu addBuilding={addBuilding} addRoad={addRoad} defaultPosition={defaultPosition} upscale={upscale} downscale={downscale}/>
             <Stage
-                width={1920}
-                height={840}>
-                <Layer>
-                    <Grid />
+                x={stage.x}
+                y={stage.y}
+                offsetX={width/2}
+                offsetY={height/2}
+                width={width}
+                height={height}
+                scaleX={stage.scale}
+                scaleY={stage.scale}
+                onWheel={(e) => handleWheel(e)}
+                draggable={true}>
+
+                <Layer >
+                    <Grid width={width} height={height} scale={stage.scale}/>
                 </Layer>
+
                 <Layer>
                     <BuildingsList buildings={buildings} rm={removeBuilding} />
                     <RoadList roads={roads}  rm={removeRoad}/>

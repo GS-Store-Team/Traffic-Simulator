@@ -1,5 +1,8 @@
 import React from 'react';
 import classes from "./menu.module.css";
+import pointer from "../UI/images/pointer.png"
+import plus from "../UI/images/plus.png"
+import minus from "../UI/images/minus.png"
 
 const Menu = (props) => {
     return (
@@ -15,6 +18,16 @@ const Menu = (props) => {
                 className={classes.my__button}>
                 Add Road
             </button>
+
+            <img onClick={props.defaultPosition}
+                 className={classes.my__pointer}
+                 src={pointer}/>
+            <img onClick={props.upscale}
+                 className={classes.my__plus}
+                 src={plus}/>
+            <img onClick={props.downscale}
+                 className={classes.my__minus}
+                 src={minus}/>
         </div>
     );
 };

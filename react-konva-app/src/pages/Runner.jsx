@@ -3,12 +3,14 @@ import {Header} from "../components/header/Header";
 import {RunnerToolbar} from "../components/RunnerToolbar/RunnerToolbar";
 import API from "../API.js";
 import {Stage} from "react-konva";
-import {BackgroundLayer} from "../components/RunnerToolbar/BackgroundLayer";
+import {BackgroundLayer} from "../components/BackgroundLayer.jsx";
 
 export const Runner = () => {
     const [config, setConfig] = useState(undefined);
     const [state, setState] = useState(undefined);
     const [started, setStarted] = useState(false);
+    const [frames, setFrames] = useState(1);
+    const [defaultVis, setDefaultVis] = useState(true);
 
     useEffect(() =>{
         getConfig();
@@ -54,7 +56,14 @@ export const Runner = () => {
     return (
         <div>
             <Header state={true}/>
-            <RunnerToolbar reload={getConfig} start={startSimulation} stop={stopSimulation} continuesim={continueSimulation} started={started}/>
+            <RunnerToolbar reload={getConfig}
+                           start={startSimulation}
+                           stop={stopSimulation}
+                           continuesim={continueSimulation}
+                           started={started}
+                           setFrames={setFrames}
+                           frames={frames}
+                           setDefaultVis={setDefaultVis}/>
             {config?
                 <Stage
                     width={1920}
