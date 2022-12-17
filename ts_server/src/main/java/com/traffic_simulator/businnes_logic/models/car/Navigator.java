@@ -28,4 +28,8 @@ public class Navigator {
         this.nextGraphObject = null;
         this.advance = new ArrayList<>();
     }
+
+    public void update() {
+
+    }
 }

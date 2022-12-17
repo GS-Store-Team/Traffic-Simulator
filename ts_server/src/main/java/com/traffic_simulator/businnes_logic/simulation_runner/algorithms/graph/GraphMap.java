@@ -5,6 +5,10 @@ import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPo
 import com.traffic_simulator.businnes_logic.models.attachment_point.Crossroad;
 import com.traffic_simulator.businnes_logic.models.buildings.Building;
 import com.traffic_simulator.businnes_logic.models.road.Road;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Edge;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Node;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.RoadSide;
+import com.traffic_simulator.exceptions.GraphConstructionException;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -28,7 +32,7 @@ public class GraphMap {
      * Creates two edges (for left and right parts) for each road and connection between attachment point and building.
      * @param roadMap roadMap to represent as graph
      */
-    public GraphMap(RoadMap roadMap) {
+    public GraphMap(RoadMap roadMap) throws GraphConstructionException {
         this.roadMap = roadMap;
         this.nodes = new ArrayList<>();
         this.edges = new ArrayList<>();
@@ -41,10 +45,14 @@ public class GraphMap {
         }
     }
 
-    private void constructGraphMap() {
-        constructAttachmentPointNodes();
-        connectBuildings();
-        constructRoads();
+    private void constructGraphMap() throws GraphConstructionException {
+        try {
+            constructAttachmentPointNodes();
+            connectBuildings();
+            constructRoads();
+        } catch (IndexOutOfBoundsException exc) {
+            throw new GraphConstructionException(exc.getMessage(), null);
+        }
     }
 
     private void constructAttachmentPointNodes() {

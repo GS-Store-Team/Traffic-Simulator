@@ -1,7 +1,6 @@
-package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph;
+package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements;
 
 import com.traffic_simulator.businnes_logic.models.GraphObject;
-import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.ElementColor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

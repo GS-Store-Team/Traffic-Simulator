@@ -1,4 +1,7 @@
-package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph;
+package com.traffic_simulator.businnes_logic.simulation_runner.algorithms;
+
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.car_path.CarPath;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Node;
 
 public class PathRetriever {
     public static CarPath retrievePath(Node start, Node end) {

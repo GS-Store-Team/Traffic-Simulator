@@ -1,5 +1,6 @@
-package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph;
+package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.car_path;
 
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Node;
 import lombok.Getter;
 import lombok.ToString;
 

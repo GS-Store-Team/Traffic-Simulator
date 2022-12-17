@@ -1,4 +1,4 @@
-package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph;
+package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements;
 
 import com.traffic_simulator.businnes_logic.models.road.Road;
 import lombok.Getter;
