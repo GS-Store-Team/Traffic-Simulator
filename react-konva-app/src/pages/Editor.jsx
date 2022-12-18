@@ -9,6 +9,43 @@ import {defaultBuilding, defaultRoad, height, width} from "../UI/DefaultObjects.
 import {Context} from "../router/AppRouter.jsx";
 
 export const Editor = () => {
+
+    function getWindowDimensions() {
+        const { innerWidth: width, innerHeight: height } = window;
+        return {
+            width,
+            height
+        };
+    }
+
+    // eslint-disable-next-line no-restricted-globals
+    const [width, setWidth] = useState(innerWidth);
+    // eslint-disable-next-line no-restricted-globals
+    const [height, setHeight] = useState(innerHeight-120);
+    const [offset, setOffset] = useState({x:0,y:0})
+
+    useEffect(() => {
+        function handleWindowResize() {
+            setWidth(getWindowDimensions().width);
+            setHeight(getWindowDimensions().height-120);
+        }
+
+        window.addEventListener('resize', handleWindowResize);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+    }, []);
+
+    useEffect(()=>{
+        setStage({
+            scale: 1,
+            x: width/2,
+            y: height/2
+        });
+    },[width, height]);
+
+
     const [buildings, setBuildings] = useState([]);
     const [roads, setRoads] = useState([]);
     const {setScale} = useContext(Context);
@@ -31,17 +68,21 @@ export const Editor = () => {
         setScale(stage.scale/scaleBy/scaleBy);
         setStage({scale: stage.scale/scaleBy/scaleBy, x: stage.x, y: stage.y});
     }
-    const addBuilding = () =>{
+    const addBuilding = (e) =>{
         const building = {...defaultBuilding};
         building.id = Date.now();
+        building.x = offset.x+50;
+        building.y = offset.y+50;
         setBuildings([...buildings, building])
     }
     const removeBuilding = (building) =>{
         setBuildings(buildings.filter(b => b.id !== building.id))
     }
-    const addRoad = () =>{
+    const addRoad = (e) =>{
         const road = {...defaultRoad};
         road.id = Date.now();
+        road.x = offset.x+50;
+        road.y = offset.y+50;
         setRoads([...roads, road])
     }
     const removeRoad = (road) =>{
@@ -68,6 +109,12 @@ export const Editor = () => {
         setScale(newScale);
     };
 
+    const handleDrag = (e) =>{
+        if(e.target.constructor.name === "Stage")
+            setOffset({x:(-e.target._lastPos.x + width/2),
+                         y:(-e.target._lastPos.y + height/2)})
+    }
+
     return (
         <div>
             <Header state={false}/>
@@ -82,7 +129,8 @@ export const Editor = () => {
                 scaleX={stage.scale}
                 scaleY={stage.scale}
                 onWheel={(e) => handleWheel(e)}
-                draggable={true}>
+                draggable={true}
+                onDragEnd={(e) => handleDrag(e)}>
 
                 <Layer >
                     <Grid width={width} height={height} scale={stage.scale}/>
@@ -92,7 +140,7 @@ export const Editor = () => {
                     <BuildingsList buildings={buildings} rm={removeBuilding} />
                     <RoadList roads={roads}  rm={removeRoad}/>
                 </Layer>
-            </Stage>
+            </Stage>;
         </div>
     );
 }

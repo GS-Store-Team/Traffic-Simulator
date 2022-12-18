@@ -1,6 +1,3 @@
-
-export const width = 1920;
-export const height = 820;
 export const defaultBuilding = {
     id:0,
     x: 0,

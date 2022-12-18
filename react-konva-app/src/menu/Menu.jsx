@@ -8,13 +8,13 @@ const Menu = (props) => {
     return (
         <div className={classes.my__menu}>
             <button
-                onClick={props.addBuilding}
+                onClick={(e) => props.addBuilding(e)}
                 className={classes.my__button}>
                 Add Building
             </button>
 
             <button
-                onClick={props.addRoad}
+                onClick={(e) => props.addRoad(e)}
                 className={classes.my__button}>
                 Add Road
             </button>

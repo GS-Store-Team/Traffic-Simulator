@@ -114,6 +114,14 @@ const Road = (props) => {
                 shadowBlur={road.shadowBlur}
                 />
 
+    const separationLine = <Line
+                                x={0}
+                                y={0}
+                                points={[startX, startY, endX, endY]}
+                                strokeWidth={road.lineStroke/40}
+                                stroke={"white"}
+                            />
+
     const area = <Rect
                 x={startX <= endX ? startX-10: startX+10}
                 y={startY <= endY ? startY-10: startY+10}
@@ -150,6 +158,7 @@ const Road = (props) => {
                     {area}
                     {exit}
                     {line}
+                    {separationLine}
                     {circleStart}
                     {circleEnd}
                     </Group>

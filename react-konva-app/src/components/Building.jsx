@@ -56,8 +56,8 @@ const Building = (props) => {
                     />
 
     const area = <Circle
-                        x={25}
-                        y={25}
+                        x={building.x+ 25}
+                        y={building.y +25}
                         strokeWidth={0.4/myScale}
                         stroke={"black"}
                         radius={60}
@@ -67,8 +67,8 @@ const Building = (props) => {
                     />
 
     const exit = <Circle
-                    x={67}
-                    y={-17.5}
+                    x={building.x + 67}
+                    y={building.y-17.5}
                     fill={"red"}
                     strokeWidth={0.5/myScale}
                     stroke={"black"}
