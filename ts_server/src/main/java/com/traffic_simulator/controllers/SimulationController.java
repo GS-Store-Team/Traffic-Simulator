@@ -24,31 +24,26 @@ public class SimulationController {
     private RoadMap roadMap;
     private TickGenerator tickGenerator;
 
-    @PostConstruct
-    public void init(){
-        this.tickGenerator = new TickGenerator();
-        this.tickGenerator.init(simulationRunner, new TickGeneratorSettings(1));
-        this.roadMap = new RoadMap(simulationContext);
-    }
-
     @GetMapping("/run")
-    public ResponseEntity<?> startSimulation() throws SimulationException {
-        simulationRunner = new SimulationRunner(roadMap, tickGenerator);
-        simulationRunner.start();
+    public ResponseEntity<?> startSimulation() {
+        this.roadMap = new RoadMap(simulationContext);
+        this.simulationRunner = new SimulationRunner(roadMap);
+        this.tickGenerator = new TickGenerator(simulationRunner, new TickGeneratorSettings(1));
+        tickGenerator.run();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/run/stop")
     public ResponseEntity<?> stopSimulation(){
         if(simulationRunner == null) return ResponseEntity.badRequest().build();
-        simulationRunner.stop();
+        tickGenerator.stop();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/run/play")
     public ResponseEntity<?> playSimulation(){
         if(simulationRunner == null) return ResponseEntity.badRequest().build();
-        simulationRunner.play();
+        tickGenerator.play();
         return ResponseEntity.ok().build();
     }
 

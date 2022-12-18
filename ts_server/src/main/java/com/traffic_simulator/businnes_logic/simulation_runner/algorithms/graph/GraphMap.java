@@ -1,10 +1,12 @@
 package com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph;
 
+import com.traffic_simulator.businnes_logic.beans.SimulationContext;
 import com.traffic_simulator.businnes_logic.models.RoadMap;
 import com.traffic_simulator.businnes_logic.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.businnes_logic.models.attachment_point.Crossroad;
 import com.traffic_simulator.businnes_logic.models.buildings.Building;
 import com.traffic_simulator.businnes_logic.models.road.Road;
+import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.PathfindingAlgorithm;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Edge;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Node;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.RoadSide;
@@ -22,7 +24,7 @@ public class GraphMap {
     private List<Node> crossroadNodes;
     private List<Node> buildingNodes;
     private final List<Edge> edges;
-    private final RoadMap roadMap;
+    private final SimulationContext simulationContext;
 
     //TODO Сделать свои исключения
 
@@ -32,8 +34,8 @@ public class GraphMap {
      * Creates two edges (for left and right parts) for each road and connection between attachment point and building.
      * @param roadMap roadMap to represent as graph
      */
-    public GraphMap(RoadMap roadMap) throws GraphConstructionException {
-        this.roadMap = roadMap;
+    public GraphMap(SimulationContext simulationContext, PathfindingAlgorithm algorithm) throws GraphConstructionException {
+        this.simulationContext = simulationContext;
         this.nodes = new ArrayList<>();
         this.edges = new ArrayList<>();
         constructGraphMap();

@@ -14,7 +14,7 @@ public class TickGenerator implements Runnable {
     private long tickMoment = 1;
     private boolean running = false;
 
-    public void init(SimulationRunner simulationRunner, TickGeneratorSettings tickGeneratorSettings) {
+    public TickGenerator(SimulationRunner simulationRunner, TickGeneratorSettings tickGeneratorSettings) {
         this.simulationRunner = simulationRunner;
         this.tickMoment = 1000 / tickGeneratorSettings.timeSpeedMultiplier();
         this.timePassed = Instant.ofEpochSecond(0);
@@ -23,6 +23,7 @@ public class TickGenerator implements Runnable {
 
     @Override
     public void run() {
+        reset();
         Instant currentTime;
         while (running) {
             currentTime = Instant.now();
@@ -45,5 +46,6 @@ public class TickGenerator implements Runnable {
     public void reset() {
         stop();
         timePassed = Instant.ofEpochSecond(0);
+        simulationRunner.reset();
     }
 }

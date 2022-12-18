@@ -23,34 +23,17 @@ public class SimulationRunner {
     private HashMap<Node, CarPathsBunch> allPaths;
     private GraphMap graphMap;
     private List<Car> cars;
-    private TickGenerator tickGenerator;
-    public SimulationRunner(RoadMap roadMap, TickGenerator tickGenerator) {
+    public SimulationRunner(RoadMap roadMap) {
         this.roadMap = roadMap;
         this.allPaths = new HashMap<>();
         this.graphMap = null;
-        this.tickGenerator = tickGenerator;
         this.cars = new ArrayList<>();
-    }
-
-    public void start() throws SimulationException {
-        reset();
-        heavyInit();
-        play();
-    }
-
-    public void play() {
-        tickGenerator.play();
-    }
-
-    public void stop() {
-        tickGenerator.stop();
     }
 
     public void reset() {
         allPaths = new HashMap<>();
         graphMap = null;
         cars = new ArrayList<>();
-        tickGenerator.reset();
     }
 
     public void update() {

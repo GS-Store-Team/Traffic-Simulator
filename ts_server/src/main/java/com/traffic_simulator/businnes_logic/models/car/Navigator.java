@@ -20,11 +20,11 @@ public class Navigator {
 
     private List<Cell> advance;
 
-    public Navigator(MapObject initMapObject, double accelerationUpperLimit, double accelerationLowerLimit) {
+    public Navigator(Car car, double accelerationUpperLimit, double accelerationLowerLimit) {
         this.acceleration = 0;
         this.accelerationUpperLimit = accelerationUpperLimit;
         this.accelerationLowerLimit = accelerationLowerLimit;
-        this.currentMapObject = initMapObject;
+        this.currentMapObject = car.getCurrentMapObject();
         this.nextMapObject = null;
         this.advance = new ArrayList<>();
     }

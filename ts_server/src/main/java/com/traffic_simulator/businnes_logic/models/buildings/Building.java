@@ -22,7 +22,6 @@ public class Building extends MapObject {
     private String name;
     private String street;
     private String index;
-
     private ParkingZone parkingZone;
 
     //TODO Сделать более легкий конструктор для Building и потомков
