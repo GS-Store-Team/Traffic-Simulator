@@ -26,7 +26,8 @@ public class SimulationContext {
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(130,70), new PointDTO(130, 200), 1, 1, null, null));
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,70), new PointDTO(290, 70), 1, 1, null, null));
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(130,200), new PointDTO(290, 200), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,70), new PointDTO(460, 200), 1, 1, null, null));
+        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,70), new PointDTO(460, 70), 1, 1, null, null));
+        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,70), new PointDTO(290, 200), 1, 1, null, null));
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,200), new PointDTO(410, 200), 1, 1, null, null));
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(410,200), new PointDTO(460, 70), 1, 1, null, null));
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,200), new PointDTO(290, 330), 1, 1, null, null));
@@ -63,6 +64,7 @@ public class SimulationContext {
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 590)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 590)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 590)));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(875, 655)));
     }
 
     public long addBuildingDTO(BuildingDTO buildingDTO){

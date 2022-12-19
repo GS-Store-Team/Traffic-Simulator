@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import classes from "./toolbar.module.css";
+import classes from "./runnertoolbar.module.css";
 import API from "../../API.js";
 
 export const RunnerToolbar = ({reload, start, stop, continuesim, started, setFrames, frames, setDefaultVis}) => {

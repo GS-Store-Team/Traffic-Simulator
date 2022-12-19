@@ -1,0 +1,28 @@
+.my__pointer{
+    width: 40px;
+    height: 30px;
+    margin: 5px auto;
+    position: absolute;
+    right: 0;
+    top: 140px;
+    cursor: pointer;
+}
+.my__plus{
+    width: 25px;
+    height: 25px;
+    margin: 7px auto;
+    position: absolute;
+    right: 7px;
+    top: 175px;
+    cursor: pointer;
+}
+.my__minus{
+    width: 18px;
+    height: 20px;
+    margin: 10px auto;
+    position: absolute;
+    right: 9px;
+    top: 200px;
+    cursor: pointer;
+}
+
