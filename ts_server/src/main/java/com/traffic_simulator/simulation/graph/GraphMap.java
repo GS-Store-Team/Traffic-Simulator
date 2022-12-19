@@ -5,6 +5,7 @@ import com.traffic_simulator.simulation.context.SimulationContext;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.exceptions.GraphConstructionException;
+import com.traffic_simulator.simulation.models.buildings.Building;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class GraphMap {
     private List<Node> nodes;
     private List<Node> crossroadNodes;
+    private List<Building> buildings = new ArrayList<>();
     private List<Node> buildingNodes;
     private List<Edge> edges;
     private final SimulationContext simulationContext;
@@ -26,7 +28,7 @@ public class GraphMap {
      * Graph representation of the RoadMap.
      * Supposed to be created once for one map configuration (if it was changed you should recreate GraphMap).
      * Creates two edges (for left and right parts) for each road and connection between attachment point and building.
-     * @param roadMap roadMap to represent as graph
+
      */
     public GraphMap(SimulationContext simulationContext) throws GraphConstructionException {
         this.simulationContext = simulationContext;

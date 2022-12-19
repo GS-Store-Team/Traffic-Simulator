@@ -2,6 +2,7 @@ package com.traffic_simulator.simulation.models.buildings;
 
 import com.traffic_simulator.simulation.models.MapObject;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
+import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,9 +15,10 @@ import java.util.Map;
 @Setter
 @ToString
 public class Building extends MapObject {
+    BuildingType type;
     private Coordinates upLeftCorner;
-    private Coordinates downRightCorner;
     private Coordinates center;
+    private int width = 50;
     private AttachmentPoint connectedPoint = null;
 
     private String name;
@@ -25,26 +27,24 @@ public class Building extends MapObject {
     private ParkingZone parkingZone;
 
     //TODO Сделать более легкий конструктор для Building и потомков
-    public Building(Coordinates upLeftCorner, Coordinates downRightCorner, Coordinates center, String name, String street, String index) {
+    public Building(Coordinates upLeftCorner,  String name, String street, String index, BuildingType type) {
         super();
         this.upLeftCorner = upLeftCorner;
-        this.downRightCorner = downRightCorner;
         this.name = name;
+        this.center.setX(this.upLeftCorner.getX() + this.width/2);
         this.street = street;
         this.index = index;
-        this.parkingZone = new ParkingZone(0, upLeftCorner, downRightCorner);
-        this.center = center;
+        this.type = type;
+        this.parkingZone = new ParkingZone(0, upLeftCorner);
     }
 
-    public Building(Coordinates upLeftCorner, Coordinates downRightCorner, Coordinates center, String name, String street, String index, ParkingZone parkingZone) {
+    public Building(Coordinates upLeftCorner,   String name, String street, String index, ParkingZone parkingZone) {
         super();
         this.upLeftCorner = upLeftCorner;
-        this.downRightCorner = downRightCorner;
         this.name = name;
         this.street = street;
         this.index = index;
         this.parkingZone = parkingZone;
-        this.center = center;
     }
 
     /**

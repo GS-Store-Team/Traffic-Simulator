@@ -17,13 +17,11 @@ public class ParkingZone {
     private List<Car> cars;
 
     private Coordinates upLeftCorner;
-    private Coordinates downRightCorner;
 
-    public ParkingZone(int capacity, Coordinates upLeftCorner, Coordinates downRightCorner) {
+    public ParkingZone(int capacity, Coordinates upLeftCorner) {
         this.capacity = capacity;
         this.cars = new ArrayList<>();
         this.upLeftCorner = upLeftCorner;
-        this.downRightCorner = downRightCorner;
     }
 
     public boolean addCar(Car car) {

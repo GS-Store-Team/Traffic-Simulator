@@ -45,17 +45,17 @@ public class Lane {
 
     private int computeDiagonal(Coordinates startCoordinates, Coordinates endCoordinates) {
         return (int) Math.sqrt(
-                Math.pow((endCoordinates.x - startCoordinates.x), 2) +
-                        Math.pow((endCoordinates.y - startCoordinates.y), 2)
+                Math.pow((endCoordinates.getX() - startCoordinates.getX()), 2) +
+                        Math.pow((endCoordinates.getY() - startCoordinates.getY()), 2)
         );
     }
 
     private Coordinates computeOffsetCoordinates(Coordinates startCoordinates, Coordinates endCoordinates, int cellsAmount, int index) {
         return new Coordinates(
                 (int) Math.sqrt(
-                        Math.pow((endCoordinates.x - startCoordinates.x), 2)) / cellsAmount * index,
+                        Math.pow((endCoordinates.getX() - startCoordinates.getX()), 2)) / cellsAmount * index,
                 (int) Math.sqrt(
-                        Math.pow((endCoordinates.x - startCoordinates.x), 2)) / cellsAmount * index
+                        Math.pow((endCoordinates.getY() - startCoordinates.getY()), 2)) / cellsAmount * index
         );
     }
 

@@ -119,10 +119,10 @@ public class RoadMap {
         boolean endExists = false;
 
         for (AttachmentPoint point : attachmentPoints) {            //check for attachment points existence and set its start and end, if they exist
-            if (point.getCoordinates().x() == start.x() & point.getCoordinates().y() == start.y()) {
+            if (point.getCoordinates().getX() == start.getX() & point.getCoordinates().getY() == start.getY()) {
                 road.setStartPoint(point);
                 startExists = true;
-            } else if (point.getCoordinates().x() == end.x() & point.getCoordinates().y() == end.y()) {
+            } else if (point.getCoordinates().getX() == end.getX() & point.getCoordinates().getY() == end.getY()) {
                 road.setEndPoint(point);
                 endExists = true;
             }
@@ -144,31 +144,27 @@ public class RoadMap {
     /**
      * Add building of the specified type with parking zone.
      * Connects it to the last added attachment point, if it is located in building connection radius.
-     * @param upLeftCorner up left corner coordinates of building rectangle
-     * @param downRightCorner down right corner coordinates of building rectangle
-     * @param center center coordinates of building rectangle
-     * @param type building type
-     * @param parkingSize amount of cars, which can park in the building parking zone
      * @return newly created building object
      */
-    public Building addBuilding(Coordinates upLeftCorner, Coordinates downRightCorner, Coordinates center, BuildingType type, int parkingSize) {
-        Building building = new Building(upLeftCorner, downRightCorner, center, "name", "street", "index");
-        switch (type) {
-            case LIVING -> building = new LivingBuilding(upLeftCorner, downRightCorner, center, "name", "street", "index");
-            case WORK -> building = new WorkplaceBuilding(upLeftCorner, downRightCorner, center, "name", "street", "index");
-            case ENTERTAINMENT ->
-                    building = new EntertainmentBuilding(upLeftCorner, downRightCorner, center, "name", "street", "index");
-            case PEDESTRIAN_AREA ->
-                    building = new PedestrianArea(upLeftCorner, downRightCorner, center, "name", "street", "index");
-        }
-        building.setParkingZone(new ParkingZone(parkingSize, upLeftCorner, downRightCorner));
-
-        for (AttachmentPoint attachmentPoint : attachmentPoints) {
-            if (MyVectorGeometry.pointIsInBuildingCircleArea(attachmentPoint.getCoordinates(), building)) {
-                attachmentPoint.getConnectedBuildings().add(building);
-                building.setConnectedPoint(attachmentPoint);
+    public Building getAllBuildings(GraphMap map) {
+        Building building = null;
+        for (Building build: map.getBuildings()) {
+            building = new Building(build.getUpLeftCorner(),  "name", "street", "index", build.getType());
+            switch (build.getType()) {
+                case LIVING -> building = new LivingBuilding(build.getUpLeftCorner(), "name", "street", "index",
+                        BuildingType.LIVING);
+                case WORK -> building = new WorkplaceBuilding(build.getUpLeftCorner(),  "name", "street", "index",
+                        BuildingType.WORK);
+                case ENTERTAINMENT ->
+                        building = new EntertainmentBuilding(build.getUpLeftCorner(),  "name", "street", "index",
+                                BuildingType.ENTERTAINMENT);
+                case PEDESTRIAN_AREA ->
+                        building = new PedestrianArea(build.getUpLeftCorner(),  "name", "street", "index",
+                                BuildingType.PEDESTRIAN_AREA);
             }
+            //building.setParkingZone(new ParkingZone(parkingSize, upLeftCorner));
         }
+
 
         return building;
     }

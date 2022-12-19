@@ -13,8 +13,8 @@ public class MyVectorGeometry {
      */
     public static Coordinates computeRoadVectorCoordinates(Road road) {
         return new Coordinates(
-                road.getEndPoint().getCoordinates().x() - road.getStartPoint().getCoordinates().x(),
-                road.getEndPoint().getCoordinates().y() - road.getStartPoint().getCoordinates().y());
+                road.getEndPoint().getCoordinates().getX() - road.getStartPoint().getCoordinates().getX(),
+                road.getEndPoint().getCoordinates().getY() - road.getStartPoint().getCoordinates().getY());
     }
 
     /**
@@ -26,8 +26,8 @@ public class MyVectorGeometry {
      */
     public static Coordinates computeVectorCoordinates(Coordinates start, Coordinates end) {
         return new Coordinates(
-                end.x()  - start.x(),
-                end.y() - start.y());
+                end.getX()  - start.getX(),
+                end.getY() - start.getY());
     }
 
     /**
@@ -38,8 +38,8 @@ public class MyVectorGeometry {
      */
     public static double computeRoadVectorLength(Road road) {
         return (int) Math.sqrt(
-                Math.pow(computeRoadVectorCoordinates(road).x(), 2) +
-                        Math.pow(computeRoadVectorCoordinates(road).y(), 2)
+                Math.pow(computeRoadVectorCoordinates(road).getX(), 2) +
+                        Math.pow(computeRoadVectorCoordinates(road).getY(), 2)
         );
     }
 
@@ -51,8 +51,8 @@ public class MyVectorGeometry {
      */
     public static double computeVectorLength(Coordinates start, Coordinates end) {
         return (int) Math.sqrt(
-                Math.pow(computeVectorCoordinates(start, end).x(), 2) +
-                        Math.pow(computeVectorCoordinates(start, end).y(), 2)
+                Math.pow(computeVectorCoordinates(start, end).getX(), 2) +
+                        Math.pow(computeVectorCoordinates(start, end).getY(), 2)
         );
     }
 
@@ -63,8 +63,8 @@ public class MyVectorGeometry {
      */
     public static double computeVectorLength(Coordinates v1) {
         return (int) Math.sqrt(
-                Math.pow(v1.x(), 2) +
-                        Math.pow(v1.y(), 2)
+                Math.pow(v1.getX(), 2) +
+                        Math.pow(v1.getY(), 2)
         );
     }
 
@@ -75,7 +75,7 @@ public class MyVectorGeometry {
      * @return scalar product
      */
     public static double computeScalarProduct(Coordinates vector1, Coordinates vector2) {
-        return vector1.x() * vector2.x() + vector1.y() * vector2.y();
+        return vector1.getX() * vector2.getX() + vector1.getY() * vector2.getY();
     }
 
     /**
@@ -110,8 +110,8 @@ public class MyVectorGeometry {
         if (MyVectorGeometry.computeVectorsAngleCos(
                 MyVectorGeometry.computeVectorCoordinates(road.getStartPoint().getCoordinates(), point),
                 MyVectorGeometry.computeRoadVectorCoordinates(road)) == 1) {
-            return road.getStartPoint().getCoordinates().x() < point.x() & point.x() < road.getEndPoint().getCoordinates().x() ||
-                    road.getEndPoint().getCoordinates().x() < point.x() & point.x() < road.getStartPoint().getCoordinates().x();
+            return road.getStartPoint().getCoordinates().getX() < point.getX() & point.getX() < road.getEndPoint().getCoordinates().getX() ||
+                    road.getEndPoint().getCoordinates().getX() < point.getX() & point.getX() < road.getStartPoint().getCoordinates().getX();
         }
 
         return false;
