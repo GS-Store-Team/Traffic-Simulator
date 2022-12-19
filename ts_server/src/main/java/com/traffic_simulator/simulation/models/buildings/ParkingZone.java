@@ -1,0 +1,41 @@
+package com.traffic_simulator.simulation.models.buildings;
+
+import com.traffic_simulator.simulation.models.car.Car;
+import com.traffic_simulator.simulation.models.supportive.Coordinates;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@ToString
+public class ParkingZone {
+    private int capacity;
+    private List<Car> cars;
+
+    private Coordinates upLeftCorner;
+    private Coordinates downRightCorner;
+
+    public ParkingZone(int capacity, Coordinates upLeftCorner, Coordinates downRightCorner) {
+        this.capacity = capacity;
+        this.cars = new ArrayList<>();
+        this.upLeftCorner = upLeftCorner;
+        this.downRightCorner = downRightCorner;
+    }
+
+    public boolean addCar(Car car) {
+        if (cars.size() + 1 <= capacity) {
+            cars.add(car);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void removeCar(Car car) {
+        cars.remove(car);
+    }
+}

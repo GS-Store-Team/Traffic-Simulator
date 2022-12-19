@@ -1,7 +1,6 @@
 package com.traffic_simulator.controllers;
 
-import com.traffic_simulator.businnes_logic.beans.SimulationContext;
-import com.traffic_simulator.businnes_logic.models.road.Road;
+import com.traffic_simulator.simulation.context.SimulationContext;
 import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.RoadDTO;
 import lombok.RequiredArgsConstructor;

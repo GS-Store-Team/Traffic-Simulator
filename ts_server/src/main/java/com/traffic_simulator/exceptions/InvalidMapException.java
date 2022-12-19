@@ -1,7 +1,7 @@
 package com.traffic_simulator.exceptions;
 
-import com.traffic_simulator.businnes_logic.models.MapObject;
-import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Node;
+import com.traffic_simulator.simulation.models.MapObject;
+import com.traffic_simulator.simulation.graph.graph_elements.Node;
 
 import java.util.ArrayList;
 import java.util.List;
