@@ -6,33 +6,27 @@ import com.traffic_simulator.businnes_logic.models.buildings.ParkingZone;
 import com.traffic_simulator.businnes_logic.models.car.Car;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.PathfindingAlgorithm;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.StraightDijkstraAlgorithm;
-import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.car_path.CarPathsBunch;
 import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.GraphMap;
-import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.graph_elements.Node;
 import com.traffic_simulator.dto.SimulationDTO;
-import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.exceptions.SimulationException;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class SimulationRunner {
     private final RoadMap roadMap;
-    private HashMap<Node, CarPathsBunch> allPaths;
-    private GraphMap graphMap;
+    //private GraphMap graphMap;
+    private SimulationSettings simulationSettings;
     private List<Car> cars;
-    public SimulationRunner(RoadMap roadMap) {
+    public SimulationRunner(RoadMap roadMap, SimulationSettings simulationSettings) {
         this.roadMap = roadMap;
-        this.allPaths = new HashMap<>();
-        this.graphMap = null;
+        //this.graphMap = null;
         this.cars = new ArrayList<>();
+        this.simulationSettings = simulationSettings;
     }
 
     public void reset() {
-        allPaths = new HashMap<>();
-        graphMap = null;
+        //graphMap = null;
         cars = new ArrayList<>();
     }
 
@@ -55,24 +49,15 @@ public class SimulationRunner {
         for (Building building : roadMap.getBuildings()) {
             parkingZones.add(building.getParkingZone());
         }
-
         for (ParkingZone parkingZone : parkingZones) {
             cars.addAll(parkingZone.getCars());
         }
-
         for (Car car : cars) {
-            //TODO Раздать машинкам их пути, соответствующие их точке старта и финиша из CarPathBunch
         }
     }
 
     private void initGraphMap() throws InvalidMapException {
-        try {
-            graphMap = new GraphMap(roadMap);
-            PathfindingAlgorithm pathfindingAlgorithm = new StraightDijkstraAlgorithm(graphMap);
-            allPaths = pathfindingAlgorithm.compute();
-        } catch (GraphConstructionException exc) {
-            throw new InvalidMapException("Cannot build graph from roadmap!", exc.getUnreachableNodes());
-        }
+        //PathfindingAlgorithm pathfindingAlgorithm = new StraightDijkstraAlgorithm(graphMap);
     }
 
     public SimulationDTO getCurrentSimulationState() {

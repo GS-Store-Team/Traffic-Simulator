@@ -3,12 +3,10 @@ package com.traffic_simulator.controllers;
 import com.traffic_simulator.businnes_logic.models.RoadMap;
 import com.traffic_simulator.businnes_logic.beans.SimulationContext;
 import com.traffic_simulator.businnes_logic.simulation_runner.SimulationRunner;
+import com.traffic_simulator.businnes_logic.simulation_runner.SimulationSettings;
 import com.traffic_simulator.businnes_logic.simulation_runner.TickGenerator;
-import com.traffic_simulator.businnes_logic.simulation_runner.TickGeneratorSettings;
 import com.traffic_simulator.dto.SimulationDTO;
 import com.traffic_simulator.dto.MapStateDTO;
-import com.traffic_simulator.exceptions.SimulationException;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +25,9 @@ public class SimulationController {
     @GetMapping("/run")
     public ResponseEntity<?> startSimulation() {
         this.roadMap = new RoadMap(simulationContext);
-        this.simulationRunner = new SimulationRunner(roadMap);
-        this.tickGenerator = new TickGenerator(simulationRunner, new TickGeneratorSettings(1));
-        tickGenerator.run();
+        this.simulationRunner = new SimulationRunner(roadMap, new SimulationSettings());
+        this.tickGenerator = new TickGenerator(simulationRunner, 1);
+        new Thread(tickGenerator).start();
         return ResponseEntity.ok().build();
     }
 

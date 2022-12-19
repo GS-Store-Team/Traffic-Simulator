@@ -8,6 +8,5 @@ import lombok.ToString;
 @Getter
 @ToString
 public class SimulationSettings {
-    private TickGeneratorSettings tickGeneratorSettings;
-    private
+    private final long ticksPerSecond = 10;
 }

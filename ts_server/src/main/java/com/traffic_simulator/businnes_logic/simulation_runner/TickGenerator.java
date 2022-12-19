@@ -1,51 +1,34 @@
 package com.traffic_simulator.businnes_logic.simulation_runner;
 
 import lombok.Getter;
+import java.util.concurrent.TimeUnit;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
-
+@Getter
 public class TickGenerator implements Runnable {
     private SimulationRunner simulationRunner;
-    @Getter
-    private Instant timePassed;
-    @Getter
-    private long tickMoment = 1;
-    private boolean running = false;
+    private long ticksPerSecond;
+    private boolean running;
 
-    public TickGenerator(SimulationRunner simulationRunner, TickGeneratorSettings tickGeneratorSettings) {
+    public TickGenerator(SimulationRunner simulationRunner, long ticksPerSecond) {
         this.simulationRunner = simulationRunner;
-        this.tickMoment = 1000 / tickGeneratorSettings.timeSpeedMultiplier();
-        this.timePassed = Instant.ofEpochSecond(0);
-        reset();
+        this.ticksPerSecond = ticksPerSecond;
     }
 
     @Override
     public void run() {
-        reset();
-        Instant currentTime;
-        while (running) {
-            currentTime = Instant.now();
-            timePassed = currentTime;
-            if (currentTime.getNano() % tickMoment < 10) {
-                simulationRunner.update();
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                if(running) simulationRunner.update();
+                TimeUnit.MILLISECONDS.sleep(1000/ticksPerSecond);
             }
-        }
+        } catch (InterruptedException ignore){};
     }
 
     public void play() {
         running = true;
-        run();
     }
 
     public void stop() {
         running = false;
-    }
-
-    public void reset() {
-        stop();
-        timePassed = Instant.ofEpochSecond(0);
-        simulationRunner.reset();
     }
 }

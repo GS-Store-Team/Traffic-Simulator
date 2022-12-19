@@ -12,7 +12,7 @@ import com.traffic_simulator.businnes_logic.models.buildings.types.WorkplaceBuil
 import com.traffic_simulator.businnes_logic.models.road.Road;
 import com.traffic_simulator.businnes_logic.models.supportive.BuildingType;
 import com.traffic_simulator.businnes_logic.models.supportive.Coordinates;
-import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.GraphMap;
+//import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.GraphMap;
 import com.traffic_simulator.dto.MapStateDTO;
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class RoadMap {
     private List<AttachmentPoint> attachmentPoints;
     private List<Road> roads;
     private List<Building> buildings;
-    private GraphMap graphMap;
+    //private GraphMap graphMap;
 
     public RoadMap(String name, String description, String author, SimulationContext simulationContext)  {
         this.name = name;
