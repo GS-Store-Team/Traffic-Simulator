@@ -114,7 +114,7 @@ public class RoadMap {
      * @return newly created road object
      */
     public Road addRoad(Coordinates start, Coordinates end, int rightLanes, int leftLanes) {
-        Road road = new Road(start, end, rightLanes, leftLanes);
+        Road road = new Road(new AttachmentPoint(start), new AttachmentPoint(end), rightLanes, leftLanes);
         boolean startExists = false;
         boolean endExists = false;
 

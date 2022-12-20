@@ -32,6 +32,7 @@ public class Building extends MapObject {
         this.upLeftCorner = upLeftCorner;
         this.name = name;
         this.center.setX(this.upLeftCorner.getX() + this.width/2);
+        this.center.setY(this.upLeftCorner.getY() + this.width/2);
         this.street = street;
         this.index = index;
         this.type = type;

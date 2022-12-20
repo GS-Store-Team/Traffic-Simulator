@@ -1,5 +1,6 @@
 package com.traffic_simulator.controllers;
 
+import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.models.RoadMap;
 import com.traffic_simulator.simulation.context.SimulationContext;
 import com.traffic_simulator.simulation.simulation_runner.SimulationRunner;
@@ -31,6 +32,13 @@ public class SimulationController {
     @SneakyThrows
     private void init(){
         this.graphMap = new GraphMap(simulationContext);
+        try {
+            graphMap.constructGraphMap();
+        }
+        catch (InvalidMapException e){
+            System.out.println("Ya budu ispravlyat' " + e.getMessage());
+        }
+
         this.pathFindingAlgorithm = new StraightDijkstraAlgorithm(this.graphMap);
         this.roadMap = new RoadMap(graphMap, pathFindingAlgorithm);
         this.simulationRunner = new SimulationRunner(roadMap, new SimulationSettings());
