@@ -1,13 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Circle, Group, Line, Rect} from "react-konva";
-import {ceilPosition, mapCoordinateCeil} from "../utils/Utils";
-import API from "../API.js";
+import {ceilPosition} from "../utils/Utils";
+import {Context} from "../router/AppRouter.jsx";
 const Road = (props) => {
     const road = props.road;
 
+    const {scale} = useContext(Context);
+    const [myScale, setMyScale] = useState(1);
+    useEffect(() => {
+        scale<0.8? setMyScale(0.8): setMyScale(scale);
+    }, [scale])
+
     const [visible, setVisible] = useState(false);
     const [stroke, setStroke] = useState(false);
-
     const [roadState, setRoadState] = useState({
         //id:0,
         start:{x:0, y:0},
@@ -32,7 +37,7 @@ const Road = (props) => {
         x={road.x}
         y={road.y}
         fill={road.pointFill}
-        radius={road.pointRadius}
+        radius={road.pointRadius/myScale}
         draggable={true}
         onDragMove={(e) =>changerStart(e)}
         // onDragEnd={(e) => changerStartRoadState(e)}
@@ -42,7 +47,7 @@ const Road = (props) => {
         x={road.x+road.offSet}
         y={road.y}
         fill={road.pointFill}
-        radius={road.pointRadius}
+        radius={road.pointRadius/myScale}
         draggable={true}
         onDragMove={(e) =>changerEnd(e)}
     />
@@ -82,6 +87,11 @@ const Road = (props) => {
     const drawArea = () => {
         setVisible(true);
     }
+
+    const enterRoad = () => {
+        setVisible(true);
+        setStroke(true);
+    }
     const eraseArea = () => {
         setVisible(false);
         setStroke(false);
@@ -97,19 +107,27 @@ const Road = (props) => {
                 x={0}
                 y={0}
                 points={[startX, startY, endX, endY]}
-                // tension={0.5}
                 strokeWidth={road.lineStroke}
                 stroke={stroke?road.enter:road.lineFill}
-                onMouseEnter={fullSelect}
+                onMouseEnter={enterRoad}
                 onMouseLeave={eraseStroke}
+                shadowBlur={road.shadowBlur}
                 />
+
+    const separationLine = <Line
+                                x={0}
+                                y={0}
+                                points={[startX, startY, endX, endY]}
+                                strokeWidth={road.lineStroke/40}
+                                stroke={"white"}
+                            />
 
     const area = <Rect
                 x={startX <= endX ? startX-10: startX+10}
                 y={startY <= endY ? startY-10: startY+10}
                 width={(endX- startX) >= 0?endX- startX+20:endX- startX - 20}
                 height={(endY- startY) >= 0?endY- startY+20:endY- startY- 20}
-                strokeWidth={1}
+                strokeWidth={0.2/myScale}
                 stroke={"black"}
                 visible={visible}
                 onMouseLeave={eraseArea}
@@ -121,16 +139,17 @@ const Road = (props) => {
         x={startX <= endX ? startX + (endX-startX)*0.9: endX + (startX-endX)*0.9}
         y={startY <= endY ? startY-10: endY-10}
         fill={"red"}
-        radius={8}
+        radius={6/myScale}
         visible={visible}
         onMouseEnter={fullSelect}
         onMouseLeave={eraseArea}
         strokeEnabled={exitStroke}
-        strokeWidth={1}
+        strokeWidth={0.5/myScale}
         stroke={"black"}
-        shadowBlur={3}
+        shadowBlur={2/myScale}
         shadowEnabled={exitStroke}
         onClick={remove}
+        opacity={exitStroke? 0.8:0.5}
     />
 
     const group =   <Group draggable={true}
@@ -139,6 +158,7 @@ const Road = (props) => {
                     {area}
                     {exit}
                     {line}
+                    {separationLine}
                     {circleStart}
                     {circleEnd}
                     </Group>

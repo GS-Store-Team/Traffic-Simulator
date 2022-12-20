@@ -1,25 +1,17 @@
 import React, {useState} from 'react';
-import {Layer, Stage} from "react-konva";
-import Menu from "../menu/Menu.jsx";
+import {Layer} from "react-konva";
+import EditorToolbar from "../components/EditorToolbar/EditorToolbar.jsx";
 import BuildingsList from "../components/BuildingsList.jsx";
 import RoadList from "../components/RoadList.jsx";
 import {Header} from "../components/header/Header.jsx";
 import {Grid} from "../components/Grid";
+import {defaultBuilding, defaultRoad} from "../UI/DefaultObjects.js";
+import {MyStage} from "../components/mystage/MyStage.jsx";
 
 export const Editor = () => {
-    const defaultBuilding = {
-        id:0,
-        x: 0,
-        y: 0,
-        width: 50,
-        height: 50,
-        fill: "grey",
-        shadowBlur: 0,
-        draggable: true,
-        enter: "gold"
-    }
     const [buildings, setBuildings] = useState([]);
-    const addBuilding = () =>{
+    const [roads, setRoads] = useState([]);
+    const addBuilding = (e) =>{
         const building = {...defaultBuilding};
         building.id = Date.now();
         setBuildings([...buildings, building])
@@ -27,20 +19,7 @@ export const Editor = () => {
     const removeBuilding = (building) =>{
         setBuildings(buildings.filter(b => b.id !== building.id))
     }
-
-    const defaultRoad = {
-        id:0,
-        x: 100,
-        y: 50,
-        offSet: 100,
-        pointRadius:6,
-        pointFill: "grey",
-        lineFill: "grey",
-        lineStroke: 10,
-        enter: "gold",
-    }
-    const [roads, setRoads] = useState([]);
-    const addRoad = () =>{
+    const addRoad = (e) =>{
         const road = {...defaultRoad};
         road.id = Date.now();
         setRoads([...roads, road])
@@ -52,18 +31,18 @@ export const Editor = () => {
     return (
         <div>
             <Header state={false}/>
-            <Menu addBuilding={addBuilding} addRoad={addRoad}/>
-            <Stage
-                width={1920}
-                height={840}>
-                <Layer>
-                    <Grid />
-                </Layer>
-                <Layer>
-                    <BuildingsList buildings={buildings} rm={removeBuilding} />
-                    <RoadList roads={roads}  rm={removeRoad}/>
-                </Layer>
-            </Stage>
+            <EditorToolbar addBuilding={addBuilding} addRoad={addRoad} />
+            <MyStage layers={
+                [
+                    <Layer key={0}>
+                        <Grid width={window.innerWidth} height={window.innerHeight-100}/>
+                    </Layer>,
+                    <Layer key={1}>
+                        <BuildingsList buildings={buildings} rm={removeBuilding} />
+                        <RoadList roads={roads}  rm={removeRoad}/>
+                    </Layer>
+                ]
+            }/>
         </div>
     );
 }

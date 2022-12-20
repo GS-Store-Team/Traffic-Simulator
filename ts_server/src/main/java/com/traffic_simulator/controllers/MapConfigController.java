@@ -37,7 +37,6 @@ public class MapConfigController {
 
     @DeleteMapping("/roads/{id}")
     public ResponseEntity<?> deleteRoad(@PathVariable("id") long id){
-        System.out.println(id);
         boolean status = simulationContext.deleteRoadDTOById(id);
         return status?
                 ResponseEntity.ok().build():

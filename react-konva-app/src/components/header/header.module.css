@@ -13,7 +13,7 @@
     margin: auto 10px;
     height: 30px;
     width: 150px;
-    border: 0;
+    border: 3px solid rgba(255, 255, 255, 0.8);
     border-radius: 5px;
     background-color: rgba(143, 0, 168, 0.5);
     color: white;
@@ -34,4 +34,5 @@
 
 .my__button:hover{
     color: yellow;
+    border: 3px solid yellow;
 }

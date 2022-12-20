@@ -1,5 +1,4 @@
 import React from 'react';
-import Building from "./Building";
 import Road from "./Road";
 import {Group} from "react-konva";
 

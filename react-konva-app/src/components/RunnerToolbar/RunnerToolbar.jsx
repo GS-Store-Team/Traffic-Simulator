@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import classes from "./toolbar.module.css";
+import classes from "./runnertoolbar.module.css";
 import API from "../../API.js";
 
-export const RunnerToolbar = ({reload, start, stop, continuesim, started}) => {
+export const RunnerToolbar = ({reload, start, stop, continuesim, started, setFrames, frames, setDefaultVis}) => {
     const [stopped, setStopped] = useState(false);
 
     const startSimulation = (e) =>{
@@ -27,10 +27,37 @@ export const RunnerToolbar = ({reload, start, stop, continuesim, started}) => {
         continuesim();
     }
 
+    const [vis, setVis] = useState(true);
+
+    const defaultVis = () =>{
+        setVis(!vis);
+        setDefaultVis(!vis);
+    }
+
     return (
         <div className={classes.my__toolbar}>
+            <div className={classes.my__frames}>
+                <input onChange={(e) => setFrames(e.target.value)}
+                       className={classes.my__slider}
+                       type={"range"}
+                       min={1}
+                       max={10}
+                       defaultValue={1}/>
+                <div className={classes.my__frames__title}>{frames} fps</div>
+            </div>
+
+            <div className={classes.my__choice__box}>
+                <input onChange={defaultVis}
+                       type="checkbox"
+                       id="switch"/>
+                <label htmlFor="switch">Toggle</label>
+                <div className={classes.my__choice__box__title}>
+                    {vis ? "cars": "heat map"}
+                </div>
+            </div>
+
             <button onClick={(e) => reloadMap(e)}
-                    className={classes.my__button}>Reload map</button>
+                    className={classes.my__button__reload}>Reload map</button>
             <button className={classes.my__button}
                     onClick={(e) => startSimulation(e)}>Start</button>
             <button disabled={!started || stopped}
