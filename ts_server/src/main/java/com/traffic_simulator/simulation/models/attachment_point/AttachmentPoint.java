@@ -6,21 +6,19 @@ import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.road.Lane;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.*;
 
-@Getter
-@Setter
-@ToString
+
+@Data
 public class AttachmentPoint extends MapObject {
     protected Coordinates coordinates;
     protected List<Building> connectedBuildings;
     protected List<Road> roads;
-    protected Hashtable<Road, List<Lane>> entryLanes;
-    protected Hashtable<Road, List<Lane>> outputLanes;
     protected List<Road> endingRoads;
     protected List<Road> startingRoads;
 
@@ -31,8 +29,8 @@ public class AttachmentPoint extends MapObject {
         this.endingRoads = new ArrayList<>();
         this.startingRoads = new ArrayList<>();
 
-        setEntryLanes();
-        setOutputLanes();
+/*        setEntryLanes();
+        setOutputLanes();*/
     }
 
     protected void dispenseRoadsByEnds() {
@@ -45,7 +43,7 @@ public class AttachmentPoint extends MapObject {
         }
     }
 
-    protected void setEntryLanes() {
+/*    protected void setEntryLanes() {
         for (Road road : roads) {
             entryLanes.put(road, road.getRightLanes());
         }
@@ -55,7 +53,7 @@ public class AttachmentPoint extends MapObject {
         for (Road road : roads) {
             entryLanes.put(road, road.getLeftLanes());
         }
-    }
+    }*/
     /**
      * Calculate traffic weight.
      *

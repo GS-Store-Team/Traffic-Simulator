@@ -1,16 +1,25 @@
 package com.traffic_simulator.simulation.graph;
 
+import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.MapStateDTO;
+import com.traffic_simulator.dto.PointDTO;
+import com.traffic_simulator.dto.RoadDTO;
+import com.traffic_simulator.exceptions.InvalidMapException;
+import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.context.SimulationContext;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.exceptions.GraphConstructionException;
+import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.buildings.Building;
+import com.traffic_simulator.simulation.models.road.Road;
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @ToString
 @Getter
@@ -21,6 +30,7 @@ public class GraphMap {
     private List<Node> buildingNodes;
     private List<Edge> edges;
     private final SimulationContext simulationContext;
+    private Validation validation;
 
     //TODO Сделать свои исключения
 
@@ -30,9 +40,9 @@ public class GraphMap {
      * Creates two edges (for left and right parts) for each road and connection between attachment point and building.
 
      */
-    public GraphMap(SimulationContext simulationContext) throws GraphConstructionException {
+
+    public GraphMap(SimulationContext simulationContext){
         this.simulationContext = simulationContext;
-        constructGraphMap();
     }
 
     public void resetMarks() {
@@ -41,14 +51,16 @@ public class GraphMap {
         }
     }
 
-    private void constructGraphMap() throws GraphConstructionException {
-        try {
-            constructAttachmentPointNodes();
-            connectBuildings();
-            constructRoads();
-        } catch (IndexOutOfBoundsException exc) {
-            throw new GraphConstructionException(exc.getMessage(), null);
-        }
+    public void constructGraphMap() throws InvalidMapException {
+        validation = new Validation(simulationContext);
+        validation.checkErrors();
+        constructAttachmentPointNodes();
+        connectBuildings();
+        constructRoads();
+    }
+
+    public Map<String, List<Long>> getErrors(){
+        return validation.getErrors();
     }
 
     private void constructAttachmentPointNodes() {
@@ -64,7 +76,6 @@ public class GraphMap {
 
     private void connectBuildings() {
         buildingNodes = new ArrayList<>();
-
 //        for (Building building : roadMap.getBuildings()) {
 //            Node buildingNode = new Node(building);
 //            Node connectedAttachmentPoint;
@@ -83,6 +94,7 @@ public class GraphMap {
 //            edges.add(new Edge(null, connectedAttachmentPoint, buildingNode, RoadSide.RIGHT));
 //            edges.add(new Edge(null, buildingNode, connectedAttachmentPoint, RoadSide.LEFT));
 //        }
+
     }
 
     private void constructRoads() {
