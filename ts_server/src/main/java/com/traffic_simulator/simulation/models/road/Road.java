@@ -22,11 +22,9 @@ public class Road extends MapObject {
     private List<Lane> rightLanes;
     private List<Lane> leftLanes;
 
-    public Road(Coordinates startCoordinates, Coordinates endCoordinates, int rightLanesAmount, int leftLanesAmount) {
-        super();
-
-        this.startPoint = new AttachmentPoint(startCoordinates);
-        this.endPoint = new AttachmentPoint(endCoordinates);
+    public Road(AttachmentPoint startPoint, AttachmentPoint endPoint, int rightLanesAmount, int leftLanesAmount) {
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
         this.rightLanes = new ArrayList<>();
         this.leftLanes = new ArrayList<>();
         addLanes(rightLanesAmount, leftLanesAmount);

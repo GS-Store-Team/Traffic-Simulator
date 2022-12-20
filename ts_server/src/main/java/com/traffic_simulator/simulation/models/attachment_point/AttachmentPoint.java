@@ -16,31 +16,30 @@ import java.util.*;
 
 @Data
 public class AttachmentPoint extends MapObject {
-    protected Coordinates coordinates;
-    protected List<Building> connectedBuildings;
-    protected List<Road> roads;
-    protected List<Road> endingRoads;
-    protected List<Road> startingRoads;
+    private final Coordinates coordinates;
+    private final List<Building> connectedBuildings;
+    private final List<Road> roads;
+    private final List<Building> buildings;
 
     public AttachmentPoint(Coordinates coordinates) {
         this.coordinates = coordinates;
         this.connectedBuildings = new ArrayList<>();
         this.roads = new ArrayList<>();
-        this.endingRoads = new ArrayList<>();
-        this.startingRoads = new ArrayList<>();
+/*        this.endingRoads = new ArrayList<>();
+        this.startingRoads = new ArrayList<>();*/
 
 /*        setEntryLanes();
         setOutputLanes();*/
     }
 
     protected void dispenseRoadsByEnds() {
-        for (Road road : roads) {
+/*        for (Road road : roads) {
             if (road.getStartPoint().equals(this)) {
                 startingRoads.add(road);
             } else if (road.getEndPoint().equals(this)) {
                 endingRoads.add(road);
             }
-        }
+        }*/
     }
 
 /*    protected void setEntryLanes() {

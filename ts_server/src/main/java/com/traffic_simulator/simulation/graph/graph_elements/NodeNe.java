@@ -13,7 +13,7 @@ public class NodeNe {
         this.attachmentPoint = attachmentPoint;
     }
 
-    public void setNodesList(List<NodeNe> nodesList){
-        this.nodesList = nodesList;
+    public void addNodeToList(NodeNe node){
+        nodesList.add(node);
     }
 }

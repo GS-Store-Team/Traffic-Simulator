@@ -21,6 +21,8 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
     }
     @Override
     protected CarPathsBunch computeCarPath(Node start) throws PathsConstructionException {
+        return null;
+        /*
         CarPathsBunch carPathsBunch = new CarPathsBunch(start);
         List<Node> unmarkedNodes = graph.getNodes();
         Node currentNode = start;
@@ -45,7 +47,7 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
         for (Node end : graph.getNodes()) {
             carPathsBunch.getCarPathsEndsMap().put(end, PathRetriever.retrievePath(start, end));
         }
-        return carPathsBunch;
+        return carPathsBunch;*/
     }
 
 }
