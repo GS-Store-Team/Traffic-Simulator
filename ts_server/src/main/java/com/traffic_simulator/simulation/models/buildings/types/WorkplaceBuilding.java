@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class WorkplaceBuilding extends Building {
     public WorkplaceBuilding(Coordinates upLeftCorner, String name, String street, String index, BuildingType type) {
-        super(upLeftCorner,  name, street, index, type );
+        super(upLeftCorner,  name, street, index, new ParkingZone(10, new Coordinates(0,0)) );
     }
 
     public WorkplaceBuilding(Coordinates upLeftCorner,  String name, String street, String index, ParkingZone parkingZone) {

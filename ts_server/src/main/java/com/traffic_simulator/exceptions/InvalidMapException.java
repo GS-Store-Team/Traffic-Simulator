@@ -20,10 +20,10 @@ public class InvalidMapException extends Exception {
      */
     public InvalidMapException(String message, List<Node> invalidNodes) {
         super(message);
-        this.invalidNodes = invalidNodes;
-        this.invalidMapObjects = new ArrayList<>();
-        for (Node node : invalidNodes) {
-            this.invalidMapObjects.add(node.getRefMapObject());
-        }
+//        this.invalidNodes = invalidNodes;
+//        this.invalidMapObjects = new ArrayList<>();
+//        for (Node node : invalidNodes) {
+//            this.invalidMapObjects.add(node.getRefMapObject());
+//        }
     }
 }

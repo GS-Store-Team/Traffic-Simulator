@@ -20,47 +20,12 @@ import java.util.List;
 @Setter
 @ToString
 public class Car {
-    private Navigator navigator;
-
     private int currentVelocity;        //per tick
-    private int currentAcceleration;    //per tick
-
-    private MapObject start;
-    private MapObject destination;
-
-    private MapObject currentMapObject;
-    private CarPath path;
-    private Instant departingTime = null;
-    private List<Cell> cellDisposition;
-
-    //TODO Продумать как назначить путь и как сменять клетки и mapobject-ы по пути
-    public Car(MapObject start, MapObject destination) {
-        this.currentVelocity = 0;
-        this.currentAcceleration = 0;
-        this.start = start;
-        this.destination = destination;
-        this.currentMapObject = start;
-        this.cellDisposition = new ArrayList<>();
-        //this.navigator = new Navigator(this, GlobalSettings.automobileMaxAcceleration, GlobalSettings.automobileMinAcceleration);
-    }
-
-    public void update() {
-
-    }
-
-    public void move() {
-        if (currentMapObject.getClass().equals(Road.class)) {
-
-        } else if (currentMapObject.getClass().equals(Crossroad.class)) {
-
-        } else if (currentMapObject.getClass().equals(AttachmentPoint.class)) {
-
-        } else if (currentMapObject.getClass().equals(Building.class)) {
-
-        }
-    }
-
-    private void changeSpeed() {
-
+    private int currentAcceleration = 1;    //per tick
+    private Building buildingStart;
+    private Building buildingEnd;
+    public Car(Building buildingStart, Building buildingEnd) {
+        this.buildingStart = buildingStart;
+        this.buildingEnd = buildingEnd;
     }
 }

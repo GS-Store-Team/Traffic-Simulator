@@ -55,16 +55,16 @@ public class SimulationContext {
 
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 10)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 80)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(60, 60)));
+        //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(60, 60)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 160)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 80)));
+        //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 80)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 660)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 660)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 660)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 590)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 590)));
         buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 590)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(875, 655)));
+        //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(875, 655)));
     }
 
     public long addBuildingDTO(BuildingDTO buildingDTO){

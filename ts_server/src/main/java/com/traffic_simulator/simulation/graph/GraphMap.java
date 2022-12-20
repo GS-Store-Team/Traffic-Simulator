@@ -14,6 +14,7 @@ import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.road.Road;
+import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import lombok.Data;
 import lombok.Getter;
@@ -24,15 +25,17 @@ import java.util.*;
 @ToString
 @Getter
 public class GraphMap {
-    private List<Node> nodes;
-    private List<Node> crossroadNodes;
-    private List<Building> buildings = new ArrayList<>();
-    private List<Node> buildingNodes;
-    private List<Edge> edges;
+    private List<Node> nodes = new ArrayList<>();
+    private List<Node> crossroadNodes = new ArrayList<>();
+    private List<Node> buildingNodes = new ArrayList<>();
+    private List<Edge> edges = new ArrayList<>();
+
+
     private final SimulationContext simulationContext;
     private Validation validation;
     private List<NodeNe> nodesList;
-    private List<Road> roads;
+    private List<Road> roads = new ArrayList<>();
+    private List<Building> buildings = new ArrayList<>();
 
     //TODO Сделать свои исключения
 
@@ -45,12 +48,6 @@ public class GraphMap {
 
     public GraphMap(SimulationContext simulationContext){
         this.simulationContext = simulationContext;
-    }
-
-    public void resetMarks() {
-        for (Node node : nodes) {
-            node.resetMarks();
-        }
     }
 
     public void constructGraphMap() throws InvalidMapException {
@@ -79,11 +76,29 @@ public class GraphMap {
         for (RoadDTO roadDTO : simulationContext.getRoadDTOList()){
             NodeNe start = map.get(roadDTO.getStart());
             NodeNe end = map.get(roadDTO.getEnd());
-            roads.add(new Road(start.getAttachmentPoint(), end.getAttachmentPoint(),
-                    roadDTO.getForwardLanesCnt(), roadDTO.getReverseLanesCnt()));
+            Road road = new Road(
+                    start.getAttachmentPoint().getCoordinates(),
+                    end.getAttachmentPoint().getCoordinates(),
+                    roadDTO.getForwardLanesCnt(),
+                    roadDTO.getReverseLanesCnt());
+
+            roads.add(road);
 
             start.addNodeToList(end);
             end.addNodeToList(start);
+
+            start.getAttachmentPoint().addStartingRoad(road);
+            end.getAttachmentPoint().addFinishingRoad(road);
+        }
+
+        Map<PointDTO, PointDTO> map1 = validation.getMap();
+
+        for (BuildingDTO buildingDTO: simulationContext.getBuildingDTOList()){
+            PointDTO pointDTO = map1.get(buildingDTO.getLocation());
+            NodeNe nodeNe = map.get(pointDTO);
+            Building building = new Building(new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), BuildingType.LIVING);
+            buildings.add(building);
+            nodeNe.getAttachmentPoint().addBuilding(building);
         }
     }
 
@@ -91,9 +106,9 @@ public class GraphMap {
         return nodesList;
     }
 
-
-    public MapStateDTO getCurrentMapConfig() {
-        //return new MapStateDTO();
-        return null;
+    public MapStateDTO getCurrentMapConfig()    {
+        return new MapStateDTO(simulationContext.getBuildingDTOList(),
+                               simulationContext.getRoadDTOList(),
+                          null, null);
     }
 }

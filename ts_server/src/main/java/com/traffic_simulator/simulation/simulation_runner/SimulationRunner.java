@@ -3,13 +3,13 @@ package com.traffic_simulator.simulation.simulation_runner;
 import com.traffic_simulator.dto.SimulationDTO;
 import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.exceptions.SimulationException;
-import com.traffic_simulator.simulation.models.RoadMap;
+import com.traffic_simulator.simulation.models.SimulationState;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 
 public class SimulationRunner {
-    private final RoadMap roadMap;
+    private final SimulationState roadMap;
     private SimulationSettings simulationSettings;
-    public SimulationRunner(RoadMap roadMap, SimulationSettings simulationSettings) {
+    public SimulationRunner(SimulationState roadMap, SimulationSettings simulationSettings) {
         this.roadMap = roadMap;
         this.simulationSettings = simulationSettings;
     }

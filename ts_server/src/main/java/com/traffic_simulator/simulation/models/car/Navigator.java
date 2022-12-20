@@ -24,7 +24,7 @@ public class Navigator {
         this.acceleration = 0;
         this.accelerationUpperLimit = accelerationUpperLimit;
         this.accelerationLowerLimit = accelerationLowerLimit;
-        this.currentMapObject = car.getCurrentMapObject();
+        //this.currentMapObject = car.getCurrentMapObject();
         this.nextMapObject = null;
         this.advance = new ArrayList<>();
     }

@@ -17,7 +17,7 @@ import java.util.Map;
 public class Building extends MapObject {
     BuildingType type;
     private Coordinates upLeftCorner;
-    private Coordinates center;
+    private Coordinates center = new Coordinates(0,0);
     private int width = 50;
     private AttachmentPoint connectedPoint = null;
 
@@ -27,14 +27,11 @@ public class Building extends MapObject {
     private ParkingZone parkingZone;
 
     //TODO Сделать более легкий конструктор для Building и потомков
-    public Building(Coordinates upLeftCorner,  String name, String street, String index, BuildingType type) {
+    public Building(Coordinates upLeftCorner, BuildingType type) {
         super();
         this.upLeftCorner = upLeftCorner;
-        this.name = name;
-        this.center.setX(this.upLeftCorner.getX() + this.width/2);
-        this.center.setY(this.upLeftCorner.getY() + this.width/2);
-        this.street = street;
-        this.index = index;
+//        this.center.setX(this.upLeftCorner.getX() + this.width/2);
+//        this.center.setY(this.upLeftCorner.getY() + this.width/2);
         this.type = type;
         this.parkingZone = new ParkingZone(0, upLeftCorner);
     }

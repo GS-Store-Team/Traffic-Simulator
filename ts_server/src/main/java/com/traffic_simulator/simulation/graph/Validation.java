@@ -26,8 +26,9 @@ public class Validation {
     public void checkErrors() throws InvalidMapException{
         validateRoads();
         validateBuildings();
-        if ((buildingsErrorId.size() + roadsErrorId.size()) > 0)
+        if ((buildingsErrorId.size() + roadsErrorId.size()) > 0) {
             throw new InvalidMapException("invalid map exception", null);
+        }
     }
 
     public Map<String, List<Long>> getErrors(){
@@ -44,13 +45,29 @@ public class Validation {
         for (BuildingDTO buildingDTO : simulationContext.getBuildingDTOList()){
             boolean check = false;
             for (RoadDTO roadDTO : simulationContext.getRoadDTOList()){
-                if (roadInBuildingArea(roadDTO, buildingDTO, false) ||
-                        roadInBuildingArea(roadDTO, buildingDTO, true))
+                if (roadInBuildingArea(roadDTO, buildingDTO, false)){
                     check = true;
+                }
+                if (roadInBuildingArea(roadDTO, buildingDTO, true)) {
+                    check = true;
+                }
+                if(isInRadius( new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth/2,
+                        buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2),roadDTO.getStart()))
+                    map.put(buildingDTO.getLocation(), roadDTO.getStart());
+
+                if(isInRadius( new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth/2,
+                        buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2),roadDTO.getEnd()))
+                    map.put(buildingDTO.getLocation(), roadDTO.getEnd());
             }
             if (!check)
                 buildingsErrorId.add(buildingDTO.getId());
         }
+    }
+
+    private Map<PointDTO, PointDTO> map = new HashMap<>();
+
+    public Map<PointDTO, PointDTO> getMap(){
+        return map;
     }
 
 

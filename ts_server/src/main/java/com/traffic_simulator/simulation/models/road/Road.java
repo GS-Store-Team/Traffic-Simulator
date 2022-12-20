@@ -17,35 +17,26 @@ import java.util.Map;
 @Setter
 @ToString
 public class Road extends MapObject {
-    private AttachmentPoint startPoint;
-    private AttachmentPoint endPoint;
+    private Coordinates startCoordinate;
+    private Coordinates endCoordinate;
     private List<Lane> rightLanes;
     private List<Lane> leftLanes;
 
-    public Road(AttachmentPoint startPoint, AttachmentPoint endPoint, int rightLanesAmount, int leftLanesAmount) {
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
+    public Road(Coordinates startPoint, Coordinates endPoint, int rightLanesAmount, int leftLanesAmount) {
+        this.startCoordinate = startPoint;
+        this.endCoordinate = endPoint;
         this.rightLanes = new ArrayList<>();
         this.leftLanes = new ArrayList<>();
+        //this.naturalWeight = computeNaturalWeightByCoordinates();
         addLanes(rightLanesAmount, leftLanesAmount);
-
-        this.naturalWeight = computeNaturalWeightByCoordinates();
     }
 
-    public void addLanes(int rightLanesAmount, int leftLanesAmount) {
-        for (int i = 0; i < rightLanesAmount; i++) {
-            rightLanes.add(new Lane(
-                    i + 1,
-                    startPoint.getCoordinates(),
-                    endPoint.getCoordinates()));
-        }
+    private void addLanes(int rightLanesAmount, int leftLanesAmount) {
+        for (int i = 0; i < rightLanesAmount; i++)
+            rightLanes.add(new Lane(i, startCoordinate, endCoordinate));
 
-        for (int i = 0; i < leftLanesAmount; i++) {
-            rightLanes.add(new Lane(
-                    -(i + 1),
-                    startPoint.getCoordinates(),
-                    endPoint.getCoordinates()));
-        }
+        for (int i = 0; i < leftLanesAmount; i++)
+            rightLanes.add(new Lane(-(i + 1), endCoordinate, startCoordinate));
     }
 
     public double computeNaturalWeightByCoordinates() {
@@ -60,11 +51,11 @@ public class Road extends MapObject {
 
         return weight;
     }
-
+//
     public double computeRightTrafficWeight() {
         return computeLanePackTrafficWeight(rightLanes);
     }
-
+//
     public double computeLeftTrafficWeight() {
         return computeLanePackTrafficWeight(leftLanes);
     }

@@ -18,58 +18,29 @@ import java.util.*;
 public class AttachmentPoint extends MapObject {
     private final Coordinates coordinates;
     private final List<Building> connectedBuildings;
-    private final List<Road> roads;
-    private final List<Building> buildings;
+    private final List<Road> startingRoads;
+    private final List<Road> finishingRoads;
 
     public AttachmentPoint(Coordinates coordinates) {
         this.coordinates = coordinates;
         this.connectedBuildings = new ArrayList<>();
-        this.roads = new ArrayList<>();
-/*        this.endingRoads = new ArrayList<>();
-        this.startingRoads = new ArrayList<>();*/
-
-/*        setEntryLanes();
-        setOutputLanes();*/
+        this.startingRoads = new ArrayList<>();
+        this.finishingRoads = new ArrayList<>();
     }
-
-    protected void dispenseRoadsByEnds() {
-/*        for (Road road : roads) {
-            if (road.getStartPoint().equals(this)) {
-                startingRoads.add(road);
-            } else if (road.getEndPoint().equals(this)) {
-                endingRoads.add(road);
-            }
-        }*/
-    }
-
-/*    protected void setEntryLanes() {
-        for (Road road : roads) {
-            entryLanes.put(road, road.getRightLanes());
-        }
-    }
-
-    protected void setOutputLanes() {
-        for (Road road : roads) {
-            entryLanes.put(road, road.getLeftLanes());
-        }
-    }*/
-    /**
-     * Calculate traffic weight.
-     *
-     * @return traffic weight distinguished to lane packs (if it is road).
-     */
     @Override
     public Map<Integer, Double> getTrafficWeight() {
         HashMap<Integer, Double> hashMap = new HashMap<>();
         hashMap.put(0, 1 * GlobalSettings.cellTrafficWeightModifier);
         return hashMap;
     }
-
     public void addBuilding(Building building) {
         connectedBuildings.add(building);
     }
 
-    public void removeBuilding(Building building) {
-        connectedBuildings.remove(building);
+    public void addStartingRoad(Road road){
+        startingRoads.add(road);
+    }
+    public void addFinishingRoad(Road road){
+        finishingRoads.add(road);
     }
 }

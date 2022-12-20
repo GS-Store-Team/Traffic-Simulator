@@ -64,7 +64,6 @@ public class Lane {
         for (Cell cell : cells) {
             weight += cell.getTrafficWeight();
         }
-
         return weight * GlobalSettings.cellTrafficWeightModifier;
     }
 }
