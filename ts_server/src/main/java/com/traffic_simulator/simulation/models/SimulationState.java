@@ -32,6 +32,15 @@ public class SimulationState {
         init();
     }
 
+    public List<Road> getAllRoads(){
+        return graphMap.getRoads();
+    }
+
+    public List<Building> getAllBuildings(){
+        return graphMap.getBuildings();
+    }
+
+
 
     private void init(){
         graphMap.getBuildings().forEach(System.out::println);
