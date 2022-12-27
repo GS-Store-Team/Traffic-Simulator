@@ -10,6 +10,7 @@ import lombok.Data;
 public class NodeNe {
     private List<NodeNe> nodesList = new ArrayList<>();
     private AttachmentPoint attachmentPoint;
+    private double weight = Double.POSITIVE_INFINITY;
 
     public NodeNe(AttachmentPoint attachmentPoint) {
         this.attachmentPoint = attachmentPoint;

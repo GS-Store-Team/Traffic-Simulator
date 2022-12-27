@@ -21,6 +21,7 @@ public class Road extends MapObject {
     private Coordinates endCoordinate;
     private List<Lane> rightLanes;
     private List<Lane> leftLanes;
+    private final double weight = 1;
 
     public Road(Coordinates startPoint, Coordinates endPoint, int rightLanesAmount, int leftLanesAmount) {
         this.startCoordinate = startPoint;
