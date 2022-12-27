@@ -1,7 +1,9 @@
 package com.traffic_simulator.simulation.simulation_runner;
 
+import com.traffic_simulator.exceptions.SimulationException;
 import com.traffic_simulator.simulation.GlobalSettings;
 import lombok.Getter;
+
 import java.util.concurrent.TimeUnit;
 
 @Getter
@@ -18,10 +20,19 @@ public class TickGenerator implements Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                if(running) simulationRunner.update();
-                TimeUnit.MILLISECONDS.sleep(1000/ticksPerSecond);
+                if (running) {
+                    try {
+                        simulationRunner.update();
+                    } catch (SimulationException exc) {
+                        this.stop();
+                        System.out.println(exc.getMessage());
+                    }
+
+                    TimeUnit.MILLISECONDS.sleep(1000 / ticksPerSecond);     //inside of the if block! Important point in debugging!
+                }
             }
-        } catch (InterruptedException ignore){};
+        } catch (InterruptedException ignore) {
+        }
     }
 
     public void play() {

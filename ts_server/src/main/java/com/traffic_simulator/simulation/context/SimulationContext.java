@@ -3,6 +3,7 @@ package com.traffic_simulator.simulation.context;
 import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.PointDTO;
 import com.traffic_simulator.dto.RoadDTO;
+import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -53,17 +54,17 @@ public class SimulationContext {
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(340,650), new PointDTO(400, 650), 1, 1, null, null));
         roadDTOList.add(new RoadDTO(cnt++, new PointDTO(400,650), new PointDTO(650, 650), 1, 1, null, null));
 
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 10)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 80)));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 10), BuildingType.LIVING, 10, 10));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 80), BuildingType.LIVING, 10, 10));
         //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(60, 60)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 160)));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 160), BuildingType.LIVING, 10, 10));
         //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 80)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 660)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 660)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 660)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 590)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 590)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 590)));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 660), BuildingType.LIVING, 10, 10));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 660), BuildingType.LIVING, 10, 10));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 660), BuildingType.WORK, 0, 10));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 590), BuildingType.WORK, 0, 10));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 590), BuildingType.WORK, 0, 10));
+        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 590), BuildingType.WORK, 0, 20));
         //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(875, 655)));
     }
 

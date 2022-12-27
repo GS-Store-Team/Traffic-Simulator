@@ -1,9 +1,11 @@
 package com.traffic_simulator.simulation.models.car;
 
+import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
 import com.traffic_simulator.simulation.models.MapObject;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.simulation.models.supportive.cell.Cell;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPath;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,9 +18,10 @@ public class Navigator {
     private double acceleration;
     private double accelerationUpperLimit;
     private double accelerationLowerLimit;
-
-    private MapObject currentMapObject;
-    private MapObject nextMapObject;
+    private long departureTime;
+    private long workTime;
+    private NodeNe currentNode;
+    private NodeNe nextNode;
 
     private List<Cell> advance;
 
@@ -31,16 +34,17 @@ public class Navigator {
 
     private Car car;
 
-    public Navigator(Car car, double accelerationUpperLimit, double accelerationLowerLimit, List<Road> roads) {
+    public Navigator(Car car, double accelerationUpperLimit, double accelerationLowerLimit, CarPath carPath) {
         this.acceleration = 0;
         this.accelerationUpperLimit = accelerationUpperLimit;
         this.accelerationLowerLimit = accelerationLowerLimit;
-        //this.currentMapObject = car.getCurrentMapObject();
         this.car = car;
-        this.nextMapObject = null;
-        this.roads = roads;
+        this.currentNode = null;
+        this.nextNode = null;
+        this.roads = carPath.getRoads().stream().toList();
         this.advance = new ArrayList<>();
-
+        this.departureTime = 0;
+        this.workTime = 0;
         this.index = 0;
         try{
             this.currentRoad = roads.get(index);
@@ -56,6 +60,9 @@ public class Navigator {
         moveCar();
     }
 
+    public void reset() {
+
+    }
     public Coordinates getCurrentCoordinates() {
         return currentCoordinates;
     }

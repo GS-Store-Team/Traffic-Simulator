@@ -10,4 +10,6 @@ public class BuildingDTO {
     private long id;
     private PointDTO location;
     private BuildingType buildingType;
+    private int carsAmount;
+    private int carsCap;
 }

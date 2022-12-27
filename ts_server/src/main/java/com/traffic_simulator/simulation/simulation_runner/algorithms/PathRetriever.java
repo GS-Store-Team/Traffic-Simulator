@@ -12,9 +12,11 @@ public class PathRetriever {
         NodeNe currentNode = end;
         while (hm.get(currentNode) != start) {
             carPath.getNodes().addFirst(currentNode);
+            carPath.getRoads().addFirst(currentNode.getRoadToPrev());
             currentNode = hm.get(currentNode);
         }
         carPath.getNodes().addFirst(start);
+
         return carPath;
     }
 }

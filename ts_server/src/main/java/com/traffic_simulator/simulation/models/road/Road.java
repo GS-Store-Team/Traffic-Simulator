@@ -37,7 +37,7 @@ public class Road extends MapObject {
             rightLanes.add(new Lane(i, startCoordinate, endCoordinate));
 
         for (int i = 0; i < leftLanesAmount; i++)
-            rightLanes.add(new Lane(-(i + 1), endCoordinate, startCoordinate));
+            leftLanes.add(new Lane(-(i + 1), endCoordinate, startCoordinate));
     }
 
     public double computeNaturalWeightByCoordinates() {

@@ -1,6 +1,8 @@
 package com.traffic_simulator.simulation.models.car;
 
+import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.models.buildings.Building;
+import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import lombok.Data;
 import lombok.ToString;
 
@@ -11,6 +13,8 @@ public class Car {
     private int currentAcceleration = 1;    //per tick
     private Building buildingStart;
     private Building buildingEnd;
+    private Coordinates currentPosition;
+    private int carLength = GlobalSettings.automobileLength;
     public Car(Building buildingStart, Building buildingEnd) {
         this.buildingStart = buildingStart;
         this.buildingEnd = buildingEnd;

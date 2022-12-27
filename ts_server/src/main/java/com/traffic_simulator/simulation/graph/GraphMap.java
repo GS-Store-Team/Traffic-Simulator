@@ -13,6 +13,8 @@ import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.buildings.Building;
+import com.traffic_simulator.simulation.models.buildings.ParkingZone;
+import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
@@ -25,9 +27,9 @@ import java.util.*;
 @ToString
 @Getter
 public class GraphMap {
-    private List<Node> nodes = new ArrayList<>();
-    private List<Node> crossroadNodes = new ArrayList<>();
-    private List<Node> buildingNodes = new ArrayList<>();
+    private List<NodeNe> nodes = new ArrayList<>();
+    private List<NodeNe> crossroadNodes = new ArrayList<>();
+    private List<NodeNe> buildingNodes = new ArrayList<>();
     private List<Edge> edges = new ArrayList<>();
 
 
@@ -96,7 +98,16 @@ public class GraphMap {
         for (BuildingDTO buildingDTO: simulationContext.getBuildingDTOList()){
             PointDTO pointDTO = map1.get(buildingDTO.getLocation());
             NodeNe nodeNe = map.get(pointDTO);
-            Building building = new Building(new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), BuildingType.LIVING);
+            Building building = new Building(new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), buildingDTO.getBuildingType());
+
+            //add cars
+            building.setParkingZone(new ParkingZone(buildingDTO.getCarsCap(), new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY())));
+            List<Car> cars = new ArrayList<>();
+            for (int i = 0; i < buildingDTO.getCarsAmount(); i++) {
+                cars.add(new Car(building, null));
+            }
+            building.getParkingZone().setCars(cars);
+
             buildings.add(building);
             nodeNe.getAttachmentPoint().addBuilding(building);
         }

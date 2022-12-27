@@ -17,5 +17,6 @@ public class GlobalSettings {
 
     public static final int automobileLength = 5;
     public static final int truckLength = 10;
-
+    public static final int seedLength = 16;
+    public static final long dayLengthInSeconds = 86400;
 }

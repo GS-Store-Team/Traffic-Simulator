@@ -56,20 +56,16 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
                 } catch (IndexOutOfBoundsException exc) {
                     continue;
                 }
-                if (nodeNe.getWeight() < currentNode.getWeight() + road.getWeight()) {      //relaxation
+                if (nodeNe.getWeight() < currentNode.getWeight() + road.getWeight()) {      //relaxation and path building
                     nodeNe.setWeight(currentNode.getWeight() + road.getWeight());
-                    if (paths.containsKey(nodeNe)) {                                //paths building
-                        paths.remove(nodeNe);
-                        paths.put(nodeNe, currentNode);
-                    } else {
-                        paths.put(nodeNe, currentNode);
-                    }
+                    paths.remove(nodeNe);
+                    nodeNe.setRoadToPrev(road);
+                    paths.put(nodeNe, currentNode);
                 }
             }
 
             if (currentNode.getWeight() == Double.POSITIVE_INFINITY) {              //if there are only unreachable nodes left
                 throw new PathsConstructionException("One or more nodes are unreachable!", unmarkedNodes);
-                //TODO Написать исключение для недостижимой вершины в графе -> невалидный граф -> невалидная карта -> корректная симуляция невозможна
             }
         }
 

@@ -6,6 +6,7 @@ import com.traffic_simulator.simulation.models.buildings.types.EntertainmentBuil
 import com.traffic_simulator.simulation.models.buildings.types.LivingBuilding;
 import com.traffic_simulator.simulation.models.buildings.types.PedestrianArea;
 import com.traffic_simulator.simulation.models.buildings.types.WorkplaceBuilding;
+import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
@@ -17,7 +18,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,10 +28,12 @@ import java.util.List;
 public class SimulationState {
     private GraphMap graphMap;
     private PathFindingAlgorithm pathfindingAlgorithm;
+    private Set<Car> cars;
 
     public SimulationState(GraphMap graphMap, PathFindingAlgorithm pathfindingAlgorithm)  {
         this.graphMap = graphMap;
         this.pathfindingAlgorithm = pathfindingAlgorithm;
+        this.cars = new HashSet<>();
         init();
     }
 
@@ -40,10 +45,12 @@ public class SimulationState {
         return graphMap.getBuildings();
     }
 
-
-
     private void init(){
-        graphMap.getBuildings().forEach(System.out::println);
+        for (Building building : graphMap.getBuildings()) {
+            if (building.getType() == BuildingType.LIVING) {
+                cars.addAll(building.getParkingZone().getCars());
+            }
+        }
     }
 
 
