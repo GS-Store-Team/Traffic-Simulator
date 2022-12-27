@@ -24,4 +24,9 @@ public class CarPath {
         this.end = end;
         this.roads = new ArrayDeque<>();
     }
+
+    public void addNode(NodeNe node) {
+        NodeNe nodeNe = new NodeNe(node);
+        nodes.addFirst(node);
+    }
 }

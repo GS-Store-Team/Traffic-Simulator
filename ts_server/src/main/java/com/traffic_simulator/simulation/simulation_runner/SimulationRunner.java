@@ -22,6 +22,7 @@ public class SimulationRunner {
     private SimulationSettings simulationSettings;
     private List<Car> cars;
     private List<Navigator> navigators;
+    private long currentTick;
 
     public SimulationRunner(SimulationState roadMap, SimulationSettings simulationSettings) {
         this.roadMap = roadMap;
@@ -29,6 +30,7 @@ public class SimulationRunner {
         this.cars = new ArrayList<>();
         this.cars.addAll(this.roadMap.getCars());
         this.navigators = new ArrayList<>();
+        this.currentTick = 0;
     }
 
     public void reset() {
@@ -36,7 +38,12 @@ public class SimulationRunner {
     }
 
     public void update() throws SimulationException {
-        updateNavigators();
+        updateNavigators(currentTick);
+
+        if (currentTick >= GlobalSettings.dayLengthInSeconds) {
+            currentTick %= GlobalSettings.dayLengthInSeconds;
+        }
+        currentTick++;
     }
 
     public SimulationDTO getCurrentSimulationState() {
@@ -44,9 +51,9 @@ public class SimulationRunner {
         return null;
     }
 
-    private void updateNavigators() {
+    private void updateNavigators(long secondsPassed) {
         for (Navigator navigator : navigators) {
-            navigator.update();
+            navigator.update(secondsPassed);
         }
     }
 

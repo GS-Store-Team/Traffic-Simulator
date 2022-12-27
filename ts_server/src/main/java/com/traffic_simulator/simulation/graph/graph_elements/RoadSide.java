@@ -1,5 +1,5 @@
 package com.traffic_simulator.simulation.graph.graph_elements;
 
 public enum RoadSide {
-    LEFT, RIGHT, CLOSED, BUILDING_CONNECTOR
+    LEFT, RIGHT, CLOSED, NONE
 }

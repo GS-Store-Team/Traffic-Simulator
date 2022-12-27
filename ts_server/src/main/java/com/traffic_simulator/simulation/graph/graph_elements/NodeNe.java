@@ -20,6 +20,12 @@ public class NodeNe {
         this.roadToPrev = null;
     }
 
+    public NodeNe(NodeNe nodeNe) {          //copying constructor
+        this.attachmentPoint = nodeNe.attachmentPoint;
+        this.roadToPrev = nodeNe.roadToPrev;
+        this.weight = nodeNe.weight;
+        this.nodesList = new ArrayList<>(nodeNe.nodesList);
+    }
     public void addNodeToList(NodeNe node){
         nodesList.add(node);
     }
