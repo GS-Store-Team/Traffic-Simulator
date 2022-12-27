@@ -32,7 +32,7 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
     @Override
     protected CarPathsBunch computeCarPath(NodeNe start) throws PathsConstructionException {
         CarPathsBunch carPathsBunch = new CarPathsBunch(start);
-        List<NodeNe> unmarkedNodes = graph.getNodes();
+        List<NodeNe> unmarkedNodes = new ArrayList<>(graph.getNodes());
 
         start.setWeight(0);
         NodeNe currentNode = start;
@@ -41,6 +41,9 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
 
         while (!unmarkedNodes.isEmpty()) {
             unmarkedNodes.remove(currentNode);
+
+            //System.out.println("Was removed!" + currentNode);
+            //System.out.println(unmarkedNodes);
 
             AttachmentPoint ref = currentNode.getAttachmentPoint();             //retrieve all roads which have a way to another nodeNe
             List<Road> refRoads = new ArrayList<>();

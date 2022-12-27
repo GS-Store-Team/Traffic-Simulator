@@ -81,6 +81,7 @@ public class SimulationController {
 
     @GetMapping("/config")
     public ResponseEntity<MapStateDTO> getMapConfig(){
+        System.out.println("Hey!");
         var mapState = graphMap.getCurrentMapConfig();
         return mapState != null?
                 ResponseEntity.ok(mapState):
