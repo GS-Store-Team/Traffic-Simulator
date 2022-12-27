@@ -2,7 +2,6 @@ package com.traffic_simulator.simulation.simulation_runner;
 
 import com.traffic_simulator.dto.SimulationDTO;
 import com.traffic_simulator.exceptions.GraphConstructionException;
-import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.exceptions.SimulationException;
 import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
@@ -12,25 +11,35 @@ import com.traffic_simulator.simulation.models.car.Navigator;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPathsBunch;
-
+import com.traffic_simulator.utils.SimulationUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SimulationRunner {
-    private final SimulationState roadMap;
+    private final SimulationState simulationState;
     private SimulationSettings simulationSettings;
     private List<Car> cars;
     private List<Navigator> navigators;
     private long currentTick;
 
-    public SimulationRunner(SimulationState roadMap, SimulationSettings simulationSettings) {
-        this.roadMap = roadMap;
+    public SimulationRunner(SimulationState simulationState, SimulationSettings simulationSettings) {
+        this.simulationState = simulationState;
         this.simulationSettings = simulationSettings;
         this.cars = new ArrayList<>();
-        this.cars.addAll(this.roadMap.getCars());
+        this.cars.addAll(this.simulationState.getCars());
         this.navigators = new ArrayList<>();
         this.currentTick = 0;
+        init();
+    }
+
+    private void init() {
+        try {
+            initCars();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+            //"initialization failure"
+        }
     }
 
     public void reset() {
@@ -38,6 +47,7 @@ public class SimulationRunner {
     }
 
     public void update() throws SimulationException {
+        System.out.println("UPDATE");
         updateNavigators(currentTick);
 
         if (currentTick >= GlobalSettings.dayLengthInSeconds) {
@@ -47,8 +57,10 @@ public class SimulationRunner {
     }
 
     public SimulationDTO getCurrentSimulationState() {
-        //return new SimulationDTO();
-        return null;
+        SimulationDTO simulationDTO = new SimulationDTO();
+        simulationDTO.setCars(cars.stream().map(SimulationUtils::carToDTO).toList());
+        simulationDTO.setBuildings(simulationState.getAllBuildings().stream().map(SimulationUtils::buildingToDTO).toList());
+        return simulationDTO;
     }
 
     private void updateNavigators(long secondsPassed) {
@@ -57,40 +69,52 @@ public class SimulationRunner {
         }
     }
 
+//    private void setCarsNavigators(){
+//        navigators = cars.stream().map(car -> {
+//            NodeNe start = SimulationUtils.getNodeFromBuilding(car.getBuildingStart(), simulationState.getGraphMap());
+//            NodeNe end = SimulationUtils.getNodeFromBuilding(car.getBuildingEnd(), simulationState.getGraphMap());
+//
+//            CarPath carPath = PathRetriever.retrievePath(start, end, null); // 3rd param shouldn't be null
+//            if(carPath == null) throw new RuntimeException("invalid car path");
+//
+//            return new Navigator(
+//                    car,
+//                    simulationSettings.getAutomobileMinAcceleration(),
+//                    simulationSettings.getAutomobileMaxAcceleration(),
+//                    carPath);
+//        }).toList();
+//    }
+
     private void initCars() throws GraphConstructionException {
 
-        HashMap<NodeNe, CarPathsBunch> allPaths = roadMap.getPathfindingAlgorithm().compute();
+        HashMap<NodeNe, CarPathsBunch> allPaths = simulationState.getPathfindingAlgorithm().compute();
         List<Car> unmarkedCars = new ArrayList<>(cars);
         int tempId = 1;
         int cycle = 1;
         long departureTime = 0;
-        int carPackSize = simulationSettings.seedData.depCarPackSize();
-        List<NodeNe> ends = roadMap.getGraphMap().getBuildingNodes().stream().filter((NodeNe n) -> n.getAttachmentPoint().getConnectedBuildings().get(0).getType() != BuildingType.LIVING).toList();
+        int carPackSize = simulationSettings.getSeedData().depCarPackSize();
+        List<NodeNe> ends = simulationState.getGraphMap().getBuildingNodes().stream().filter((NodeNe n) -> n.getAttachmentPoint().getConnectedBuildings().get(0).getType() != BuildingType.LIVING).toList();
 
         while (!unmarkedCars.isEmpty()) {
             for (int i = 0; i < unmarkedCars.size(); i = (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
-                NodeNe startPoint = roadMap.getGraphMap().getBuildingNodes().stream()
+                NodeNe startPoint = simulationState.getGraphMap().getBuildingNodes().stream()
                         .filter((NodeNe n) -> n.getAttachmentPoint()
                                 .getConnectedBuildings()
                                 .contains(currentCar.getBuildingStart()))
                         .toList()
                         .get(0);
-                NodeNe endPoint = ends.get((simulationSettings.seedData.coeff() * 10 / cycle + i) % ends.size());
+                NodeNe endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i) % ends.size());
                 Navigator navigator = new Navigator(unmarkedCars.get(i), 20, -20, allPaths.get(startPoint).getCarPathsEndsMap().get(endPoint));
 
-                navigator.setDepartureTime((departureTime + simulationSettings.seedData.depTimeShift()) % GlobalSettings.dayLengthInSeconds);
-                navigator.setWorkTime((simulationSettings.seedData.coeff() * simulationSettings.seedData.destTimeSpend()) % GlobalSettings.dayLengthInSeconds);
+                navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
+                navigator.setWorkTime((simulationSettings.getSeedData().coeff() * simulationSettings.getSeedData().destTimeSpend()) % GlobalSettings.dayLengthInSeconds);
 
                 navigators.add(navigator);
                 unmarkedCars.remove(i);
             }
-            departureTime = (departureTime + simulationSettings.seedData.depTimeShift()) % GlobalSettings.dayLengthInSeconds;
+            departureTime = (departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds;
             cycle++;
         }
-    }
-
-    private void initGraphMap() throws InvalidMapException {
-        //PathfindingAlgorithm pathfindingAlgorithm = new StraightDijkstraAlgorithm(graphMap);
     }
 }

@@ -18,6 +18,7 @@ import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
+import com.traffic_simulator.utils.SimulationUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
@@ -31,8 +32,6 @@ public class GraphMap {
     private List<NodeNe> crossroadNodes = new ArrayList<>();
     private List<NodeNe> buildingNodes = new ArrayList<>();
     private List<Edge> edges = new ArrayList<>();
-
-
     private final SimulationContext simulationContext;
     private Validation validation;
     private List<NodeNe> nodesList;
@@ -98,16 +97,8 @@ public class GraphMap {
         for (BuildingDTO buildingDTO: simulationContext.getBuildingDTOList()){
             PointDTO pointDTO = map1.get(buildingDTO.getLocation());
             NodeNe nodeNe = map.get(pointDTO);
-            Building building = new Building(new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), buildingDTO.getBuildingType());
-
-            //add cars
-            building.setParkingZone(new ParkingZone(buildingDTO.getCarsCap(), new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY())));
-            List<Car> cars = new ArrayList<>();
-            for (int i = 0; i < buildingDTO.getCarsAmount(); i++) {
-                cars.add(new Car(building, null));
-            }
-            building.getParkingZone().setCars(cars);
-
+            Building building = new Building(0, new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), buildingDTO.getBuildingType());
+            building.setParkingZone(new ParkingZone(buildingDTO.getCarsCap(), SimulationUtils.pointToCoordinates(buildingDTO.getLocation())));
             buildings.add(building);
             nodeNe.getAttachmentPoint().addBuilding(building);
         }

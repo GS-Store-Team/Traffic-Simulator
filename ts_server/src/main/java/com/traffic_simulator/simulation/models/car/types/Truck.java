@@ -8,7 +8,7 @@ public class Truck extends Car {
 
     //private static final int cellLength = GlobalSettings.truckLength;
 
-    public Truck(Building start, Building destination) {
-        super(start, destination);
+    public Truck(long id, Building start, Building destination) {
+        super(id, start, destination);
     }
 }

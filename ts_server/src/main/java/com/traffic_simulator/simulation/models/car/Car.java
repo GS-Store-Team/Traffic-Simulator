@@ -9,13 +9,15 @@ import lombok.ToString;
 @Data
 @ToString
 public class Car {
-    private int currentVelocity;        //per tick
-    private int currentAcceleration = 1;    //per tick
+    private final long id;
+    private float currentVelocity;        //per tick
+    private float currentAcceleration = 1;    //per tick
     private Building buildingStart;
     private Building buildingEnd;
     private Coordinates currentPosition;
     private int carLength = GlobalSettings.automobileLength;
-    public Car(Building buildingStart, Building buildingEnd) {
+    public Car(long id, Building buildingStart, Building buildingEnd) {
+        this.id = id;
         this.buildingStart = buildingStart;
         this.buildingEnd = buildingEnd;
     }

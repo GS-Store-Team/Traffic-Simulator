@@ -12,11 +12,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class LivingBuilding extends Building {
-    public LivingBuilding(Coordinates upLeftCorner, String name, String street, String index, BuildingType type) {
-        super(upLeftCorner,  name, street, index, new ParkingZone(10, new Coordinates(10,10)));
+    public LivingBuilding(long id, Coordinates upLeftCorner, String name, String street, String index, BuildingType type) {
+        super(id, upLeftCorner,  name, street, index, new ParkingZone(10, new Coordinates(10,10)));
     }
 
-    public LivingBuilding(Coordinates upLeftCorner, String name, String street, String index, ParkingZone parkingZone) {
-        super(upLeftCorner,  name, street, index, parkingZone);
+    public LivingBuilding(long id, Coordinates upLeftCorner, String name, String street, String index, ParkingZone parkingZone) {
+        super(id, upLeftCorner,  name, street, index, parkingZone);
     }
 }

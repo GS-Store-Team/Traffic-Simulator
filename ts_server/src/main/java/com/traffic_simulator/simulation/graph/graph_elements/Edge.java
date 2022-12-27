@@ -18,17 +18,19 @@ public class Edge {
         this.start = start;
         this.end = end;
 
-        if (this.refRoad == null) {
-            this.roadSide = RoadSide.BUILDING_CONNECTOR;
-        } else {
-            this.roadSide = roadSide;
-        }
+//        if (this.refRoad == null) {
+//            this.roadSide = RoadSide.BUILDING_CONNECTOR;
+//        } else {
+//            this.roadSide = roadSide;
+//        }
+
+        this.roadSide = roadSide;
 
         switch (this.roadSide) {
             case LEFT -> this.weight = this.refRoad.getNaturalWeight() + this.refRoad.computeLeftTrafficWeight();
             case RIGHT -> this.weight = this.refRoad.getNaturalWeight() + this.refRoad.computeRightTrafficWeight();
             case CLOSED -> this.weight = Double.POSITIVE_INFINITY;
-            case BUILDING_CONNECTOR -> this.weight = 0;
+            //case BUILDING_CONNECTOR -> this.weight = 0;
         }
     }
 }

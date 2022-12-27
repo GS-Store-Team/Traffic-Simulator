@@ -15,6 +15,7 @@ import java.util.Map;
 @Setter
 @ToString
 public class Building extends MapObject {
+    private final long id;
     BuildingType type;
     private Coordinates upLeftCorner;
     private Coordinates center = new Coordinates(0,0);
@@ -27,17 +28,19 @@ public class Building extends MapObject {
     private ParkingZone parkingZone;
 
     //TODO Сделать более легкий конструктор для Building и потомков
-    public Building(Coordinates upLeftCorner, BuildingType type) {
+    public Building(long id, Coordinates upLeftCorner, BuildingType type) {
         super();
+        this.id = id;
         this.upLeftCorner = upLeftCorner;
 //        this.center.setX(this.upLeftCorner.getX() + this.width/2);
 //        this.center.setY(this.upLeftCorner.getY() + this.width/2);
         this.type = type;
-        this.parkingZone = new ParkingZone(0, upLeftCorner);
+        this.parkingZone = new ParkingZone(50, upLeftCorner);
     }
 
-    public Building(Coordinates upLeftCorner,   String name, String street, String index, ParkingZone parkingZone) {
+    public Building(long id, Coordinates upLeftCorner,   String name, String street, String index, ParkingZone parkingZone) {
         super();
+        this.id = id;
         this.upLeftCorner = upLeftCorner;
         this.name = name;
         this.street = street;

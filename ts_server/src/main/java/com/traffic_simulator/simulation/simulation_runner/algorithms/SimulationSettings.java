@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimulationSettings {
-    public double automobileMaxAcceleration = 3;
-    public double automobileMinAcceleration = -10;
-    public double truckMaxAcceleration = 3;
-    public double truckMinAcceleration = -8;
-    public SeedData seedData = SeedDecoder.decode(1234567891234567L);
+    private int automobileMaxAcceleration = 3;
+    private int automobileMinAcceleration = -10;
+    private double truckMaxAcceleration = 3;
+    private double truckMinAcceleration = -8;
+    private SeedData seedData = SeedDecoder.decode(1234567891234567L);
 }

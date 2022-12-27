@@ -1,30 +1,23 @@
 package com.traffic_simulator.simulation.models;
 
-import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.buildings.*;
-import com.traffic_simulator.simulation.models.buildings.types.EntertainmentBuilding;
-import com.traffic_simulator.simulation.models.buildings.types.LivingBuilding;
-import com.traffic_simulator.simulation.models.buildings.types.PedestrianArea;
-import com.traffic_simulator.simulation.models.buildings.types.WorkplaceBuilding;
 import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
-import com.traffic_simulator.simulation.models.supportive.Coordinates;
 //import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.GraphMap;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.PathFindingAlgorithm;
 import com.traffic_simulator.simulation.graph.GraphMap;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.traffic_simulator.utils.SimulationUtils;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class SimulationState {
     private GraphMap graphMap;
     private PathFindingAlgorithm pathfindingAlgorithm;
@@ -46,6 +39,9 @@ public class SimulationState {
     }
 
     private void init(){
+        defaultInit(getAllBuildings().stream().filter(b -> b.getType().equals(BuildingType.LIVING)).toList(),
+                getAllBuildings().stream().filter(b -> b.getType().equals(BuildingType.WORK)).toList());
+
         for (Building building : graphMap.getBuildings()) {
             if (building.getType() == BuildingType.LIVING) {
                 cars.addAll(building.getParkingZone().getCars());
@@ -53,5 +49,13 @@ public class SimulationState {
         }
     }
 
-
+    private void defaultInit(List<Building> livingBuildings, List<Building> destinationBuildings){
+        AtomicLong id = new AtomicLong();
+        List<Building> lb = new ArrayList<>(livingBuildings);
+        lb.forEach(b -> {
+            ParkingZone parkingZone = b.getParkingZone();
+            for (int i = 0; i<10; i++ )
+                parkingZone.addCar(new Car(id.getAndIncrement(), b, destinationBuildings.get(Math.abs(ThreadLocalRandom.current().nextInt()) % destinationBuildings.size())));
+        });
+    }
 }
