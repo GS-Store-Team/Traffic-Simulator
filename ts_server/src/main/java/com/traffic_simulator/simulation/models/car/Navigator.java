@@ -35,6 +35,7 @@ public class Navigator {
 
     private int index;
     private boolean carRunning;
+    private boolean temp = false;
     private Car car;
 
     public Navigator(Car car, int accelerationLowerLimit, int accelerationUpperLimit, CarPath carPath) {
@@ -81,6 +82,11 @@ public class Navigator {
             carRunning = true;
         }
 
+        if (carRunning && !temp) {
+            System.out.println("Navigator #" + this.hashCode() + " is running: " + carRunning);
+            temp = true;
+        }
+
         if (carRunning) {
             updateCar();
             System.out.println("Navigator #" + this.hashCode() + " (" + currentCoordinate.getX() + ", " + currentCoordinate.getY() + ")");
@@ -103,8 +109,9 @@ public class Navigator {
 
         RoadSide roadSide = RoadSide.NONE;
         if (currentRoad == null) {
-            if (currentNode.getAttachmentPoint().getConnectedBuildings().get(0).equals(car.getBuildingStart())) {
-                currentNode.getAttachmentPoint().getConnectedBuildings().get(0).getParkingZone().removeCar(car);
+            if (currentNode.getAttachmentPoint().getConnectedBuildings().contains(car.getBuildingStart())) {
+                //currentNode.getAttachmentPoint().getConnectedBuildings().get(0).getParkingZone().removeCar(car);
+                car.getBuildingStart().getParkingZone().removeCar(car);
                 currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
             } else if (currentNode.getAttachmentPoint().getCoordinates() == carPath.getRoads().peek().getStartCoordinate()) {
                 currentCoordinate = carPath.getRoads().peek().getStartCoordinate();
@@ -116,9 +123,11 @@ public class Navigator {
                 currentRoad = carPath.getRoads().pop();
                 roadSide = RoadSide.LEFT;
                 currentNode = null;
-            } else if (currentNode.getAttachmentPoint().getConnectedBuildings().get(0).equals(car.getBuildingEnd())) {
+            } else if (currentNode.getAttachmentPoint().getConnectedBuildings().contains(car.getBuildingEnd())) {
                 currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
-                currentNode.getAttachmentPoint().getConnectedBuildings().get(0).getParkingZone().addCar(car);
+                //currentNode.getAttachmentPoint().getConnectedBuildings().get(0).getParkingZone().addCar(car);
+                currentCoordinate = car.getBuildingEnd().getCenter();
+                car.getBuildingEnd().getParkingZone().addCar(car);
                 roadSide = RoadSide.NONE;
             }
         } else {

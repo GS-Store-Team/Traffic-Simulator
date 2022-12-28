@@ -49,7 +49,7 @@ public class SimulationRunner {
     }
 
     public void update() throws SimulationException {
-        System.out.println("UPDATE TICK# " + currentTick);
+        //System.out.println("UPDATE TICK# " + currentTick);
         updateNavigators(currentTick);
 
         if (currentTick >= GlobalSettings.dayLengthInSeconds) {
