@@ -66,6 +66,7 @@ public class Navigator {
 
     private void initSelfPositioning() {
         try {
+
             this.currentNode = carPath.getNodes().pop();
             this.currentRoad = null;
             currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();

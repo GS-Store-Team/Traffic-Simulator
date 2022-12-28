@@ -6,12 +6,14 @@ import com.traffic_simulator.exceptions.SimulationException;
 import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
 import com.traffic_simulator.simulation.models.SimulationState;
+import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.car.Navigator;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPathsBunch;
 import com.traffic_simulator.utils.SimulationUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +38,7 @@ public class SimulationRunner {
     private void init() {
         try {
             initCars();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
             //"initialization failure"
         }
@@ -93,18 +95,33 @@ public class SimulationRunner {
         int cycle = 1;
         long departureTime = 0;
         int carPackSize = simulationSettings.getSeedData().depCarPackSize();
-        List<NodeNe> ends = simulationState.getGraphMap().getBuildingNodes().stream().filter((NodeNe n) -> n.getAttachmentPoint().getConnectedBuildings().get(0).getType() != BuildingType.LIVING).toList();
+        List<NodeNe> ends = simulationState.getGraphMap().getNodes()
+                .stream()
+                .filter((NodeNe n) -> !n.getAttachmentPoint().getConnectedBuildings()
+                        .stream()
+                        .filter((Building b) -> !b.getType().equals(BuildingType.LIVING))
+                        .toList()
+                        .isEmpty())
+                .toList();
 
         while (!unmarkedCars.isEmpty()) {
             for (int i = 0; i < unmarkedCars.size(); i = (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
-                NodeNe startPoint = simulationState.getGraphMap().getBuildingNodes().stream()
+                NodeNe startPoint = simulationState.getGraphMap().getNodes().stream()
                         .filter((NodeNe n) -> n.getAttachmentPoint()
                                 .getConnectedBuildings()
                                 .contains(currentCar.getBuildingStart()))
                         .toList()
                         .get(0);
                 NodeNe endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i) % ends.size());
+                int temp = 1;
+                while (endPoint == startPoint) {
+                    endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i + temp) % ends.size());
+                    temp++;
+                }
+                if (allPaths.get(startPoint).getCarPathsEndsMap().get(endPoint) == null) {
+                    System.out.println("a");
+                }
                 Navigator navigator = new Navigator(unmarkedCars.get(i), 20, -20, allPaths.get(startPoint).getCarPathsEndsMap().get(endPoint));
 
                 navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
@@ -112,6 +129,9 @@ public class SimulationRunner {
 
                 navigators.add(navigator);
                 unmarkedCars.remove(i);
+                if (unmarkedCars.isEmpty()) {
+                    break;
+                }
             }
             departureTime = (departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds;
             cycle++;
