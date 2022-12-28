@@ -11,10 +11,7 @@ import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.exceptions.PathsConstructionException;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static java.util.Collections.addAll;
 
@@ -31,19 +28,23 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
 
     @Override
     protected CarPathsBunch computeCarPath(NodeNe start) throws PathsConstructionException {
+        System.out.println("Dijkstra started! Start: " + start.hashCode() + "\n");
         CarPathsBunch carPathsBunch = new CarPathsBunch(start);
         List<NodeNe> unmarkedNodes = new ArrayList<>(graph.getNodes());
+        unmarkedNodes.sort(Comparator.comparingDouble(NodeNe::getWeight));
 
         start.setWeight(0);
         NodeNe currentNode = start;
 
-        HashMap<NodeNe, NodeNe> paths = new HashMap<>();
+        HashMap<NodeNe, NodeNe> predecessors = new HashMap<>();
+        for (NodeNe node : unmarkedNodes) {
+            predecessors.put(node, null);
+        }
+
+        //graph.getNodes().stream().forEach((NodeNe n) -> System.out.println(n.getAttachmentPoint()));
 
         while (!unmarkedNodes.isEmpty()) {
             unmarkedNodes.remove(currentNode);
-
-            //System.out.println("Was removed!" + currentNode);
-            //System.out.println(unmarkedNodes);
 
             AttachmentPoint ref = currentNode.getAttachmentPoint();             //retrieve all roads which have a way to another nodeNe
             List<Road> refRoads = new ArrayList<>();
@@ -53,27 +54,55 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
             for (NodeNe nodeNe : currentNode.getNodesList()) {
                 Road road;
                 try {                               //retrieve road, which is connected with current node
-                     road = refRoads.stream()
+                    road = refRoads.stream()
                             .filter((Road r) -> ref.getStartingRoads().contains(r) & nodeNe.getAttachmentPoint().getFinishingRoads().contains(r) ||
-                                    nodeNe.getAttachmentPoint().getStartingRoads().contains(r) & ref.getFinishingRoads().contains(r)).toList().get(0);
-                } catch (IndexOutOfBoundsException exc) {
-                    continue;
+                                    nodeNe.getAttachmentPoint().getStartingRoads().contains(r) & ref.getFinishingRoads().contains(r))
+                            .min(Comparator.comparingDouble(Road::getWeight))
+                            .get();
+                } catch (NoSuchElementException exc) {
+                    throw exc;
                 }
-                if (nodeNe.getWeight() < currentNode.getWeight() + road.getWeight()) {      //relaxation and path building
-                    nodeNe.setWeight(currentNode.getWeight() + road.getWeight());
-                    paths.remove(nodeNe);
-                    nodeNe.setRoadToPrev(road);
-                    paths.put(nodeNe, currentNode);
+                if (nodeNe.getWeight() > currentNode.getWeight() + road.getWeight()) {
+                    if (unmarkedNodes.contains(nodeNe)) {
+                        nodeNe.setWeight(currentNode.getWeight() + road.getWeight());
+                        nodeNe.setRoadToPrev(road);
+                        predecessors.put(nodeNe, currentNode);
+                    }
                 }
             }
+
+            /*for (NodeNe node : graph.getNodes()) {
+                System.out.println(node.hashCode() + " - " + node.getWeight());
+            }
+            System.out.println("-----");
+            */
+            try {
+                currentNode = unmarkedNodes.stream().min(Comparator.comparingDouble(NodeNe::getWeight)).get();
+            } catch (NoSuchElementException exc) {
+                break;
+            }
+            //System.out.println("5: aaaaaaaaaaaaaaaaaaaaa");
+
 
             if (currentNode.getWeight() == Double.POSITIVE_INFINITY) {              //if there are only unreachable nodes left
                 throw new PathsConstructionException("One or more nodes are unreachable!", unmarkedNodes);
             }
         }
 
-        for (NodeNe end : graph.getNodes()) {           //retrieve concrete paths from starting node to node
-            carPathsBunch.getCarPathsEndsMap().put(end, PathRetriever.retrievePath(start, end, paths));
+        /*System.out.println(start.hashCode());
+        for (NodeNe key : predecessors.keySet()) {
+            System.out.print(key.hashCode() + " -> ");
+            if (predecessors.get(key) == null) {
+                System.out.println("null");
+            } else {
+                System.out.println(predecessors.get(key).hashCode());
+            }
+        }*/
+
+        List<NodeNe> list = new ArrayList<>(graph.getNodes());
+        list.remove(start);
+        for (NodeNe end : list) {           //retrieve concrete paths from starting node to node
+            carPathsBunch.getCarPathsEndsMap().put(end, PathRetriever.retrievePath(start, end, predecessors));
         }
         return carPathsBunch;
     }

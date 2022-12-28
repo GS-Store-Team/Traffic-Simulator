@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-@ToString
+//@ToString
 public class Road extends MapObject {
     private Coordinates startCoordinate;
     private Coordinates endCoordinate;

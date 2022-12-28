@@ -116,5 +116,7 @@ public class SimulationRunner {
             departureTime = (departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds;
             cycle++;
         }
+
+        System.out.println("Cars initialization completed!");
     }
 }

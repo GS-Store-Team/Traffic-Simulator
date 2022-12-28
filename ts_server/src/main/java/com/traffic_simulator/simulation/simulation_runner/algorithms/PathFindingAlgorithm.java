@@ -20,9 +20,10 @@ public abstract class PathFindingAlgorithm {
 
         try {
             for (NodeNe start : graph.getNodes()) {
-                //start.setWeightMark(0);
                 result.put(start, computeCarPath(start));
+                graph.resetWeights();
             }
+            System.out.println("Paths computation completed!");
             return result;
         } catch (PathsConstructionException exc) {
             throw new GraphConstructionException("Graph construction error!", exc.getUnreachableNodes());

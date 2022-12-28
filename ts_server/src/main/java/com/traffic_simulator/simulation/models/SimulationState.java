@@ -23,22 +23,22 @@ public class SimulationState {
     private PathFindingAlgorithm pathfindingAlgorithm;
     private Set<Car> cars;
 
-    public SimulationState(GraphMap graphMap, PathFindingAlgorithm pathfindingAlgorithm)  {
+    public SimulationState(GraphMap graphMap, PathFindingAlgorithm pathfindingAlgorithm) {
         this.graphMap = graphMap;
         this.pathfindingAlgorithm = pathfindingAlgorithm;
         this.cars = new HashSet<>();
         init();
     }
 
-    public List<Road> getAllRoads(){
+    public List<Road> getAllRoads() {
         return graphMap.getRoads();
     }
 
-    public List<Building> getAllBuildings(){
+    public List<Building> getAllBuildings() {
         return graphMap.getBuildings();
     }
 
-    private void init(){
+    private void init() {
         defaultInit(getAllBuildings().stream().filter(b -> b.getType().equals(BuildingType.LIVING)).toList(),
                 getAllBuildings().stream().filter(b -> b.getType().equals(BuildingType.WORK)).toList());
 
@@ -47,14 +47,15 @@ public class SimulationState {
                 cars.addAll(building.getParkingZone().getCars());
             }
         }
+        System.out.println("Simulation state initialization completed!");
     }
 
-    private void defaultInit(List<Building> livingBuildings, List<Building> destinationBuildings){
+    private void defaultInit(List<Building> livingBuildings, List<Building> destinationBuildings) {
         AtomicLong id = new AtomicLong();
         List<Building> lb = new ArrayList<>(livingBuildings);
         lb.forEach(b -> {
             ParkingZone parkingZone = b.getParkingZone();
-            for (int i = 0; i<10; i++ )
+            for (int i = 0; i < 10; i++)
                 parkingZone.addCar(new Car(id.getAndIncrement(), b, destinationBuildings.get(Math.abs(ThreadLocalRandom.current().nextInt()) % destinationBuildings.size())));
         });
     }

@@ -14,7 +14,9 @@ import lombok.ToString;
 import java.util.*;
 
 
-@Data
+@Getter
+@Setter
+@ToString
 public class AttachmentPoint extends MapObject {
     private final Coordinates coordinates;
     private final List<Building> connectedBuildings;
@@ -42,5 +44,10 @@ public class AttachmentPoint extends MapObject {
     }
     public void addFinishingRoad(Road road){
         finishingRoads.add(road);
+    }
+
+    @Override
+    public String toString() {
+        return startingRoads.size() + " " + finishingRoads.size();
     }
 }

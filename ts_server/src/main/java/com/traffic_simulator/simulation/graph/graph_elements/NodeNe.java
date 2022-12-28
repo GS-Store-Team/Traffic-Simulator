@@ -7,8 +7,13 @@ import java.util.List;
 
 import com.traffic_simulator.simulation.models.road.Road;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 public class NodeNe {
     private List<NodeNe> nodesList = new ArrayList<>();
     private AttachmentPoint attachmentPoint;
@@ -26,7 +31,10 @@ public class NodeNe {
         this.weight = nodeNe.weight;
         this.nodesList = new ArrayList<>(nodeNe.nodesList);
     }
-    public void addNodeToList(NodeNe node){
+
+    public void addNodeToList(NodeNe node) {
         nodesList.add(node);
     }
+
+
 }

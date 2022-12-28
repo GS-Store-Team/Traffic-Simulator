@@ -28,7 +28,6 @@ import java.util.*;
 @ToString
 @Getter
 public class GraphMap {
-    private List<NodeNe> nodes = new ArrayList<>();
     private List<NodeNe> crossroadNodes = new ArrayList<>();
     private List<NodeNe> buildingNodes = new ArrayList<>();
     private List<Edge> edges = new ArrayList<>();
@@ -112,5 +111,11 @@ public class GraphMap {
         return new MapStateDTO(simulationContext.getBuildingDTOList(),
                                simulationContext.getRoadDTOList(),
                           null, null);
+    }
+
+    public void resetWeights() {
+        for (NodeNe node : nodesList) {
+            node.setWeight(Double.POSITIVE_INFINITY);
+        }
     }
 }
