@@ -83,6 +83,7 @@ public class Navigator {
 
         if (carRunning) {
             updateCar();
+            System.out.println("Navigator #" + this.hashCode() + " (" + currentCoordinate.getX() + ", " + currentCoordinate.getY() + ")");
         }
     }
 

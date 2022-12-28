@@ -49,7 +49,7 @@ public class SimulationRunner {
     }
 
     public void update() throws SimulationException {
-        System.out.println("UPDATE");
+        System.out.println("UPDATE TICK# " + currentTick);
         updateNavigators(currentTick);
 
         if (currentTick >= GlobalSettings.dayLengthInSeconds) {
@@ -119,9 +119,7 @@ public class SimulationRunner {
                     endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i + temp) % ends.size());
                     temp++;
                 }
-                if (allPaths.get(startPoint).getCarPathsEndsMap().get(endPoint) == null) {
-                    System.out.println("a");
-                }
+
                 Navigator navigator = new Navigator(unmarkedCars.get(i), 20, -20, allPaths.get(startPoint).getCarPathsEndsMap().get(endPoint));
 
                 navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
