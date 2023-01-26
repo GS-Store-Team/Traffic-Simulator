@@ -1,5 +1,4 @@
 export const defaultBuilding = {
-    id:0,
     x: 0,
     y: 0,
     width: 50,
@@ -11,14 +10,16 @@ export const defaultBuilding = {
 }
 
 export const defaultRoad = {
-    id:0,
     x: 100,
     y: 50,
-    offSet: 100,
+    x1:200,
+    y1:50,
     pointRadius:5,
     pointFill: "grey",
     lineFill: "grey",
     lineStroke: 10,
     enter: "gold",
     shadowBlur: 0,
+    forwardLanesCnt:1,
+    reverseLanesCnt:1,
 }

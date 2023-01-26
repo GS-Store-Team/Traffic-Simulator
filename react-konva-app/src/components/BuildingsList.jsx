@@ -1,6 +1,6 @@
 import React from 'react';
-import Building from "./Building";
 import {Group} from "react-konva";
+import {Building} from "./Building.jsx";
 
 const BuildingsList = (props) => {
     return (

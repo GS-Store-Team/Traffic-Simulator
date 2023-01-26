@@ -7,6 +7,7 @@
 }
 
 .my__button{
+    cursor: pointer;
     font-size: 14px;
     height: 20px;
     margin: auto 5px;
@@ -16,6 +17,7 @@
 }
 
 .my__button__reload{
+    cursor: pointer;
     font-size: 14px;
     height: 20px;
     margin: 10px 5px;
@@ -44,6 +46,7 @@
 
 .my__frames{
     width: 140px;
+    margin-right: 10px;
     display: flex;
     justify-content: space-between;
 }
@@ -54,56 +57,17 @@
     margin: auto;
 }
 
-input[type=checkbox]{
-    height: 0;
-    width: 0;
-    visibility: hidden;
-}
-
-label {
-    cursor: pointer;
-    text-indent: -9999px;
-    width: 40px;
-    height: 16px;
-    background: orange;
-    display: block;
-    border-radius: 0;
-    position: relative;
-    margin: auto;
-}
-
-label:after {
-    content: '';
-    position: absolute;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    background: rebeccapurple;
-    border-radius: 0;
-    transition: 0.1s;
-}
-
-input:checked + label {
-    background: rgba(0, 169, 143, 0.8);
-}
-
-input:checked + label:after {
-    left: calc(100% - 2px);
-    transform: translateX(-100%);
-}
-
-label:active:after {
-    width: 30px;
-}
-
 .my__choice__box{
-    width: 130px;
-    display: flex;
-    justify-content: center;
+    margin: auto 10px auto 0;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    width: 100px;
+    height: 22px;
+    padding-top: 3px;
+    text-align: center;
 }
 
-.my__choice__box__title{
-    width: 60px;
-    margin: 10px;
-    text-align: left;
+.my__choice__box:hover{
+    scale: 1.05;
 }

@@ -46,15 +46,7 @@ export const RunnerToolbar = ({reload, start, stop, continuesim, started, setFra
                 <div className={classes.my__frames__title}>{frames} fps</div>
             </div>
 
-            <div className={classes.my__choice__box}>
-                <input onChange={defaultVis}
-                       type="checkbox"
-                       id="switch"/>
-                <label htmlFor="switch">Toggle</label>
-                <div className={classes.my__choice__box__title}>
-                    {vis ? "cars": "heat map"}
-                </div>
-            </div>
+            <div className={classes.my__choice__box} onClick={defaultVis}>{vis ? "cars": "heat map"}</div>
 
             <button onClick={(e) => reloadMap(e)}
                     className={classes.my__button__reload}>Reload map</button>

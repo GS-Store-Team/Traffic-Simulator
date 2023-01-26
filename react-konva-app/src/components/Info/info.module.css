@@ -1,0 +1,51 @@
+.item{
+    width: 400px;
+    height: 200px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    border-radius: 20px;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 100;
+    display: block;
+    padding: 5px;
+
+}
+
+.my__coords{
+    position: absolute;
+    font-size: 12px;
+    color: white;
+    text-align: right;
+    right: 10px;
+}
+
+.my__coords1{
+    position: absolute;
+    font-size: 12px;
+    color: white;
+    text-align: right;
+    right: 10px;
+    top: 20px;
+}
+
+
+.id{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: white;
+    font-size: 15px;
+}
+
+.main__info{
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    color: white;
+    font-size: 15px;
+}
+
+.row{
+    display: block;
+}

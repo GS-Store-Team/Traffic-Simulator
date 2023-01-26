@@ -15,7 +15,7 @@ export const MyStage = ({layers}) => {
         };
     }
     // eslint-disable-next-line no-restricted-globals
-    const [width, setWidth] = useState(innerWidth);
+    const [width, setWidth] = useState(window.innerWidth);
     // eslint-disable-next-line no-restricted-globals
     const [height, setHeight] = useState(innerHeight-120);
     const [offset, setOffset] = useState({x:0,y:0})
@@ -39,14 +39,13 @@ export const MyStage = ({layers}) => {
         });
     },[width, height]);
 
-    const {setScale} = useContext(Context);
+    const {setScale, scale} = useContext(Context);
     const scaleBy = 1.10;
     const [stage, setStage] = useState({
         scale: 1,
         x: width/2,
         y: height/2
     });
-
     const defaultPosition = () => {
         setScale(1);
         setStage({scale: 1, x: width/2, y: height/2});
@@ -80,10 +79,19 @@ export const MyStage = ({layers}) => {
         setScale(newScale);
     };
 
+    const {setShift} = useContext(Context);
+
     const handleDrag = (e) =>{
-        if(e.target.constructor.name === "Stage")
-            setOffset({x:(-e.target._lastPos.x + width/2),
-                y:(-e.target._lastPos.y + height/2)})
+        if(e.target.constructor.name === "Stage") {
+            setOffset({
+                x: (-e.target._lastPos.x + width / 2),
+                y: (-e.target._lastPos.y + height / 2)
+            })
+            setShift({
+                x: (-e.target._lastPos.x + width / 2),
+                y: (-e.target._lastPos.y + height / 2)
+            })
+        }
     }
 
     return (
@@ -94,26 +102,30 @@ export const MyStage = ({layers}) => {
                 offsetX={width/2}
                 offsetY={height/2}
                 width={width}
-                height={height}
+                height={height+20}
                 scaleX={stage.scale}
                 scaleY={stage.scale}
                 onWheel={(e) => handleWheel(e)}
                 draggable={true}
-                onDragEnd={(e) => handleDrag(e)}>
+                onDragEnd={(e) => handleDrag(e)}
+                >
                 {layers.map((l)=>l)}
             </Stage>
             <img onClick={defaultPosition}
                  className={classes.my__pointer}
                  src={pointer}
-                 alt={".."}/>
+                 alt={".."}
+            />
             <img onClick={upscale}
                  className={classes.my__plus}
                  src={plus}
-                 alt={".."}/>
+                 alt={".."}
+            />
             <img onClick={downscale}
                  className={classes.my__minus}
                  src={minus}
-                 alt={".."}/>
+                 alt={".."}
+            />
         </div>
     );
 };

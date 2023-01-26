@@ -1,30 +1,26 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Circle, Rect, Group} from "react-konva";
+import {Circle, Group, Rect} from "react-konva";
 import {ceilPosition} from "../utils/Utils";
 import {Context} from "../router/AppRouter.jsx";
-const Building = (props) => {
+
+export const Building = (props) => {
 
     const building = props.building
 
     const [visible, setVisible] = useState(false);
     const [stroke, setStroke] = useState(false);
-    const [exitStroke, setExitStroke] = useState(false);
-
-    const {scale} = useContext(Context);
+    const [buildingState, setBuildingState] = useState({x:building.x, y:building.y})
+    const {scale, setBuilding, setBuildingSettings} = useContext(Context);
     const [myScale, setMyScale] = useState(1);
+
     useEffect(() => {
         scale<0.8? setMyScale(0.8): setMyScale(scale);
     }, [scale])
 
-    const drawArea = () => {
-        setVisible(true);
-    }
-
-    const fullSelect = () => {
-        setVisible(true);
-        setStroke(true);
-        setExitStroke(true);
-    }
+    useEffect(()=>{
+        if(visible) setBuilding({building:building, position:buildingState})
+        else setBuilding(null);
+    }, [visible, buildingState])
 
     const enterBuilding = () => {
         setVisible(true);
@@ -33,14 +29,10 @@ const Building = (props) => {
 
     const eraseArea = () => {
         setVisible(false);
-        eraseStroke();
+        setStroke(false)
     }
-    const eraseStroke = () => {
-        setExitStroke(false);
-        setStroke(false);
-    }
-
     const remove = ()=>{
+        setVisible(false)
         props.rm(building);
     }
 
@@ -52,7 +44,8 @@ const Building = (props) => {
                     fill={stroke? building.enter: building.fill}
                     shadowBlur={building.shadowBlur}
                     onMouseEnter={enterBuilding}
-                    onMouseLeave={eraseStroke}
+                    onMouseLeave={() => setStroke(false)}
+                    onClick={() => setBuildingSettings({building:building, delete:remove})}
                     />
 
     const area = <Circle
@@ -63,34 +56,13 @@ const Building = (props) => {
                         radius={60}
                         visible={visible}
                         onMouseLeave={eraseArea}
-                        onMouseEnter={drawArea}
                     />
-
-    const exit = <Circle
-                    x={building.x + 67}
-                    y={building.y-17.5}
-                    fill={"red"}
-                    strokeWidth={0.5/myScale}
-                    stroke={"black"}
-                    radius={6/myScale}
-                    visible={visible}
-                    onMouseEnter={fullSelect}
-                    onMouseLeave={eraseArea}
-                    onClick={remove}
-                    shadowBlur={2/myScale}
-                    shadowEnabled={exitStroke}
-                    opacity={exitStroke? 0.8:0.5}
-                />
-
-    const move = (e) =>{
-    }
 
     const group =   <Group
                         draggable={true}
                         onDragMove={(e) => ceilPosition(e)}
-                        onDragEnd={(e) => move(e)}>
+                        onDragEnd={(e) => setBuildingState({x:e.target.attrs.x, y:e.target.attrs.y})}>
                         {area}
-                        {exit}
                         {rect}
                     </Group>
 
@@ -98,5 +70,3 @@ const Building = (props) => {
         group
     );
 }
-
-export default Building;
