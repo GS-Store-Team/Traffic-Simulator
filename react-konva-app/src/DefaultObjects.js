@@ -23,3 +23,7 @@ export const defaultRoad = {
     forwardLanesCnt:1,
     reverseLanesCnt:1,
 }
+
+export const visualizationSettings = {
+    showRoadCells:false,
+}

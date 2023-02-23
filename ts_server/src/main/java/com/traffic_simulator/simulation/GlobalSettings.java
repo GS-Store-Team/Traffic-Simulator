@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class GlobalSettings {
-    public static final int ticksPerSecond = 100;
+    public static final int ticksPerSecond = 1;
     public static final int buildingConnectionRadius = 60;
     public static final int buildingWidth = 50;
     public static final int cellWidth = 4;

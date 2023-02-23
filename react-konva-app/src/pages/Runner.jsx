@@ -5,6 +5,9 @@ import API from "../API.js";
 import {MapConfigurationLayer} from "../components/MapConfigurationLayer.jsx";
 import {MyStage} from "../components/mystage/MyStage.jsx";
 import {SimulationLayer} from "../components/SimulationLayer.jsx";
+import {Layer} from "react-konva";
+import {Grid} from "../components/Grid.jsx";
+import useMeasure from "react-use-measure";
 
 export const Runner = () => {
     const [config, setConfig] = useState(undefined);
@@ -21,9 +24,10 @@ export const Runner = () => {
     const getConfig = () => {
         setStarted(false);
         API.getMapConfig().then((response) => {
-            setConfig(response.data);
-            console.log("MAP CONFIGURATION:")
-            console.log(response.data);
+            console.log(response.data)
+            if(response.data === '')
+                setConfig({roads:[],buildings:[], signs:[],crossroads:[]})
+            else setConfig(response.data);
         }).catch((e) => {
             setConfig(undefined);
         })
@@ -62,8 +66,10 @@ export const Runner = () => {
         })
     }
 
+    const [ref, bounds] = useMeasure()
+
     return (
-        <div>
+        <div ref={ref}>
             <Header state={true}/>
             <RunnerToolbar reload={getConfig}
                            start={startSimulation}
@@ -73,16 +79,20 @@ export const Runner = () => {
                            setFrames={setFrames}
                            frames={frames}
                            setDefaultVis={setDefaultVis}/>
-            {config?
+            {config !== undefined?
                 <MyStage layers={
-                    [<MapConfigurationLayer key={0}
+                    [
+                    <Layer key={2}>
+                        <Grid width={bounds.width} height={bounds.height-100}/>
+                    </Layer>,
+                        <MapConfigurationLayer key={0}
                                             config={config}/>,
                      <SimulationLayer key={1}
-                                      stopped={stopped}
+                                       stopped={stopped}
                                       started={started}
                                       frames={frames}/>]
                 }/>
-                : <div> Cant fetch server..</div>
+                : <div>Can not fetch server..</div>
             }
         </div>
     )

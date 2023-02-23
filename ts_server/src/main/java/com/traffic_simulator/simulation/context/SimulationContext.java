@@ -19,55 +19,6 @@ public class SimulationContext {
     private List<BuildingDTO> buildingDTOList = new ArrayList<>();
     private List<RoadDTO> roadDTOList = new ArrayList<>();
 
-
-    @PostConstruct
-    public void init(){
-        int cnt = 0;
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(130,70), new PointDTO(290, 70), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(130,70), new PointDTO(130, 200), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,70), new PointDTO(290, 70), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(130,200), new PointDTO(290, 200), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,70), new PointDTO(460, 70), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,70), new PointDTO(290, 200), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,200), new PointDTO(410, 200), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(410,200), new PointDTO(460, 70), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,200), new PointDTO(290, 330), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(130,200), new PointDTO(50, 460), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(50,460), new PointDTO(290, 330), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(290,330), new PointDTO(460, 330), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(460,70), new PointDTO(730, 220), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(460,330), new PointDTO(730, 220), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(460,330), new PointDTO(750, 370), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(730,220), new PointDTO(750, 370), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(730,220), new PointDTO(930, 150), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(750,370), new PointDTO(870, 640), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(720,600), new PointDTO(750, 370), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(720,600), new PointDTO(870, 640), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(50,460), new PointDTO(110, 560), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(110,560), new PointDTO(210, 560), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(720,600), new PointDTO(210, 560), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(110,560), new PointDTO(200, 650), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(210,560), new PointDTO(200, 650), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(650,650), new PointDTO(870, 640), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(720,600), new PointDTO(650, 650), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(200,650), new PointDTO(340, 650), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(340,650), new PointDTO(400, 650), 1, 1, null, null));
-        roadDTOList.add(new RoadDTO(cnt++, new PointDTO(400,650), new PointDTO(650, 650), 1, 1, null, null));
-
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 10), BuildingType.LIVING, 10, 10));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(140, 80), BuildingType.LIVING, 10, 10));
-        //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(60, 60)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 160), BuildingType.LIVING, 10, 10));
-        //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(920, 80)));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 660), BuildingType.LIVING, 10, 10));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 660), BuildingType.LIVING, 10, 10));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 660), BuildingType.WORK, 0, 10));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(290, 590), BuildingType.WORK, 0, 10));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(350, 590), BuildingType.WORK, 0, 10));
-        buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(410, 590), BuildingType.WORK, 0, 20));
-        //buildingDTOList.add(new BuildingDTO(cnt++, new PointDTO(875, 655)));
-    }
-
     public long addBuildingDTO(BuildingDTO buildingDTO){
         buildingDTO.setId(roadId++);
         buildingDTOList.add(buildingDTO);

@@ -32,15 +32,14 @@ public class SimulationRunner {
         this.cars.addAll(this.simulationState.getCars());
         this.navigators = new ArrayList<>();
         this.currentTick = 0;
-        init();
+        //init();
     }
 
     private void init() {
         try {
             initCars();
         } catch (Exception e) {
-            throw new RuntimeException(e);
-            //"initialization failure"
+            throw new RuntimeException("initialization failure");
         }
     }
 
@@ -88,8 +87,9 @@ public class SimulationRunner {
 //    }
 
     private void initCars() throws GraphConstructionException {
-
+        System.out.println("HERE");
         HashMap<NodeNe, CarPathsBunch> allPaths = simulationState.getPathfindingAlgorithm().compute();
+        System.out.println("WHERE");
         List<Car> unmarkedCars = new ArrayList<>(cars);
         int tempId = 1;
         int cycle = 1;
@@ -105,6 +105,7 @@ public class SimulationRunner {
                 .toList();
 
         while (!unmarkedCars.isEmpty()) {
+            System.out.println(unmarkedCars.size());
             for (int i = 0; i < unmarkedCars.size(); i = (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
                 NodeNe startPoint = simulationState.getGraphMap().getNodes().stream()

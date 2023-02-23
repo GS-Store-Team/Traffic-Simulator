@@ -2,6 +2,7 @@ import React from 'react';
 import {Circle, Group, Layer, Line, Rect} from "react-konva";
 
 export const MapConfigurationLayer = ({config}) => {
+    console.log(config)
     return (
         <Layer>
             {config.buildings.map((b) =>

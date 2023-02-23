@@ -27,6 +27,7 @@ public class TickGenerator implements Runnable {
                         this.stop();
                         System.out.println(exc.getMessage());
                     }
+                    System.out.println("tic");
 
                     TimeUnit.MILLISECONDS.sleep(1000 / ticksPerSecond);     //inside of the if block! Important point in debugging!
                 }

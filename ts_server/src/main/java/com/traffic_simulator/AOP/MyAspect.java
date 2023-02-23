@@ -3,6 +3,7 @@ package com.traffic_simulator.AOP;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +14,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Component
+@Component
 @Aspect
 public class MyAspect {
     Logger logger = LoggerFactory.getLogger(MyAspect.class);
 
     @Around("Pointcuts.allControllersMethods()")
-    public void mapLoggingAdvice(ProceedingJoinPoint joinPoint) throws Exception {
+    public void mapLoggingAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         Map<String, String> map = new HashMap<>();
 
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
@@ -32,5 +33,7 @@ public class MyAspect {
         map.put("params", DebugUtils.getParameters(method.getParameters()));
 
         logger.info(DebugUtils.getNote(map));
+
+        joinPoint.proceed(joinPoint.getArgs());
     }
 }

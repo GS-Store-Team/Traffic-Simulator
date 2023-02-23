@@ -3,8 +3,9 @@ import {Circle, Group, Rect} from "react-konva";
 import {ceilPosition} from "../utils/Utils";
 import {Context} from "../router/AppRouter.jsx";
 import {MultiLanesRoad} from "./MultiLanesRoad.jsx";
+import API from "../API.js";
 export const Road = (props) => {
-    const road = props.road;
+    const [road, setRS] = useState(props.road);
     const {scale, setRoad, setRoadSettings} = useContext(Context);
     const [myScale, setMyScale] = useState(1);
     useEffect(() => {
@@ -22,9 +23,34 @@ export const Road = (props) => {
         else setRoad(null);
     }, [visible, roadState])
 
-    useEffect(() => {
-        console.log(road)
-    }, [roadState])
+    useEffect(()=>{
+        // API.sendRoad(
+        //     {
+        //         id:road.id,
+        //         start:roadState.start,
+        //         end:roadState.end,
+        //         forwardLanesCnt: road.forwardLanesCnt,
+        //         reverseLanesCnt:road.reverseLanesCnt,
+        //         forwardRoadSigns: null,
+        //         reverseRoadSigns: null,
+        //     }).then(response => {
+        //         console.log(response);
+        // })
+
+        API.sendRoad(
+            {
+                id:0,
+                start:{x:0, y:0},
+                end:{x:0, y:0},
+                forwardLanesCnt:1,
+                reverseLanesCnt:1,
+                //offsetX:offsetX,
+                //offsetY:offsetY,
+            }).then(response => {
+            console.log(response);
+        })
+    }, [roadState, road])
+
     const remove = () =>{
         setVisible(false)
         props.rm(road);
@@ -60,8 +86,6 @@ export const Road = (props) => {
     const [startY, setStartY] = useState(road.y);
     const [endX, setEndX] = useState(road.x1);
     const [endY, setEndY] = useState(road.y);
-
-
     const changerStart = (e) => {
         ceilPosition(e);
         setStartX(e.target.attrs.x);
@@ -93,7 +117,7 @@ export const Road = (props) => {
     }
 
     const changeSettings = () =>{
-        setRoadSettings({road:road, delete:remove})
+        setRoadSettings({road:road, delete:remove, setRoad:setRS})
     }
 
     const multiRoad = <MultiLanesRoad position={{start:{x:startX, y:startY}, end:{x:endX,y:endY}}} reverse={road.reverseLanesCnt} forward={road.forwardLanesCnt} enterRoad={enterRoad} leaveRoad={leaveRoad} changeSettings={changeSettings}/>

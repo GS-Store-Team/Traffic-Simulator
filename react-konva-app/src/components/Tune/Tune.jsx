@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import classes from "./tune.module.css";
 import {Context} from "../../router/AppRouter.jsx";
+import {RoadTune} from "./RoadTune.jsx";
+import {BuildingTune} from "./BuildingTune.jsx";
 
 export const Tune = () => {
     const {roadSettings, buildingSettings, setRoadSettings, setBuildingSettings} = useContext(Context);
@@ -22,10 +24,8 @@ export const Tune = () => {
                      onClick={() => setRoadSettings(null)}>
                     <div className={classes.tune}
                          onClick={e => e.stopPropagation()}>
-                        <div className={classes.id}>
-                            ID: {roadSettings.road.id}
-                        </div>
                         <div className={classes.my__delete} onClick={deleteRoad}>delete</div>
+                        <RoadTune roadSettings={roadSettings}/>
                     </div>
                 </div>
                 : null}
@@ -34,10 +34,8 @@ export const Tune = () => {
                      onClick={() => setBuildingSettings(null)}>
                     <div className={classes.tune}
                          onClick={e => e.stopPropagation()}>
-                        <div className={classes.id}>
-                            ID: {buildingSettings.building.id}
-                        </div>
                         <div className={classes.my__delete} onClick={deleteBuilding}>delete</div>
+                        <BuildingTune />
                     </div>
                 </div>
                 : null}
