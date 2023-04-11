@@ -4,7 +4,7 @@ import com.traffic_simulator.dto.SimulationDTO;
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.SimulationException;
 import com.traffic_simulator.simulation.GlobalSettings;
-import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
+import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.models.SimulationState;
 import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.car.Car;
@@ -32,14 +32,15 @@ public class SimulationRunner {
         this.cars.addAll(this.simulationState.getCars());
         this.navigators = new ArrayList<>();
         this.currentTick = 0;
-        //init();
+        init();
     }
 
     private void init() {
         try {
             initCars();
         } catch (Exception e) {
-            throw new RuntimeException("initialization failure");
+            throw new RuntimeException(e);
+            //"initialization failure"
         }
     }
 
@@ -87,17 +88,16 @@ public class SimulationRunner {
 //    }
 
     private void initCars() throws GraphConstructionException {
-        System.out.println("HERE");
-        HashMap<NodeNe, CarPathsBunch> allPaths = simulationState.getPathfindingAlgorithm().compute();
-        System.out.println("WHERE");
+
+        HashMap<Node, CarPathsBunch> allPaths = simulationState.getPathfindingAlgorithm().compute();
         List<Car> unmarkedCars = new ArrayList<>(cars);
         int tempId = 1;
         int cycle = 1;
         long departureTime = 0;
         int carPackSize = simulationSettings.getSeedData().depCarPackSize();
-        List<NodeNe> ends = simulationState.getGraphMap().getNodes()
+        List<Node> ends = simulationState.getGraphMap().getNodes()
                 .stream()
-                .filter((NodeNe n) -> !n.getAttachmentPoint().getConnectedBuildings()
+                .filter((Node n) -> !n.getAttachmentPoint().getConnectedBuildings()
                         .stream()
                         .filter((Building b) -> !b.getType().equals(BuildingType.LIVING))
                         .toList()
@@ -105,23 +105,25 @@ public class SimulationRunner {
                 .toList();
 
         while (!unmarkedCars.isEmpty()) {
-            System.out.println(unmarkedCars.size());
             for (int i = 0; i < unmarkedCars.size(); i = (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
-                NodeNe startPoint = simulationState.getGraphMap().getNodes().stream()
-                        .filter((NodeNe n) -> n.getAttachmentPoint()
+                Node startPoint = simulationState.getGraphMap().getNodes().stream()
+                        .filter((Node n) -> n.getAttachmentPoint()
                                 .getConnectedBuildings()
                                 .contains(currentCar.getBuildingStart()))
                         .toList()
                         .get(0);
-                NodeNe endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i) % ends.size());
+                Node endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i) % ends.size());
                 int temp = 1;
                 while (endPoint == startPoint) {
                     endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i + temp) % ends.size());
                     temp++;
                 }
 
-                Navigator navigator = new Navigator(unmarkedCars.get(i), 20, -20, allPaths.get(startPoint).getCarPathsEndsMap().get(endPoint));
+                Navigator navigator = new Navigator(unmarkedCars.get(i),
+                        20,
+                        -20,
+                        allPaths.get(startPoint).getCarPathsByEnds().get(endPoint));
 
                 navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
                 navigator.setWorkTime((simulationSettings.getSeedData().coeff() * simulationSettings.getSeedData().destTimeSpend()) % GlobalSettings.dayLengthInSeconds);

@@ -4,7 +4,7 @@ import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.CarDTO;
 import com.traffic_simulator.dto.PointDTO;
 import com.traffic_simulator.simulation.graph.GraphMap;
-import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
+import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
@@ -26,7 +26,7 @@ public class SimulationUtils {
         return new Coordinates(pointDTO.getX(), pointDTO.getY());
     }
 
-    public static NodeNe getNodeFromBuilding(Building building, GraphMap graphMap){
+    public static Node getNodeFromBuilding(Building building, GraphMap graphMap){
         return null;
     }
 }

@@ -5,21 +5,18 @@ import com.traffic_simulator.dto.MapStateDTO;
 import com.traffic_simulator.dto.PointDTO;
 import com.traffic_simulator.dto.RoadDTO;
 import com.traffic_simulator.exceptions.InvalidMapException;
-import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.context.SimulationContext;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
-import com.traffic_simulator.exceptions.GraphConstructionException;
-import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.buildings.ParkingZone;
-import com.traffic_simulator.simulation.models.car.Car;
+import com.traffic_simulator.simulation.models.buildings.types.LivingBuilding;
+import com.traffic_simulator.simulation.models.buildings.types.WorkplaceBuilding;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.utils.SimulationUtils;
-import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -28,14 +25,15 @@ import java.util.*;
 @ToString
 @Getter
 public class GraphMap {
-    private List<NodeNe> crossroadNodes = new ArrayList<>();
-    private List<NodeNe> buildingNodes = new ArrayList<>();
+    private List<Node> crossroadNodes = new ArrayList<>();
     private List<Edge> edges = new ArrayList<>();
     private final SimulationContext simulationContext;
     private Validation validation;
-    private List<NodeNe> nodesList;
+    private List<Node> nodesList;
     private List<Road> roads = new ArrayList<>();
     private List<Building> buildings = new ArrayList<>();
+    private List<LivingBuilding> livingBuildings = new ArrayList<>();
+    private List<WorkplaceBuilding> workplaceBuildings = new ArrayList<>();
 
     //TODO Сделать свои исключения
 
@@ -61,21 +59,26 @@ public class GraphMap {
     }
 
     private void constructGraph(){
-        Map<PointDTO, NodeNe> map = new HashMap<>();
+        Map<PointDTO, Node> map = new HashMap<>();
         Set<PointDTO> points = new HashSet<>();
         for (RoadDTO roadDTO : simulationContext.getRoadDTOList()){
             points.add(roadDTO.getStart());
             points.add(roadDTO.getEnd());
         }
+        int nodeIndex = 0;
         nodesList = points.stream().map(p -> {
-            NodeNe answer = new NodeNe(new AttachmentPoint(new Coordinates(p.getX(), p.getY())));
+            Node answer = new Node(new AttachmentPoint(new Coordinates(p.getX(), p.getY())));
             map.put(p, answer);
             return answer;
         }).toList();
 
+        for (Node node : nodesList) {
+            node.setNodeIndex(nodeIndex++);
+        }
+
         for (RoadDTO roadDTO : simulationContext.getRoadDTOList()){
-            NodeNe start = map.get(roadDTO.getStart());
-            NodeNe end = map.get(roadDTO.getEnd());
+            Node start = map.get(roadDTO.getStart());
+            Node end = map.get(roadDTO.getEnd());
             Road road = new Road(
                     start.getAttachmentPoint().getCoordinates(),
                     end.getAttachmentPoint().getCoordinates(),
@@ -95,15 +98,29 @@ public class GraphMap {
 
         for (BuildingDTO buildingDTO: simulationContext.getBuildingDTOList()){
             PointDTO pointDTO = map1.get(buildingDTO.getLocation());
-            NodeNe nodeNe = map.get(pointDTO);
-            Building building = new Building(0, new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), buildingDTO.getBuildingType());
+            Node node = map.get(pointDTO);
+            Building building;
+            switch(buildingDTO.getBuildingType()) {
+                case LIVING -> {
+                    LivingBuilding livingBuilding = new LivingBuilding(0, new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), buildingDTO.getBuildingType());
+                    livingBuilding.setResidingCars(buildingDTO.getCarsAmount());
+                    livingBuildings.add(livingBuilding);
+                    building = livingBuilding;
+                }
+                case WORK -> {
+                    WorkplaceBuilding workplaceBuilding = new WorkplaceBuilding(0, new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), buildingDTO.getBuildingType());
+                    workplaceBuildings.add(workplaceBuilding);
+                    building = workplaceBuilding;
+                }
+                default -> building = new Building(0, new Coordinates(buildingDTO.getLocation().getX(), buildingDTO.getLocation().getY()), buildingDTO.getBuildingType());
+            }
             building.setParkingZone(new ParkingZone(buildingDTO.getCarsCap(), SimulationUtils.pointToCoordinates(buildingDTO.getLocation())));
             buildings.add(building);
-            nodeNe.getAttachmentPoint().addBuilding(building);
+            node.getAttachmentPoint().addBuilding(building);
         }
     }
 
-    public List<NodeNe> getNodes(){
+    public List<Node> getNodes(){
         return nodesList;
     }
 
@@ -114,7 +131,7 @@ public class GraphMap {
     }
 
     public void resetWeights() {
-        for (NodeNe node : nodesList) {
+        for (Node node : nodesList) {
             node.setWeight(Double.POSITIVE_INFINITY);
         }
     }

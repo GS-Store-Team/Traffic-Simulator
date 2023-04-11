@@ -1,13 +1,13 @@
 package com.traffic_simulator.simulation.models;
 
-import com.traffic_simulator.simulation.models.buildings.*;
+import com.traffic_simulator.simulation.graph.GraphMap;
+import com.traffic_simulator.simulation.models.buildings.Building;
+import com.traffic_simulator.simulation.models.buildings.types.LivingBuilding;
+import com.traffic_simulator.simulation.models.buildings.types.WorkplaceBuilding;
 import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.BuildingType;
-//import com.traffic_simulator.businnes_logic.simulation_runner.algorithms.graph.GraphMap;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.PathFindingAlgorithm;
-import com.traffic_simulator.simulation.graph.GraphMap;
-import com.traffic_simulator.utils.SimulationUtils;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -38,10 +38,24 @@ public class SimulationState {
         return graphMap.getBuildings();
     }
 
-    private void init() {
-        defaultInit(getAllBuildings().stream().filter(b -> b.getType().equals(BuildingType.LIVING)).toList(),
-                getAllBuildings().stream().filter(b -> b.getType().equals(BuildingType.WORK)).toList());
+    public List<LivingBuilding> getAllLivingBuildings() {
+        return graphMap.getLivingBuildings();
+    }
 
+    public List<WorkplaceBuilding> getAllWorkplaceBuildings() {
+        return graphMap.getWorkplaceBuildings();
+    }
+
+    private void init() {
+        /*defaultInit(
+                getAllBuildings().stream()
+                        .filter(b -> b.getType().equals(BuildingType.LIVING))
+                        .toList(),
+                getAllBuildings().stream()
+                        .filter(b -> b.getType().equals(BuildingType.WORK))
+                        .toList());
+        */
+        defaultInit(getAllLivingBuildings(), getAllWorkplaceBuildings());
         for (Building building : graphMap.getBuildings()) {
             if (building.getType() == BuildingType.LIVING) {
                 cars.addAll(building.getParkingZone().getCars());
@@ -50,13 +64,18 @@ public class SimulationState {
         System.out.println("Simulation state initialization completed!");
     }
 
-    private void defaultInit(List<Building> livingBuildings, List<Building> destinationBuildings) {
+    private void defaultInit(List<LivingBuilding> livingBuildings, List<WorkplaceBuilding> destinationBuildings) {
         AtomicLong id = new AtomicLong();
-        List<Building> lb = new ArrayList<>(livingBuildings);
+        List<LivingBuilding> lb = new ArrayList<>(livingBuildings);
         lb.forEach(b -> {
-            ParkingZone parkingZone = b.getParkingZone();
-            for (int i = 0; i < 10; i++)
-                parkingZone.addCar(new Car(id.getAndIncrement(), b, destinationBuildings.get(Math.abs(ThreadLocalRandom.current().nextInt()) % destinationBuildings.size())));
+            //ParkingZone parkingZone = b.getParkingZone();
+            for (int i = 0; i < b.getResidingCars(); i++)
+                b.getParkingZone().addCar(
+                        new Car(
+                                id.getAndIncrement(),
+                                b,
+                                destinationBuildings.get(
+                                        Math.abs(ThreadLocalRandom.current().nextInt()) % destinationBuildings.size())));
         });
     }
 }

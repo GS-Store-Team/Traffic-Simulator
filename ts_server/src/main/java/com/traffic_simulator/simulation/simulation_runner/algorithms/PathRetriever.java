@@ -1,20 +1,17 @@
 package com.traffic_simulator.simulation.simulation_runner.algorithms;
 
-import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPath;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPath;
 
 import java.util.HashMap;
 
 public class PathRetriever {
-    public static CarPath retrievePath(NodeNe start, NodeNe end, HashMap<NodeNe, NodeNe> hm) {
+    public static CarPath retrievePath(Node start, Node end, HashMap<Node, Node> hm) {
         CarPath carPath = new CarPath(start, end);
-        NodeNe currentNode = end;
-        while (hm.get(currentNode) != start) {
-            if (currentNode == start) {
-                break;
-            }
-            carPath.getNodes().addFirst(currentNode);
+        Node currentNode = end;
+        while (currentNode != start) {
+            carPath.addNode(currentNode);
+
             if (currentNode.getRoadToPrev() == null) {
                 System.out.println("bbbbbb");
             }

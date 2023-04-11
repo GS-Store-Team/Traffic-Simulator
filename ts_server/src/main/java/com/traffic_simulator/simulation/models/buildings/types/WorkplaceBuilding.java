@@ -12,6 +12,10 @@ import lombok.ToString;
 @Getter
 @ToString
 public class WorkplaceBuilding extends Building {
+
+    public WorkplaceBuilding(long id, Coordinates upLeftCorner, BuildingType type) {
+        super(id, upLeftCorner, type);
+    }
     public WorkplaceBuilding(long id, Coordinates upLeftCorner, String name, String street, String index, BuildingType type) {
         super(id, upLeftCorner,  name, street, index, new ParkingZone(10, new Coordinates(0,0)) );
     }

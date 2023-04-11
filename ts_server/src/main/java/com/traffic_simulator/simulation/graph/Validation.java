@@ -17,13 +17,13 @@ public class Validation {
     private ArrayList<Long> buildingsErrorId;
     private ArrayList<Long> roadsErrorId;
 
-    public Validation(SimulationContext simulationContext){
+    public Validation(SimulationContext simulationContext) {
         this.simulationContext = simulationContext;
         roadsErrorId = new ArrayList<>();
         buildingsErrorId = new ArrayList<>();
     }
 
-    public void checkErrors() throws InvalidMapException{
+    public void checkErrors() throws InvalidMapException {
         validateRoads();
         validateBuildings();
         if ((buildingsErrorId.size() + roadsErrorId.size()) > 0) {
@@ -31,7 +31,7 @@ public class Validation {
         }
     }
 
-    public Map<String, List<Long>> getErrors(){
+    public Map<String, List<Long>> getErrors() {
         if ((buildingsErrorId.size() + roadsErrorId.size()) > 0)
             return null;
 
@@ -41,22 +41,22 @@ public class Validation {
         return errors;
     }
 
-    private void validateBuildings(){
-        for (BuildingDTO buildingDTO : simulationContext.getBuildingDTOList()){
+    private void validateBuildings() {
+        for (BuildingDTO buildingDTO : simulationContext.getBuildingDTOList()) {
             boolean check = false;
-            for (RoadDTO roadDTO : simulationContext.getRoadDTOList()){
-                if (roadInBuildingArea(roadDTO, buildingDTO, false)){
+            for (RoadDTO roadDTO : simulationContext.getRoadDTOList()) {
+                if (roadInBuildingArea(roadDTO, buildingDTO, false)) {
                     check = true;
                 }
                 if (roadInBuildingArea(roadDTO, buildingDTO, true)) {
                     check = true;
                 }
-                if(isInRadius( new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth/2,
-                        buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2),roadDTO.getStart()))
+                if (isInRadius(new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth / 2,
+                        buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2), roadDTO.getStart()))
                     map.put(buildingDTO.getLocation(), roadDTO.getStart());
 
-                if(isInRadius( new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth/2,
-                        buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2),roadDTO.getEnd()))
+                if (isInRadius(new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth / 2,
+                        buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2), roadDTO.getEnd()))
                     map.put(buildingDTO.getLocation(), roadDTO.getEnd());
             }
             if (!check)
@@ -66,22 +66,22 @@ public class Validation {
 
     private Map<PointDTO, PointDTO> map = new HashMap<>();
 
-    public Map<PointDTO, PointDTO> getMap(){
+    public Map<PointDTO, PointDTO> getMap() {
         return map;
     }
 
 
-    private void validateRoads(){
-        for (RoadDTO roadDTO : simulationContext.getRoadDTOList()){
+    private void validateRoads() {
+        for (RoadDTO roadDTO : simulationContext.getRoadDTOList()) {
             int currentConnections = 0;
             boolean checkWithOnePoint = false;
             boolean startPoint = false;
-            for (RoadDTO roadDTO1 : simulationContext.getRoadDTOList()){
+            for (RoadDTO roadDTO1 : simulationContext.getRoadDTOList()) {
                 if (roadDTO.getId() == roadDTO1.getId())
                     continue;
 
                 //checking start point connections
-                if (roadDTO.getStart().equals(roadDTO1.getStart()) || roadDTO.getStart().equals(roadDTO1.getEnd())){
+                if (roadDTO.getStart().equals(roadDTO1.getStart()) || roadDTO.getStart().equals(roadDTO1.getEnd())) {
                     currentConnections += 1;
                     startPoint = true;
                 }
@@ -93,9 +93,9 @@ public class Validation {
             if (currentConnections == 0)
                 roadsErrorId.add(roadDTO.getId());
 
-            if (currentConnections == 1){
+            if (currentConnections == 1) {
                 for (BuildingDTO buildingDTO : simulationContext.getBuildingDTOList())
-                    if (roadInBuildingArea(roadDTO, buildingDTO, startPoint)){
+                    if (roadInBuildingArea(roadDTO, buildingDTO, startPoint)) {
                         checkWithOnePoint = true;
                         break;
                     }
@@ -106,18 +106,17 @@ public class Validation {
         }
     }
 
-    private boolean roadInBuildingArea(RoadDTO roadDTO, BuildingDTO buildingDTO, boolean startPoint){
-        if (startPoint){
-            return isInRadius( new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth/2,
-                    buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2),roadDTO.getEnd());
-        }
-        else {
-            return isInRadius( new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth/2,
-                    buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2),roadDTO.getStart());
+    private boolean roadInBuildingArea(RoadDTO roadDTO, BuildingDTO buildingDTO, boolean startPoint) {
+        if (startPoint) {
+            return isInRadius(new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth / 2,
+                    buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2), roadDTO.getEnd());
+        } else {
+            return isInRadius(new PointDTO(buildingDTO.getLocation().getX() + (float) GlobalSettings.buildingWidth / 2,
+                    buildingDTO.getLocation().getY() + (float) GlobalSettings.buildingWidth / 2), roadDTO.getStart());
         }
     }
 
-    private boolean isInRadius(PointDTO circlePoint, PointDTO pointDTO){
+    private boolean isInRadius(PointDTO circlePoint, PointDTO pointDTO) {
         return (Math.pow(circlePoint.getX() - pointDTO.getX(), 2) +
                 Math.pow(circlePoint.getY() - pointDTO.getY(), 2)) <=
                 Math.pow(GlobalSettings.buildingConnectionRadius, 2);

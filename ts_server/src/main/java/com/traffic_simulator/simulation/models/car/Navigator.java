@@ -1,6 +1,6 @@
 package com.traffic_simulator.simulation.models.car;
 
-import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
+import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
 import com.traffic_simulator.simulation.models.road.Lane;
 import com.traffic_simulator.simulation.models.road.Road;
@@ -25,7 +25,7 @@ public class Navigator {
     private long workTime;
 
     private List<Cell> advance;
-    private NodeNe currentNode;
+    private Node currentNode;
     private Road currentRoad;
     private final CarPath carPath;
 
@@ -71,8 +71,9 @@ public class Navigator {
             this.currentNode = carPath.getNodes().pop();
             this.currentRoad = null;
             currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
+            System.out.println("Car#" + car.getId() + " appeared: " + this.currentNode.getNodeIndex());
         } catch (NoSuchElementException e) {
-            System.out.println("No nodes in car path!");
+            System.out.println("No nodes in Car#" + car.getId() + " path! Init place: " + carPath.getStart().getNodeIndex());
         }
 
     }

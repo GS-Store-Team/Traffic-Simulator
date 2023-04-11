@@ -1,38 +1,40 @@
 package com.traffic_simulator.simulation.graph.graph_elements;
 
-import com.traffic_simulator.simulation.models.MapObject;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
-@Setter
+import com.traffic_simulator.simulation.models.road.Road;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 @Getter
+@Setter
+@ToString
 public class Node {
+    private int nodeIndex;
+    private List<Node> nodesList = new ArrayList<>();
+    private AttachmentPoint attachmentPoint;
+    private Road roadToPrev;
+    private double weight = Double.POSITIVE_INFINITY;
 
-    private List<Edge> inputEdges;
-    private List<Edge> outEdges;
-    private final MapObject refMapObject;
-    private final double selfWeight;
-    private double weightMark;
-    private ElementColor elementColor;
-    private Edge pathPrevNodeEdge;
-    public Node(MapObject refMapObject) {
-        this.inputEdges = new ArrayList<>();
-        this.outEdges = new ArrayList<>();
-        this.refMapObject = refMapObject;
-        this.selfWeight = refMapObject.getNaturalWeight();
-        this.weightMark = Double.POSITIVE_INFINITY;
-        this.elementColor = ElementColor.WHITE;
-        this.pathPrevNodeEdge = null;
+    public Node(AttachmentPoint attachmentPoint) {
+        this.attachmentPoint = attachmentPoint;
+        this.roadToPrev = null;
     }
 
-    public void resetMarks() {
-        weightMark = Double.POSITIVE_INFINITY;
-        elementColor = ElementColor.WHITE;
-        pathPrevNodeEdge = null;
+    public Node(Node node) {          //copying constructor
+        this.attachmentPoint = node.attachmentPoint;
+        this.roadToPrev = node.roadToPrev;
+        this.weight = node.weight;
+        this.nodesList = new ArrayList<>(node.nodesList);
     }
+
+    public void addNodeToList(Node node) {
+        nodesList.add(node);
+    }
+
+
 }

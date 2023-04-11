@@ -1,22 +1,13 @@
 package com.traffic_simulator.simulation.simulation_runner.algorithms;
 
-import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
+import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPathsBunch;
 import com.traffic_simulator.simulation.graph.GraphMap;
-import com.traffic_simulator.simulation.graph.graph_elements.Edge;
-import com.traffic_simulator.simulation.graph.graph_elements.ElementColor;
-import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.exceptions.PathsConstructionException;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-
-import static java.util.Collections.addAll;
+import java.util.*;
 
 //TODO Придумать в каком виде извлекать путь
 public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
@@ -30,41 +21,55 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
     }
 
     @Override
-    protected CarPathsBunch computeCarPath(NodeNe start) throws PathsConstructionException {
+    protected CarPathsBunch computeCarPath(Node start) throws PathsConstructionException {
+        System.out.println("Dijkstra started! Start: " + start.getNodeIndex() + "\n");
         CarPathsBunch carPathsBunch = new CarPathsBunch(start);
-        List<NodeNe> unmarkedNodes = new ArrayList<>(graph.getNodes());
+        List<Node> unmarkedNodes = new ArrayList<>(graph.getNodes());
+        unmarkedNodes.sort(Comparator.comparingDouble(Node::getWeight));
 
         start.setWeight(0);
-        NodeNe currentNode = start;
+        Node currentNode = start;
 
-        HashMap<NodeNe, NodeNe> paths = new HashMap<>();
+        HashMap<Node, Node> predecessors = new HashMap<>();
+        for (Node node : unmarkedNodes) {
+            predecessors.put(node, null);
+        }
 
         while (!unmarkedNodes.isEmpty()) {
             unmarkedNodes.remove(currentNode);
-
-            //System.out.println("Was removed!" + currentNode);
-            //System.out.println(unmarkedNodes);
 
             AttachmentPoint ref = currentNode.getAttachmentPoint();             //retrieve all roads which have a way to another nodeNe
             List<Road> refRoads = new ArrayList<>();
             refRoads.addAll(ref.getStartingRoads().stream().filter((Road r) -> !r.getRightLanes().isEmpty()).toList());
             refRoads.addAll(ref.getFinishingRoads().stream().filter((Road r) -> !r.getLeftLanes().isEmpty()).toList());
 
-            for (NodeNe nodeNe : currentNode.getNodesList()) {
+            for (Node neighbourNode : currentNode.getNodesList()) {
                 Road road;
-                try {                               //retrieve road, which is connected with current node
-                     road = refRoads.stream()
-                            .filter((Road r) -> ref.getStartingRoads().contains(r) & nodeNe.getAttachmentPoint().getFinishingRoads().contains(r) ||
-                                    nodeNe.getAttachmentPoint().getStartingRoads().contains(r) & ref.getFinishingRoads().contains(r)).toList().get(0);
-                } catch (IndexOutOfBoundsException exc) {
-                    continue;
+                try {                               //retrieve road, which is connected with current neighbourNode
+                    road = refRoads.stream()
+                            .filter((Road r) ->
+                                    ref.getStartingRoads().contains(r) & neighbourNode.getAttachmentPoint().getFinishingRoads().contains(r) ||
+                                    neighbourNode.getAttachmentPoint().getStartingRoads().contains(r) & ref.getFinishingRoads().contains(r))
+                            .min(Comparator.comparingDouble(Road::getWeight))
+                            .get();
+                } catch (NoSuchElementException exc) {
+                    throw exc;
                 }
-                if (nodeNe.getWeight() < currentNode.getWeight() + road.getWeight()) {      //relaxation and path building
-                    nodeNe.setWeight(currentNode.getWeight() + road.getWeight());
-                    paths.remove(nodeNe);
-                    nodeNe.setRoadToPrev(road);
-                    paths.put(nodeNe, currentNode);
+                if (neighbourNode.getWeight() > currentNode.getWeight() + road.getWeight()) {
+                    if (unmarkedNodes.contains(neighbourNode)) {
+                        neighbourNode.setWeight(currentNode.getWeight() + road.getWeight());
+                        neighbourNode.setRoadToPrev(road);
+                        predecessors.put(neighbourNode, currentNode);
+                    }
                 }
+            }
+
+            try {
+                currentNode = unmarkedNodes.stream()
+                        .min(Comparator.comparingDouble(Node::getWeight))
+                        .get();
+            } catch (NoSuchElementException exc) {
+                break;
             }
 
             if (currentNode.getWeight() == Double.POSITIVE_INFINITY) {              //if there are only unreachable nodes left
@@ -72,8 +77,10 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
             }
         }
 
-        for (NodeNe end : graph.getNodes()) {           //retrieve concrete paths from starting node to node
-            carPathsBunch.getCarPathsEndsMap().put(end, PathRetriever.retrievePath(start, end, paths));
+        List<Node> list = new ArrayList<>(graph.getNodes());
+        list.remove(start);
+        for (Node end : list) {           //retrieve concrete paths from starting node to node
+            carPathsBunch.getCarPathsByEnds().put(end, PathRetriever.retrievePath(start, end, predecessors));
         }
         return carPathsBunch;
     }

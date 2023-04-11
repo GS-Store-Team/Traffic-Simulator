@@ -2,10 +2,9 @@ package com.traffic_simulator.simulation.simulation_runner.algorithms;
 
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.PathsConstructionException;
-import com.traffic_simulator.simulation.graph.graph_elements.NodeNe;
+import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPathsBunch;
 import com.traffic_simulator.simulation.graph.GraphMap;
-import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import lombok.NonNull;
 import java.util.HashMap;
 
@@ -15,11 +14,11 @@ public abstract class PathFindingAlgorithm {
         this.graph = graph;
     }
 
-    public HashMap<NodeNe, CarPathsBunch> compute() throws GraphConstructionException {
-        HashMap<NodeNe, CarPathsBunch> result = new HashMap<>();
+    public HashMap<Node, CarPathsBunch> compute() throws GraphConstructionException {
+        HashMap<Node, CarPathsBunch> result = new HashMap<>();
 
         try {
-            for (NodeNe start : graph.getNodes()) {
+            for (Node start : graph.getNodes()) {
                 result.put(start, computeCarPath(start));
                 graph.resetWeights();
             }
@@ -29,5 +28,5 @@ public abstract class PathFindingAlgorithm {
             throw new GraphConstructionException("Graph construction error!", exc.getUnreachableNodes());
         }
     }
-    protected abstract CarPathsBunch computeCarPath(NodeNe start) throws PathsConstructionException;
+    protected abstract CarPathsBunch computeCarPath(Node start) throws PathsConstructionException;
 }

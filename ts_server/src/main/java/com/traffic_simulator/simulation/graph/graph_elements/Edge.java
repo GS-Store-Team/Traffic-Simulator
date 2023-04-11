@@ -17,13 +17,6 @@ public class Edge {
         this.refRoad = refRoad;
         this.start = start;
         this.end = end;
-
-//        if (this.refRoad == null) {
-//            this.roadSide = RoadSide.BUILDING_CONNECTOR;
-//        } else {
-//            this.roadSide = roadSide;
-//        }
-
         this.roadSide = roadSide;
 
         switch (this.roadSide) {
