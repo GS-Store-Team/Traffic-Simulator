@@ -1,0 +1,58 @@
+CREATE TABLE IF NOT EXISTS usr(
+    id serial primary key,
+    name VARCHAR(16) NOT NULL,
+    password char(16) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS area(
+    id serial primary key,
+    name VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS version(
+    id serial primary key,
+    area_id int references area,
+    owner_id int references usr,
+    locked boolean,
+    created timestamp not null,
+    edited timestamp not null
+);
+
+CREATE TABLE IF NOT EXISTS area_version(
+    area_id int references area,
+    area_version_id int references version,
+    PRIMARY KEY (area_id, area_version_id)
+);
+
+create TABLE IF NOT EXISTS point(
+    id serial primary key,
+    x double precision NOT NULL,
+    y double precision NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS road(
+    id serial primary key,
+    start int references point,
+    "end" int references point,
+    forward int,
+    reverse int
+);
+
+CREATE TABLE IF NOT EXISTS building(
+    id serial primary key,
+    position int references point,
+    type varchar(16) not null,
+    flow double precision NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS version_road(
+    area_version_id int references version,
+    road_id int references road,
+    PRIMARY KEY (area_version_id, road_id)
+);
+
+CREATE TABLE IF NOT EXISTS version_building(
+    area_version_id int references version,
+    building_id int references building,
+    PRIMARY KEY (area_version_id, building_id)
+);
