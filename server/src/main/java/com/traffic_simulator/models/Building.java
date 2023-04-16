@@ -16,9 +16,11 @@ public class Building {
     @JoinColumn(name = "areaVersion_id")
     private AreaVersion areaVersion;
     @OneToOne
-    private Point position;
+    private Point location;
     private Double inFlow;
     private Double outFlow;
     private BuildingType type;
     private String label;
+    @OneToOne
+    private Parking parking;
 }

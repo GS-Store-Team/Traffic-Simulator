@@ -1,77 +1,67 @@
 package com.traffic_simulator.controllers;
 
-import com.traffic_simulator.simulation.context.SimulationContext;
 import com.traffic_simulator.dto.BuildingDTO;
+import com.traffic_simulator.dto.FullMapDTO;
+import com.traffic_simulator.dto.ParkingDTO;
 import com.traffic_simulator.dto.RoadDTO;
+import com.traffic_simulator.services.AreaVersionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/map")
 @RequiredArgsConstructor
 public class MapConfigController {
-    private final SimulationContext simulationContext;
+    private final AreaVersionService areaVersionService;
 
-    @GetMapping("/roads/{id}")
-    public ResponseEntity<RoadDTO> getRoad(@PathVariable("id") long id){
-        RoadDTO roadDTO = simulationContext.getRoadDTOById(id);
-        return roadDTO != null?
-                ResponseEntity.ok(roadDTO):
-                ResponseEntity.notFound().build();
+    @GetMapping
+    public FullMapDTO getMap(){
+        throw new RuntimeException("hi");
+        //return null;
     }
 
     @PostMapping("/roads")
-    public ResponseEntity<?> addNewRoad(@RequestBody RoadDTO roadDTO){
-        System.out.println(roadDTO);
-        long id = simulationContext.addRoadDTO(roadDTO);
-        return ResponseEntity.ok(id);
+    public FullMapDTO addRoad(@RequestBody RoadDTO roadDTO){
+        return null;
     }
 
-    @PatchMapping("/roads/{id}")
-    public ResponseEntity<?> editRoad(@PathVariable("id") long id,
-                                      RoadDTO roadDTO){
-        System.out.println(roadDTO);
-        return ResponseEntity.ok().build();
+    @PatchMapping("/roads")
+    public FullMapDTO editRoad(@RequestBody RoadDTO roadDTO){
+        return null;
     }
 
     @DeleteMapping("/roads/{id}")
-    public ResponseEntity<?> deleteRoad(@PathVariable("id") long id){
-        boolean status = simulationContext.deleteRoadDTOById(id);
-        return status?
-                ResponseEntity.ok().build():
-                ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/buildings/{id}")
-    public ResponseEntity<BuildingDTO> getBuilding(@PathVariable("id") long id){
-        System.out.println(id);
-        BuildingDTO buildingDTO = simulationContext.getBuildingDTOById(id);
-        return buildingDTO != null?
-                ResponseEntity.ok(buildingDTO):
-                ResponseEntity.notFound().build();
+    public FullMapDTO deleteRoad(@PathVariable("id") long id){
+        return null;
     }
 
     @PostMapping("/buildings")
-    public ResponseEntity<?> addNewBuilding(@RequestBody BuildingDTO buildingDTO){
-        System.out.println(buildingDTO);
-        long id = simulationContext.addBuildingDTO(buildingDTO);
-        return ResponseEntity.ok(id);
+    public FullMapDTO addBuilding(@RequestBody BuildingDTO buildingDTO){
+        return null;
     }
 
-    @PatchMapping("/buildings/{id}")
-    public ResponseEntity<?> editRoad(@PathVariable("id") long id,
-                                      BuildingDTO buildingDTO){
-        System.out.println(buildingDTO);
-        return ResponseEntity.ok().build();
+    @PatchMapping("/buildings")
+    public FullMapDTO editRoad(@RequestBody BuildingDTO buildingDTO){
+        return null;
     }
 
     @DeleteMapping("/buildings/{id}")
-    public ResponseEntity<?> deleteBuilding(@PathVariable("id") long id){
-        System.out.println(id);
-        boolean state = simulationContext.deleteBuildingDTOById(id);
-        return state?
-                ResponseEntity.ok().build():
-                ResponseEntity.notFound().build();
+    public FullMapDTO deleteBuilding(@PathVariable("id") long id){
+        return null;
+    }
+
+    @PostMapping("/parking")
+    public FullMapDTO addParking(@RequestBody ParkingDTO parkingDTO){
+        return null;
+    }
+
+    @PatchMapping("/parking")
+    public FullMapDTO editParking(@RequestBody ParkingDTO parkingDTO){
+        return null;
+    }
+
+    @DeleteMapping("/parking/{id}")
+    public FullMapDTO deleteParking(@PathVariable("id") long id){
+        return null;
     }
 }

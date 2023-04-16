@@ -14,8 +14,8 @@ public class AreaVersion {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "usr_id")
+    private Usr usr;
     private Boolean locked;
     private Timestamp created;
     private Timestamp edited;
@@ -26,4 +26,5 @@ public class AreaVersion {
     private List<Building> buildings;
     @OneToMany(mappedBy = "areaVersion")
     private List<Road> roads;
+    private String label;
 }

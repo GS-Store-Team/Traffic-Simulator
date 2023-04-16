@@ -1,5 +1,5 @@
 package com.traffic_simulator.enums;
 
 public enum BuildingType {
-    LIVING, WORKING, SHOP, CONNECTION
+    LIVING, WORKING, SHOP, ENTERTAINMENT, CONNECTION
 }

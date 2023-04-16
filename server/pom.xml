@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.example</groupId>
-  <artifactId>TS-server</artifactId>
+  <artifactId>Traffic_Simulator</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
 
@@ -10,7 +10,7 @@
   <url>http://maven.apache.org</url>
 
   <build>
-    <finalName>TS-server</finalName>
+    <finalName>Traffic_Simulator</finalName>
   </build>
 
   <properties>

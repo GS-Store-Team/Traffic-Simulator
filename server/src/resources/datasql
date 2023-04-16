@@ -1,2 +1,0 @@
-INSERT INTO user (name, password) values ('first', '12345678');
-INSERT INTO user (name, password) values ('second', '12345678');
