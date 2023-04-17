@@ -16,52 +16,69 @@ public class MapConfigController {
 
     @GetMapping
     public FullMapDTO getMap(){
-        throw new RuntimeException("hi");
-        //return null;
-    }
-
-    @PostMapping("/roads")
-    public FullMapDTO addRoad(@RequestBody RoadDTO roadDTO){
         return null;
     }
 
-    @PatchMapping("/roads")
-    public FullMapDTO editRoad(@RequestBody RoadDTO roadDTO){
+    @PostMapping("/{areaVersion}/roads")
+    public FullMapDTO addRoad(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @RequestBody RoadDTO roadDTO){
         return null;
     }
 
-    @DeleteMapping("/roads/{id}")
-    public FullMapDTO deleteRoad(@PathVariable("id") long id){
+    @PatchMapping("/{areaVersion}/roads")
+    public FullMapDTO editRoad(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @RequestBody RoadDTO roadDTO){
         return null;
     }
 
-    @PostMapping("/buildings")
-    public FullMapDTO addBuilding(@RequestBody BuildingDTO buildingDTO){
+    @DeleteMapping("/{areaVersion}/roads/{id}")
+    public FullMapDTO deleteRoad(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @PathVariable("id") Long roadId){
         return null;
     }
 
-    @PatchMapping("/buildings")
-    public FullMapDTO editRoad(@RequestBody BuildingDTO buildingDTO){
+    @PostMapping("/{areaVersion}/buildings")
+    public FullMapDTO addBuilding(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @RequestBody BuildingDTO buildingDTO){
         return null;
     }
 
-    @DeleteMapping("/buildings/{id}")
-    public FullMapDTO deleteBuilding(@PathVariable("id") long id){
+    @PatchMapping("/{areaVersion}/buildings")
+    public FullMapDTO editRoad(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @RequestBody BuildingDTO buildingDTO){
         return null;
     }
 
-    @PostMapping("/parking")
-    public FullMapDTO addParking(@RequestBody ParkingDTO parkingDTO){
+    @DeleteMapping("/{areaVersion}/buildings/{id}")
+    public FullMapDTO deleteBuilding(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @PathVariable("id") Long buildingId){
         return null;
     }
 
-    @PatchMapping("/parking")
-    public FullMapDTO editParking(@RequestBody ParkingDTO parkingDTO){
+    @PostMapping("/{areaVersion}/parking")
+    public FullMapDTO addParking(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @RequestBody ParkingDTO parkingDTO){
         return null;
     }
 
-    @DeleteMapping("/parking/{id}")
-    public FullMapDTO deleteParking(@PathVariable("id") long id){
+    @PatchMapping("/{areaVersion}/parking")
+    public FullMapDTO editParking(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @RequestBody ParkingDTO parkingDTO){
+        return null;
+    }
+
+    @DeleteMapping("/{areaVersion}/parking/{id}")
+    public FullMapDTO deleteParking(
+            @PathVariable("areaVersion") Long areaVersionId,
+            @PathVariable("id") Long parkingZoneId){
         return null;
     }
 }
