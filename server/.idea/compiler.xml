@@ -8,8 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ts_server" />
-        <module name="TS-server" />
+        <module name="Traffic_Simulator" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="TS-server" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
