@@ -1,4 +1,4 @@
-package com.traffic_simulator.security.entity;
+package com.traffic_simulator.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,15 +17,23 @@ import java.util.Set;
 @Setter
 public class User implements UserDetails {
     @Id
+    @GeneratedValue
     private long id;
+
     @Size(min = 4, max = 24)
     private String username;
+
     @Size(min = 4, max = 16)
     private String password;
+
     @Transient
     private String passwordConfirm;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    private List<AreaVersion> areaVersions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

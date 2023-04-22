@@ -1,7 +1,7 @@
 package com.traffic_simulator.controllers;
 
-import com.traffic_simulator.security.entity.User;
-import com.traffic_simulator.security.service.UserService;
+import com.traffic_simulator.models.User;
+import com.traffic_simulator.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

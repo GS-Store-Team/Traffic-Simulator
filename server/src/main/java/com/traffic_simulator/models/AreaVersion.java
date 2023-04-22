@@ -13,18 +13,26 @@ public class AreaVersion {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
-    @JoinColumn(name = "usr_id")
-    private Usr usr;
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private Boolean locked;
+
     private Timestamp created;
+
     private Timestamp edited;
+
     @ManyToOne
     @JoinColumn(name = "area_id")
     private Area area;
+
     @OneToMany(mappedBy = "areaVersion")
     private List<Building> buildings;
+
     @OneToMany(mappedBy = "areaVersion")
     private List<Road> roads;
+
     private String label;
 }

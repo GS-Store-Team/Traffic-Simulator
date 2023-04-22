@@ -1,6 +1,6 @@
-package com.traffic_simulator.security.repository;
+package com.traffic_simulator.repository;
 
-import com.traffic_simulator.security.entity.Role;
+import com.traffic_simulator.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

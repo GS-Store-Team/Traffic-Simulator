@@ -13,7 +13,9 @@ public class Area {
     @Id
     @GeneratedValue
     private Long id;
+
     private String label;
+
     @OneToMany(mappedBy = "area")
     private List<AreaVersion> versions;
 }

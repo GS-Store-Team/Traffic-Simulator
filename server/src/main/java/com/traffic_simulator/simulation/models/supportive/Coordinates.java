@@ -6,10 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Coordinates{
-    private double x;
-    private double y;
+    private float x;
+    private float y;
 
-    public Coordinates(double x, double y){
+    public Coordinates(float x, float y){
         this.x = x;
         this.y = y;
     }

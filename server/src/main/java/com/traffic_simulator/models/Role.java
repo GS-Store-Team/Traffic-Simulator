@@ -1,4 +1,4 @@
-package com.traffic_simulator.security.entity;
+package com.traffic_simulator.models;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,9 +1,9 @@
-package com.traffic_simulator.security.service;
+package com.traffic_simulator.services;
 
-import com.traffic_simulator.security.entity.Role;
-import com.traffic_simulator.security.entity.User;
-import com.traffic_simulator.security.repository.RoleRepository;
-import com.traffic_simulator.security.repository.UserRepository;
+import com.traffic_simulator.models.Role;
+import com.traffic_simulator.models.User;
+import com.traffic_simulator.repository.RoleRepository;
+import com.traffic_simulator.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
