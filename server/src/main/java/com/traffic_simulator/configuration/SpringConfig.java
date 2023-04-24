@@ -4,10 +4,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.Arrays;
 
@@ -18,9 +15,6 @@ public class SpringConfig implements WebMvcConfigurer {
     public FilterRegistrationBean hiddenHttpMethodFilter(){
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new HiddenHttpMethodFilter());
         filterRegistrationBean.setUrlPatterns(Arrays.asList("/*"));
-        filterRegistrationBean.addUrlPatterns(
-                "/login",
-                "/registration");
         return filterRegistrationBean;
     }
 
@@ -30,6 +24,11 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.addViewController("/WEB-INF/jsp/registration.jsp").setViewName("registration");
         registry.addViewController("/WEB-INF/jsp/welcome.jsp").setViewName("welcome");
 
+    }
+
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.jsp("/WEB-INF/jsp/", ".jsp");
     }
 
     @Override
