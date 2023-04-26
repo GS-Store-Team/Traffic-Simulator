@@ -26,7 +26,7 @@ public class UserController {
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
 
-        return "registration.jsp";
+        return "registration";
     }
 
     @PostMapping("/registration")
@@ -41,7 +41,7 @@ public class UserController {
 
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
-        return "redirect:/welcome";
+        return "redirect:/map";
     }
 
     @GetMapping("/login")
@@ -57,6 +57,6 @@ public class UserController {
 
     @GetMapping({"/", "/welcome"})
     public String welcome(Model model) {
-        return "welcome.jsp";
+        return "welcome";
     }
 }

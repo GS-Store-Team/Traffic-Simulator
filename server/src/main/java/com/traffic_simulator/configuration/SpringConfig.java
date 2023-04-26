@@ -19,14 +19,6 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/WEB-INF/jsp/login.jsp").setViewName("login");
-        registry.addViewController("/WEB-INF/jsp/registration.jsp").setViewName("registration");
-        registry.addViewController("/WEB-INF/jsp/welcome.jsp").setViewName("welcome");
-
-    }
-
-    @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.jsp("/WEB-INF/jsp/", ".jsp");
     }

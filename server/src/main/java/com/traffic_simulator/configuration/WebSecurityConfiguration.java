@@ -38,8 +38,7 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers("/registration").permitAll()
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/map").hasRole("USER")
+                                .requestMatchers("/login").hasRole("USER")
                                 .requestMatchers("/map/**").hasRole("USER")
 
                 )
