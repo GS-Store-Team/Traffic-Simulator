@@ -1,62 +1,62 @@
 package com.traffic_simulator.controllers;
+
+import com.traffic_simulator.dto.UserDTO;
 import com.traffic_simulator.models.User;
-import com.traffic_simulator.security_utils.UserValidator;
-import com.traffic_simulator.services.SecurityService;
-import com.traffic_simulator.services.UserService;
+import com.traffic_simulator.services.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
 public class UserController {
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    private UserValidator userValidator;
-
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("userForm", new User());
-
-        return "registration";
-    }
-
-    @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
-        userValidator.validate(userForm, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-
-        userService.save(userForm);
-
-        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
-
-        return "redirect:/map";
-    }
+    private UserServiceImpl userService;
 
     @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
-
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
-
+    public String login(){
         return "login";
     }
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        // create model object to store form data
+        UserDTO user = new UserDTO();
+        model.addAttribute("user", user);
+        return "register";
+    }
 
-    @GetMapping({"/", "/welcome"})
-    public String welcome(Model model) {
-        return "welcome";
+    @PostMapping("/register/save")
+    public String registration(@Valid @ModelAttribute("user") UserDTO userDto,
+                               BindingResult result,
+                               Model model) {
+        User existingUser = userService.findUserByUsername(userDto.getUsername());
+
+        if (existingUser != null && existingUser.getUsername() != null && !existingUser.getUsername().isEmpty()) {
+            result.rejectValue("name", null,
+                    "There is already an account registered with the same nickname!");
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("user", userDto);
+            return "register";
+        }
+
+        userService.saveUser(userDto);
+        return "redirect:/register?success";
+    }
+
+    @GetMapping("/users")
+    public String users(Model model){
+        List<UserDTO> users = userService.findAllUsers();
+        model.addAttribute("users", users);
+        return "users";
     }
 }

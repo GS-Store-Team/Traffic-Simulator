@@ -5,7 +5,7 @@ import java.util.List;
 
 public record AreaVersionDTO(
         Long id,
-        UsrDTO usr,
+        UserDTO usr,
         Boolean locked,
         Timestamp created,
         Timestamp edited,

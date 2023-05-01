@@ -20,11 +20,17 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.jsp("/WEB-INF/jsp/", ".jsp");
+        registry.jsp("/WEB-INF/templates/", ".html");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");
+    }
+
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/users").setViewName("users");
+        registry.addViewController("/register").setViewName("register");
+        registry.addViewController("/login").setViewName("login");
     }
 }

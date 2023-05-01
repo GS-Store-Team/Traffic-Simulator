@@ -1,73 +1,38 @@
 package com.traffic_simulator.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-@Entity
-@Table(name = "t_user")
 @Getter
 @Setter
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue
-    private long id;
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
+public class User {
+    private static final long serialVersionUID = 1L;
 
-    @Size(min = 4, max = 24)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String username;
 
-    @Size(min = 4, max = 16)
+    @Column(nullable = false)
     private String password;
 
-    @Transient
-    private String passwordConfirm;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+    private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
-
-    @OneToMany(mappedBy = "user")
-    private List<AreaVersion> areaVersions;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
