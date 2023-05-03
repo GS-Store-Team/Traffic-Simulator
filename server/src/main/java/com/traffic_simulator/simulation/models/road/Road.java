@@ -1,12 +1,10 @@
 package com.traffic_simulator.simulation.models.road;
 
 import com.traffic_simulator.simulation.GlobalSettings;
-import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.MapObject;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +35,7 @@ public class Road extends MapObject {
             rightLanes.add(new Lane(i, startCoordinate, endCoordinate));
 
         for (int i = 0; i < leftLanesAmount; i++)
-            leftLanes.add(new Lane(-(i + 1), endCoordinate, startCoordinate));
+            leftLanes.add(new Lane(i, endCoordinate, startCoordinate));
     }
 
     public double computeNaturalWeightByCoordinates() {
@@ -52,11 +50,13 @@ public class Road extends MapObject {
 
         return weight;
     }
-//
+
+    //
     public double computeRightTrafficWeight() {
         return computeLanePackTrafficWeight(rightLanes);
     }
-//
+
+    //
     public double computeLeftTrafficWeight() {
         return computeLanePackTrafficWeight(leftLanes);
     }

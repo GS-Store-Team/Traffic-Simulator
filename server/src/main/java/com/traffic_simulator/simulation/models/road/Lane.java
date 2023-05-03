@@ -2,8 +2,8 @@ package com.traffic_simulator.simulation.models.road;
 
 import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.models.signs.road_signs.RoadSign;
-import com.traffic_simulator.simulation.models.supportive.cell.Cell;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
+import com.traffic_simulator.simulation.models.supportive.cell.Cell;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +22,7 @@ public class Lane {
     private List<RoadSign> roadSigns;
     private Coordinates startCoordinates;
     private Coordinates endCoordinates;
+
     public Lane(int localId, Coordinates startCoordinates, Coordinates endCoordinates) {
         this.cells = new ArrayList<>();
         this.roadSigns = new ArrayList<>();
@@ -52,9 +53,9 @@ public class Lane {
 
     private Coordinates computeOffsetCoordinates(Coordinates startCoordinates, Coordinates endCoordinates, int cellsAmount, int index) {
         return new Coordinates(
-                (int) Math.sqrt(
+                Math.sqrt(
                         Math.pow((endCoordinates.getX() - startCoordinates.getX()), 2)) / cellsAmount * index,
-                (int) Math.sqrt(
+                Math.sqrt(
                         Math.pow((endCoordinates.getY() - startCoordinates.getY()), 2)) / cellsAmount * index
         );
     }

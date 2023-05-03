@@ -94,7 +94,7 @@ public class SimulationRunner {
         int cycle = 1;
         long departureTime = 0;
         int carPackSize = simulationSettings.getSeedData().depCarPackSize();
-        List<Node> ends = simulationState.getAreaGraph().getNodes()
+        List<Node> ends = simulationState.getAreaGraph().getNodesSet()
                 .stream()
                 .filter((Node n) -> !n.getAttachmentPoint().getConnectedBuildings()
                         .stream()
@@ -106,7 +106,7 @@ public class SimulationRunner {
         while (!unmarkedCars.isEmpty()) {
             for (int i = 0; i < unmarkedCars.size(); i = (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
-                Node startPoint = simulationState.getAreaGraph().getNodes().stream()
+                Node startPoint = simulationState.getAreaGraph().getNodesSet().stream()
                         .filter((Node n) -> n.getAttachmentPoint()
                                 .getConnectedBuildings()
                                 .contains(currentCar.getBuildingStart()))

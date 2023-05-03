@@ -1,6 +1,5 @@
 package com.traffic_simulator.simulation.graph;
 
-import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
 import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.PointDTO;
 import com.traffic_simulator.dto.RoadDTO;
@@ -8,6 +7,7 @@ import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
+import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.buildings.ParkingZone;
@@ -24,11 +24,10 @@ import java.util.*;
 @ToString
 @Getter
 public class AreaGraph {
-    private List<Node> crossroadNodes = new ArrayList<>();
     private List<Edge> edges = new ArrayList<>();
     private final AreaSimulationContext areaSimulationContext;
     private Validation validation;
-    private List<Node> nodesList;
+    private Set<Node> nodesSet = new HashSet<>();
     private List<Road> roads = new ArrayList<>();
     private List<Building> buildings = new ArrayList<>();
     private List<LivingBuilding> livingBuildings = new ArrayList<>();
@@ -63,21 +62,23 @@ public class AreaGraph {
             points.add(roadDTO.start());
             points.add(roadDTO.end());
         }
-        int nodeIndex = 0;
-        nodesList = points.stream().map(p -> {
-            Node answer = new Node(new AttachmentPoint(new Coordinates(p.x(), p.y())));
-            map.put(p, answer);
-            return answer;
-        }).toList();
 
-        for (Node node : nodesList) {
+        int nodeIndex = 0;
+        for (PointDTO point : points) {
+            Node node = new Node(new AttachmentPoint(new Coordinates(point.x(), point.y())));
             node.setNodeIndex(nodeIndex++);
+            map.put(point, node);
+            nodesSet.add(node);
         }
 
         for (RoadDTO roadDTO : areaSimulationContext.getRoadDTOList()) {
-            Node start = map.get(roadDTO.start());
+            Node start = map.get(roadDTO.start());          //may equality check needed
             Node end = map.get(roadDTO.end());
-            Road road = new Road(start.getAttachmentPoint().getCoordinates(), end.getAttachmentPoint().getCoordinates(), roadDTO.forwardLanes(), roadDTO.reverseLanes());
+            Road road = new Road(
+                    start.getAttachmentPoint().getCoordinates(),
+                    end.getAttachmentPoint().getCoordinates(),
+                    roadDTO.forwardLanes(),
+                    roadDTO.reverseLanes());
 
             roads.add(road);
 
@@ -86,6 +87,13 @@ public class AreaGraph {
 
             start.getAttachmentPoint().addStartingRoad(road);
             end.getAttachmentPoint().addFinishingRoad(road);
+
+            if (!road.getRightLanes().isEmpty()) {
+                edges.add(new Edge(road, start, end, RoadSide.RIGHT));
+            }
+            if (!road.getLeftLanes().isEmpty()) {
+                edges.add(new Edge(road, end, start, RoadSide.LEFT));
+            }
         }
 
         Map<PointDTO, PointDTO> map1 = validation.getMap();
@@ -115,16 +123,8 @@ public class AreaGraph {
         }
     }
 
-    public List<Node> getNodes() {
-        return nodesList;
-    }
-
-    public AreaGraphSimulationStateDTO getAreaCurrentSimulationState() {
-        return new AreaGraphSimulationStateDTO()
-    }
-
     public void resetWeights() {
-        for (Node node : nodesList) {
+        for (Node node : nodesSet) {
             node.setWeight(Double.POSITIVE_INFINITY);
         }
     }

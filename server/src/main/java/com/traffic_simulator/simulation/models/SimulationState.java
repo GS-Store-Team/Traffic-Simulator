@@ -61,7 +61,6 @@ public class SimulationState {
         AtomicLong id = new AtomicLong();
         List<LivingBuilding> lb = new ArrayList<>(livingBuildings);
         lb.forEach(b -> {
-            //ParkingZone parkingZone = b.getParkingZone();
             for (int i = 0; i < b.getResidingCars(); i++)
                 b.getParkingZone().addCar(
                         new Car(

@@ -17,6 +17,8 @@ public class AreaSimulationContext {
 
     private static long buildingId = 0;
     private static long roadId = 0;
+
+    private AreaVersion areaVersion;
     private List<BuildingDTO> buildingDTOList = new ArrayList<>();
     private List<RoadDTO> roadDTOList = new ArrayList<>();
 

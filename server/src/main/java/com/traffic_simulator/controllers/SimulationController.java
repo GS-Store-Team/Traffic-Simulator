@@ -1,6 +1,8 @@
 
 package com.traffic_simulator.controllers;
 
+import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
+import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 import com.traffic_simulator.simulation.graph.AreaGraph;
@@ -8,6 +10,7 @@ import com.traffic_simulator.simulation.models.SimulationState;
 import com.traffic_simulator.simulation.simulation_runner.SimulationRunner;
 import com.traffic_simulator.simulation.simulation_runner.TickGenerator;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.PathFindingAlgorithm;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.StraightDijkstraAlgorithm;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -67,16 +70,16 @@ public class SimulationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public ResponseEntity<SimulationDTO> getState() {
-        var simulationState = simulationRunner.getCurrentSimulationState();
+    @GetMapping("/area_state")
+    public ResponseEntity<AreaGraphSimulationStateDTO> getState() {
+        var simulationState = simulationRunner();
         return simulationState != null ?
                 ResponseEntity.ok(simulationState) :
                 ResponseEntity.noContent().build();
     }
 
     @GetMapping("/config")
-    public ResponseEntity<MapStateDTO> getMapConfig() {
+    public ResponseEntity<FullMapDTO> getMapConfig() {
         var mapState = areaGraph.getCurrentMapConfig();
         return mapState != null ?
                 ResponseEntity.ok(mapState) :

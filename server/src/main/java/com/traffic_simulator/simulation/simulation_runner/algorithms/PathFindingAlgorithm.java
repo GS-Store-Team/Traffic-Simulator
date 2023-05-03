@@ -19,7 +19,7 @@ public abstract class PathFindingAlgorithm {
         HashMap<Node, CarPathsBunch> result = new HashMap<>();
 
         try {
-            for (Node start : graph.getNodes()) {
+            for (Node start : graph.getNodesSet()) {
                 result.put(start, computeCarPath(start));
                 graph.resetWeights();
             }

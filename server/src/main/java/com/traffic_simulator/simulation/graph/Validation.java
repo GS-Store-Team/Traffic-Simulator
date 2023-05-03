@@ -8,10 +8,7 @@ import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Validation {
     private AreaSimulationContext areaSimulationContext;
@@ -84,7 +81,7 @@ public class Validation {
             boolean checkWithOnePoint = false;
             boolean startPoint = false;
             for (RoadDTO roadDTO1 : areaSimulationContext.getRoadDTOList()) {
-                if (roadDTO.id() == roadDTO1.id())
+                if (Objects.equals(roadDTO.id(), roadDTO1.id()))
                     continue;
 
                 //checking start point connections

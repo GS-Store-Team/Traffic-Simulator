@@ -25,7 +25,7 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
     protected CarPathsBunch computeCarPath(Node start) throws PathsConstructionException {
         System.out.println("Dijkstra started! Start: " + start.getNodeIndex() + "\n");
         CarPathsBunch carPathsBunch = new CarPathsBunch(start);
-        List<Node> unmarkedNodes = new ArrayList<>(graph.getNodes());
+        List<Node> unmarkedNodes = new ArrayList<>(graph.getNodesSet());
         unmarkedNodes.sort(Comparator.comparingDouble(Node::getWeight));
 
         start.setWeight(0);
