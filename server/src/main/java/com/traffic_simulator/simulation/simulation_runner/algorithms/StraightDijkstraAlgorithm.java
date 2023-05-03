@@ -78,7 +78,7 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
             }
         }
 
-        List<Node> list = new ArrayList<>(graph.getNodes());
+        List<Node> list = new ArrayList<>(graph.getNodesSet());
         list.remove(start);
         for (Node end : list) {           //retrieve concrete paths from starting node to node
             carPathsBunch.getCarPathsByEnds().put(end, PathRetriever.retrievePath(start, end, predecessors));
