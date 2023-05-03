@@ -1,8 +1,8 @@
 package com.traffic_simulator.simulation.models.buildings.types;
 
+import com.traffic_simulator.enums.BuildingType;
 import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.buildings.ParkingZone;
-import com.traffic_simulator.simulation.models.supportive.BuildingType;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import lombok.Getter;
 import lombok.Setter;
