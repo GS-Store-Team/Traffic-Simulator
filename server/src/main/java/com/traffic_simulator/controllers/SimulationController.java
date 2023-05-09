@@ -74,21 +74,20 @@ public class SimulationController {
 
     @GetMapping("/area_state")
     public ResponseEntity<AreaGraphSimulationStateDTO> getState() {
-        return null;
-        /*var simulationState = simulationRunner.;
-        return simulationState != null ?
-                ResponseEntity.ok(simulationState) :
-                ResponseEntity.noContent().build();*/
+        return ResponseEntity.noContent().build();
+//        SimulationState simulationState = null;
+//        return simulationState != null ?
+//                ResponseEntity.ok(simulationState) :
+//                ResponseEntity.noContent().build();
     }
 
-    /*@GetMapping("/config")
+    @GetMapping("/config")
     public ResponseEntity<FullMapDTO> getMapConfig() {
-        var mapState = areaGraph.getCurrentMapConfig();
-        return mapState != null ?
-                ResponseEntity.ok(mapState) :
-                ResponseEntity.noContent().build();
-    }*/
-
-
+        return ResponseEntity.noContent().build();
+//        var mapState = areaGraph.getCurrentMapConfig();
+//        return mapState != null ?
+//                ResponseEntity.ok(mapState) :
+//                ResponseEntity.noContent().build();
+    }
 }
 
