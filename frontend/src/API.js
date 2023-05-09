@@ -30,4 +30,12 @@ export default class API {
     static async stopSimulation(){
         return await axios.get("http://localhost:8080/state/run/stop",httpConfig);
     }
+
+    static async getAreas(){
+        return await axios.get("http://localhost:8080/map/areas",httpConfig);
+    }
+
+    static async getFullMap(){
+        return await axios.get("http://localhost:8080/map",httpConfig);
+    }
 }

@@ -2,6 +2,7 @@
 package com.traffic_simulator.controllers;
 
 import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
+import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 import com.traffic_simulator.simulation.graph.AreaGraph;
