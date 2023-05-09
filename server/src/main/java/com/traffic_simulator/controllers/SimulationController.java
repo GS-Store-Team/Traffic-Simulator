@@ -2,6 +2,7 @@
 package com.traffic_simulator.controllers;
 
 import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
+import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 import com.traffic_simulator.simulation.graph.AreaGraph;
@@ -73,21 +74,20 @@ public class SimulationController {
 
     @GetMapping("/area_state")
     public ResponseEntity<AreaGraphSimulationStateDTO> getState() {
-        return null;
-        /*var simulationState = simulationRunner.;
-        return simulationState != null ?
-                ResponseEntity.ok(simulationState) :
-                ResponseEntity.noContent().build();*/
+        return ResponseEntity.noContent().build();
+//        SimulationState simulationState = null;
+//        return simulationState != null ?
+//                ResponseEntity.ok(simulationState) :
+//                ResponseEntity.noContent().build();
     }
 
-    /*@GetMapping("/config")
+    @GetMapping("/config")
     public ResponseEntity<FullMapDTO> getMapConfig() {
-        var mapState = areaGraph.getCurrentMapConfig();
-        return mapState != null ?
-                ResponseEntity.ok(mapState) :
-                ResponseEntity.noContent().build();
-    }*/
-
-
+        return ResponseEntity.noContent().build();
+//        var mapState = areaGraph.getCurrentMapConfig();
+//        return mapState != null ?
+//                ResponseEntity.ok(mapState) :
+//                ResponseEntity.noContent().build();
+    }
 }
 

@@ -6,6 +6,7 @@ import pointer from "../../UI/images/pointer.png";
 import plus from "../../UI/images/plus.png";
 import minus from "../../UI/images/minus.png";
 
+const scaleBy = 1.10;
 export const MyStage = ({layers}) => {
     function getWindowDimensions() {
         const { innerWidth: width, innerHeight: height } = window;
@@ -14,11 +15,9 @@ export const MyStage = ({layers}) => {
             height
         };
     }
-    // eslint-disable-next-line no-restricted-globals
     const [width, setWidth] = useState(window.innerWidth);
     // eslint-disable-next-line no-restricted-globals
     const [height, setHeight] = useState(innerHeight-120);
-    const [offset, setOffset] = useState({x:0,y:0})
 
     useEffect(() => {
         function handleWindowResize() {
@@ -39,8 +38,8 @@ export const MyStage = ({layers}) => {
         });
     },[width, height]);
 
-    const {setScale, scale} = useContext(Context);
-    const scaleBy = 1.10;
+    const {scale, setScale} = useContext(Context);
+
     const [stage, setStage] = useState({
         scale: 1,
         x: width/2,
@@ -64,12 +63,16 @@ export const MyStage = ({layers}) => {
         const stage = e.target.getStage();
         const oldScale = stage.scaleX();
 
+        const newScale = e.evt.deltaY < 0 ? oldScale * scaleBy : oldScale / scaleBy;
+
+        if(scale < 0.1 && oldScale > newScale || scale > 20 && oldScale < newScale) {
+            return
+        }
+
         const mousePointTo = {
             x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
             y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
         };
-
-        const newScale = e.evt.deltaY < 0 ? oldScale * scaleBy : oldScale / scaleBy;
 
         setStage({
             scale: newScale,
@@ -83,10 +86,6 @@ export const MyStage = ({layers}) => {
 
     const handleDrag = (e) =>{
         if(e.target.constructor.name === "Stage") {
-            setOffset({
-                x: (-e.target._lastPos.x + width / 2),
-                y: (-e.target._lastPos.y + height / 2)
-            })
             setShift({
                 x: (-e.target._lastPos.x + width / 2),
                 y: (-e.target._lastPos.y + height / 2)

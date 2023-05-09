@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Layer} from "react-konva";
 import EditorToolbar from "../components/EditorToolbar/EditorToolbar.jsx";
 import BuildingsList from "../components/BuildingsList.jsx";
@@ -10,12 +10,20 @@ import {MyStage} from "../components/mystage/MyStage.jsx";
 import useMeasure from 'react-use-measure'
 import {Info} from "../components/Info/Info.jsx";
 import {Tune} from "../components/Tune/Tune.jsx";
+import API from "../API.js";
 
 export const Editor = () => {
     const [buildings, setBuildings] = useState([]);
     const [roads, setRoads] = useState([]);
     const [defRoad, setDefRoad] = useState({...defaultRoad})
     const [defBuilding, setDefBuilding] = useState({...defaultBuilding})
+    const [selectedAreaId, setSelectedAreaId] = useState()
+    const [fullMap, setFullMap] = useState()
+
+    useEffect(() => {
+        API.getFullMap().then(response => setFullMap(response.data))
+    }, [])
+
     const addBuilding = (e) =>{
         const building = {...defBuilding};
         building.id = Date.now();
@@ -38,11 +46,11 @@ export const Editor = () => {
     return (
         <div ref={ref}>
             <Header state={false}/>
-            <EditorToolbar addBuilding={addBuilding} addRoad={addRoad} configureDefaultObj={{defRoad:defRoad,setDefRoad:setDefRoad, defBuilding:defBuilding, setDefBuilding:setDefBuilding}}/>
+            <EditorToolbar  fullMap={fullMap} selectedAreaId={selectedAreaId} selectArea={setSelectedAreaId} addBuilding={addBuilding} addRoad={addRoad} configureDefaultObj={{defRoad:defRoad,setDefRoad:setDefRoad, defBuilding:defBuilding, setDefBuilding:setDefBuilding}}/>
             <MyStage layers={
                 [
                     <Layer key={1}>
-                        <Grid width={bounds.width} height={bounds.height-100}/>
+                        <Grid width={bounds.width} height={bounds.height-100} selectedAreaId={selectedAreaId}/>
                     </Layer>,
 
                     <Layer key={2}>

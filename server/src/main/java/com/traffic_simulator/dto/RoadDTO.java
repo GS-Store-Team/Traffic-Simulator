@@ -1,13 +1,13 @@
 package com.traffic_simulator.dto;
 
+import com.traffic_simulator.models.Road;
+
 public record RoadDTO(
         Long id,
         PointDTO start,
         PointDTO end,
         Long forward,
-        Integer forwardLanes,
         Long reverse,
-        Integer reverseLanes,
         Boolean valid
 ) {
     public RoadDTO(Long id, RoadDTO roadDTO) {
@@ -16,9 +16,18 @@ public record RoadDTO(
                 roadDTO.start,
                 roadDTO.end,
                 roadDTO.forward,
-                roadDTO.forwardLanes,
                 roadDTO.reverse,
-                roadDTO.reverseLanes,
                 roadDTO.valid);
+    }
+
+    public RoadDTO(Road road, Boolean valid) {
+        this(
+                road.getId(),
+                new PointDTO(road.getStart()),
+                new PointDTO(road.getEnd()),
+                road.getForward(),
+                road.getReverse(),
+                valid
+                );
     }
 }

@@ -78,8 +78,8 @@ public class AreaGraph {
             Road road = new Road(
                     start.getAttachmentPoint().getCoordinates(),
                     end.getAttachmentPoint().getCoordinates(),
-                    roadDTO.forwardLanes(),
-                    roadDTO.reverseLanes());
+                    Math.toIntExact(roadDTO.forward()),
+                    Math.toIntExact(roadDTO.reverse()));
 
             roads.add(road);
 
@@ -120,7 +120,7 @@ public class AreaGraph {
                 default ->
                         building = new Building(0, new Coordinates(buildingDTO.location().x(), buildingDTO.location().y()), buildingDTO.type());
             }
-            building.setParkingZone(new ParkingZone(buildingDTO.parking().capacity(), SimulationUtils.pointToCoordinates(buildingDTO.location())));
+            building.setParkingZone(new ParkingZone(Math.toIntExact(buildingDTO.parking().capacity()), SimulationUtils.pointToCoordinates(buildingDTO.location())));
             buildings.add(building);
             node.getAttachmentPoint().addBuilding(building);
         }

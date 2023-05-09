@@ -4,6 +4,7 @@ import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.dto.ParkingDTO;
 import com.traffic_simulator.dto.RoadDTO;
+import com.traffic_simulator.models.areasConfig.AreasPlacement;
 import com.traffic_simulator.services.AreaVersionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +17,20 @@ import java.util.ArrayList;
 public class MapConfigController {
     private final AreaVersionService areaVersionService;
 
+    @GetMapping("/areas")
+    public AreasPlacement getAreas() {
+        return new AreasPlacement();
+    }
+
     @GetMapping
     public FullMapDTO getMap() {
-        return new FullMapDTO(1L, new ArrayList<>());
+        return areaVersionService.getState();
     }
 
     @PostMapping("/{areaVersion}/roads")
     public FullMapDTO addRoad(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody RoadDTO roadDTO) {
-
         return null;
     }
 
