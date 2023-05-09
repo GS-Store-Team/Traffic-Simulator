@@ -1,5 +1,7 @@
 package com.traffic_simulator.dto;
 
+import com.traffic_simulator.models.Point;
+
 public record PointDTO(
         Long id,
         Double x,
@@ -8,5 +10,9 @@ public record PointDTO(
 {
     public PointDTO (Long id, PointDTO pointDTO) {
         this(id, pointDTO.x, pointDTO.y);
+    }
+
+    public PointDTO (Point point) {
+        this(point.getId(), point.getX(), point.getY());
     }
 }

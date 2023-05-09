@@ -24,14 +24,13 @@ public class MapConfigController {
 
     @GetMapping
     public FullMapDTO getMap() {
-        return new FullMapDTO(1L, new ArrayList<>());
+        return areaVersionService.getState();
     }
 
     @PostMapping("/{areaVersion}/roads")
     public FullMapDTO addRoad(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody RoadDTO roadDTO) {
-
         return null;
     }
 

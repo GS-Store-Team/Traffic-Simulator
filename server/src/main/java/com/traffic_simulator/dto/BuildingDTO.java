@@ -1,6 +1,7 @@
 package com.traffic_simulator.dto;
 
 import com.traffic_simulator.enums.BuildingType;
+import com.traffic_simulator.models.Building;
 
 public record BuildingDTO(
         Long id,
@@ -24,5 +25,17 @@ public record BuildingDTO(
                 buildingDTO.label,
                 buildingDTO.parking,
                 buildingDTO.valid);
+    }
+    public BuildingDTO(Building building, Boolean valid) {
+        this(
+                building.getId(),
+                new PointDTO(building.getLocation()),
+                building.getInFlow(),
+                building.getOutFlow(),
+                0,
+                building.getType(),
+                building.getLabel(),
+                new ParkingDTO(building.getParking(), true),
+                valid);
     }
 }
