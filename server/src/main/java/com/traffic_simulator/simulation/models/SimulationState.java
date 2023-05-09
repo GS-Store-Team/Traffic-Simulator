@@ -8,7 +8,7 @@ import com.traffic_simulator.simulation.models.buildings.types.LivingBuilding;
 import com.traffic_simulator.simulation.models.buildings.types.WorkplaceBuilding;
 import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.road.Road;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.PathFindingAlgorithm;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.PathFindingAlgorithm;
 import lombok.Data;
 
 import java.util.ArrayList;

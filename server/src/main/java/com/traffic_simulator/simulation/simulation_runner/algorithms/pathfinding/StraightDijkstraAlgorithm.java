@@ -1,13 +1,11 @@
 
-package com.traffic_simulator.simulation.simulation_runner.algorithms;
+package com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding;
 
 import com.traffic_simulator.exceptions.PathsConstructionException;
 import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
-import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
-import com.traffic_simulator.simulation.models.road.Road;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPathsBunch;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
 
 import java.util.*;
 
@@ -40,15 +38,15 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
         while (!unmarkedNodes.isEmpty()) {
             unmarkedNodes.remove(currentNode);
             for (Node neighbourNode : currentNode.getOutNodes()) {
-                Edge edgeToNeighbour = currentNode.getRightEdges().stream()
-                        .filter(e -> e.getEnd().equals(neighbourNode))
-                        .findFirst()
-                        .orElse(null);
-                if (neighbourNode.getWeight() > currentNode.getWeight() + edgeToNeighbour.getWeight()) {
-                    if (unmarkedNodes.contains(neighbourNode)) {
-                        neighbourNode.setWeight(currentNode.getWeight() + edgeToNeighbour.getWeight());
-                        neighbourNode.setEdgeToPrev(edgeToNeighbour);
-                        predecessors.put(neighbourNode, currentNode);
+                List<Edge> edgesToNeighbour = currentNode.getRightEdges().stream()
+                        .filter(e -> e.getEnd().equals(neighbourNode)).toList();
+                for (Edge edge : edgesToNeighbour) {
+                    if (neighbourNode.getWeight() > currentNode.getWeight() + edge.getWeight()) {
+                        if (unmarkedNodes.contains(neighbourNode)) {
+                            neighbourNode.setWeight(currentNode.getWeight() + edge.getWeight());
+                            neighbourNode.getEdgesToPrev().add(edge);
+                            predecessors.put(neighbourNode, currentNode);
+                        }
                     }
                 }
             }
@@ -56,7 +54,7 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
             try {
                 currentNode = unmarkedNodes.get(0);
             } catch (IndexOutOfBoundsException exc) {
-
+                break;
             }
 
             if (currentNode.getWeight() == Double.POSITIVE_INFINITY) {              //if there are only unreachable nodes left

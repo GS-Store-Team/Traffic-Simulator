@@ -31,12 +31,28 @@ public class Road extends MapObject {
     }
 
     private void addLanes(int rightLanesAmount, int leftLanesAmount) {
-        for (int i = 0; i < rightLanesAmount; i++)
+        for (int i = 0; i < rightLanesAmount; i++) {
             rightLanes.add(new Lane(i, startCoordinate, endCoordinate));
-
-        for (int i = 0; i < leftLanesAmount; i++)
+        }
+        for (int i = 0; i < leftLanesAmount; i++) {
             leftLanes.add(new Lane(i, endCoordinate, startCoordinate));
+        }
     }
+
+    /*private List<Coordinates> laneCoordinatesShift(Coordinates startCoordinate, Coordinates endCoordinate) {
+        double x = Math.signum(endCoordinate.getX() - startCoordinate.getX());
+        double y = Math.signum(endCoordinate.getY() - startCoordinate.getY());
+
+        List<Coordinates> pair = new ArrayList<>();
+
+        if (x == 0 || y == 0) {
+            pair.add(new Coordinates(startCoordinate.getX()))
+        } else {
+
+        }
+
+        return new Coordinates(x, y);
+    }*/
 
     public double computeNaturalWeightByCoordinates() {
         return rightLanes.get(0).getCells().size() * GlobalSettings.cellNaturalWeightModifier;

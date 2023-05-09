@@ -1,7 +1,6 @@
 
 package com.traffic_simulator.simulation.simulation_runner;
 
-import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
 import com.traffic_simulator.enums.BuildingType;
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.SimulationException;
@@ -12,7 +11,7 @@ import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.car.Navigator;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPathsBunch;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
 
 import java.util.ArrayList;
 import java.util.HashMap;

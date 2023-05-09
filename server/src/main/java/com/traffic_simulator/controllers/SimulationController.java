@@ -2,16 +2,15 @@
 package com.traffic_simulator.controllers;
 
 import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
-import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.models.SimulationState;
 import com.traffic_simulator.simulation.simulation_runner.SimulationRunner;
 import com.traffic_simulator.simulation.simulation_runner.TickGenerator;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.PathFindingAlgorithm;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.PathFindingAlgorithm;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.StraightDijkstraAlgorithm;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.StraightDijkstraAlgorithm;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
