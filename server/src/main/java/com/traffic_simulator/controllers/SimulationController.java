@@ -74,10 +74,11 @@ public class SimulationController {
 
     @GetMapping("/area_state")
     public ResponseEntity<AreaGraphSimulationStateDTO> getState() {
-        var simulationState = simulationRunner.;
+        return null;
+        /*var simulationState = simulationRunner.;
         return simulationState != null ?
                 ResponseEntity.ok(simulationState) :
-                ResponseEntity.noContent().build();
+                ResponseEntity.noContent().build();*/
     }
 
     /*@GetMapping("/config")
