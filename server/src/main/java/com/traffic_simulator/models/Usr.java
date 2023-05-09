@@ -12,12 +12,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Usr {
     @Id
     @GeneratedValue
     private Long id;
     private String name;
     private String password;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "usr")
     private List<AreaVersion> areaVersions;
 }

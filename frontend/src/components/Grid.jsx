@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {Group, Line} from "react-konva";
 import {Context} from "../router/AppRouter.jsx";
 
@@ -8,6 +8,8 @@ export const Grid = ({width, height}) => {
     useEffect(() => {
         scale<0.8? setMyScale(0.8): setMyScale(scale);
     }, [scale])
+
+    const cells = useMemo(() => {},[])
 
     return (
         <Group>
