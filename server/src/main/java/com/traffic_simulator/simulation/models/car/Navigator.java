@@ -1,17 +1,17 @@
 
 package com.traffic_simulator.simulation.models.car;
 
+import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
-import com.traffic_simulator.simulation.models.road.Lane;
-import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.simulation.models.supportive.cell.Cell;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPath;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPath;
 import lombok.Data;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -27,7 +27,7 @@ public class Navigator {
 
     private List<Cell> advance;
     private Node currentNode;
-    private Road currentRoad;
+    private Edge currentEdge;
     private final CarPath carPath;
 
     private Coordinates currentCoordinate;
@@ -39,11 +39,18 @@ public class Navigator {
     private boolean temp = false;
     private Car car;
 
+    private RoadSide roadSide;
+
+    public enum MoveState {NODE, ROAD, NONE}
+
+    private MoveState moveState;
+
     public Navigator(Car car, int accelerationLowerLimit, int accelerationUpperLimit, CarPath carPath) {
 
         this.car = car;
         this.carPath = carPath;
         this.advance = new ArrayList<>();
+        this.moveState = MoveState.NONE;
 
         initTimers();
 
@@ -68,9 +75,9 @@ public class Navigator {
 
     private void initSelfPositioning() {
         try {
-
             this.currentNode = carPath.getNodes().pop();
-            this.currentRoad = null;
+            this.moveState = MoveState.NODE;
+            this.currentEdge = null;
             currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
             System.out.println("Car#" + car.getId() + " appeared: " + this.currentNode.getNodeIndex());
         } catch (NoSuchElementException e) {
@@ -109,70 +116,60 @@ public class Navigator {
 
     private void updateCar() {
 
-        RoadSide roadSide = RoadSide.NONE;
-        if (currentRoad == null) {
-            if (currentNode.getAttachmentPoint().getConnectedBuildings().contains(car.getBuildingStart())) {
-                car.getBuildingStart().getParkingZone().removeCar(car);
-                currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
-            } else if (currentNode.getAttachmentPoint().getCoordinates() == carPath.getRoads().peek().getStartCoordinate()) {
-                currentCoordinate = carPath.getRoads().peek().getStartCoordinate();
-                currentRoad = carPath.getRoads().pop();
-                roadSide = RoadSide.RIGHT;
-                currentNode = null;
-            } else if (currentNode.getAttachmentPoint().getCoordinates() == carPath.getRoads().peek().getEndCoordinate()) {
-                currentCoordinate = carPath.getRoads().peek().getEndCoordinate();
-                currentRoad = carPath.getRoads().pop();
-                roadSide = RoadSide.LEFT;
-                currentNode = null;
-            } else if (currentNode.getAttachmentPoint().getConnectedBuildings().contains(car.getBuildingEnd())) {
-                currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
-                currentCoordinate = car.getBuildingEnd().getCenter();
-                car.getBuildingEnd().getParkingZone().addCar(car);
-                roadSide = RoadSide.NONE;
-            }
-        } else {
-            if (currentCoordinate != currentRoad.getEndCoordinate()) {
-                try {
-                    chooseLane(roadSide);
-                    moveCar(currentRoad.getStartCoordinate(), currentRoad.getEndCoordinate());
-                    if (lengthRoad(currentRoad.getStartCoordinate(), currentCoordinate) >= lengthRoad(currentRoad.getStartCoordinate(), currentRoad.getEndCoordinate())) {
-                        currentNode = carPath.getNodes().pop();
-                        currentRoad = null;
-                    }
-                } catch (Exception e) {
-                    System.out.println("road length is null");
+        switch (moveState) {
+            case NODE -> {
+                moveCarInNode();
+                if (currentCoordinate == carPath.getEdges().peek().getStart().getAttachmentPoint().getCoordinates()) {
+                    currentEdge = carPath.getEdges().pop();
+                    moveState = MoveState.ROAD;
                 }
             }
+            case ROAD -> {
+                if (currentCoordinate == currentEdge.getStart().getAttachmentPoint().getCoordinates()) {
+                    moveCarInRoad(
+                            currentEdge.getStart().getAttachmentPoint().getCoordinates(),
+                            currentEdge.getEnd().getAttachmentPoint().getCoordinates());
+                } else if (currentCoordinate == currentEdge.getEnd().getAttachmentPoint().getCoordinates()) {
+                    currentNode = carPath.getNodes().pop();
+                    moveState = MoveState.NODE;
+                }
+            }
+            case NONE -> {
+            }
         }
-
-        currentRoad = carPath.getRoads().pop();
-        currentNode = null;
 
     }
 
-    private void chooseLane(RoadSide roadSide) {
-        switch (roadSide) {
-            case LEFT -> {
-                Lane lane = currentRoad.getLeftLanes().stream()
-                        .min((Lane lane1, Lane lane2) -> Double.compare(lane1.computeTrafficWeight(), lane1.computeTrafficWeight()))
-                        .orElseThrow();
-                currentCoordinate = lane.getEndCoordinates();
+    private void changeLane() {
+        switch (moveState) {
+            case NODE -> {
+                currentEdge = carPath.getEdges()
+                        .stream()
+                        .toList()
+                        .stream()
+                        .min(
+                                Comparator.comparingDouble(Edge::getWeight))
+                        .get();
+                currentCoordinate = currentEdge.getStart().getAttachmentPoint().getCoordinates();
             }
-            case RIGHT -> {
-                Lane lane = currentRoad.getRightLanes().stream()
-                        .min((Lane lane1, Lane lane2) -> Double.compare(lane1.computeTrafficWeight(), lane1.computeTrafficWeight()))
-                        .orElseThrow();
-                currentCoordinate = lane.getStartCoordinates();
+            case ROAD -> {
+
+            }
+            case NONE -> {
             }
         }
     }
 
-    private void moveCar(Coordinates roadStartPoint, Coordinates roadEndPoint) {
+    private void moveCarInRoad(Coordinates roadStartPoint, Coordinates roadEndPoint) {
         double length = lengthRoad(roadStartPoint, roadEndPoint);
         currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
         currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
         currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
         currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
+    }
+
+    private void moveCarInNode() {
+
     }
 
     private double lengthRoad(Coordinates start, Coordinates end) {

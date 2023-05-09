@@ -1,10 +1,8 @@
 
 package com.traffic_simulator.simulation.context;
 
-import com.traffic_simulator.dto.AreaVersionDTO;
 import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.RoadDTO;
-import com.traffic_simulator.dto.UserDTO;
 import com.traffic_simulator.models.AreaVersion;
 import lombok.Data;
 import org.springframework.stereotype.Component;

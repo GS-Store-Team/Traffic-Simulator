@@ -1,4 +1,4 @@
-package com.traffic_simulator.simulation.simulation_runner.algorithms.car_path;
+package com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path;
 
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import lombok.Getter;

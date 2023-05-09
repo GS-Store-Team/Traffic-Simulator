@@ -1,7 +1,7 @@
-package com.traffic_simulator.simulation.simulation_runner.algorithms.car_path;
+package com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path;
 
+import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
-import com.traffic_simulator.simulation.models.road.Road;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -14,13 +14,13 @@ public class CarPath {
     private final Node start;
     private final Deque<Node> nodes;
     private final Node end;
-    private Deque<Road> roads;
+    private final Deque<Edge> edges;
 
     public CarPath(Node start, Node end) {
         this.start = start;
         this.nodes = new ArrayDeque<>();
         this.end = end;
-        this.roads = new ArrayDeque<>();
+        this.edges = new ArrayDeque<>();
     }
 
     public void addNode(Node node) {

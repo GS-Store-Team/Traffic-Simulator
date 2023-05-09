@@ -1,10 +1,10 @@
 
-package com.traffic_simulator.simulation.simulation_runner.algorithms;
+package com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding;
 
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.PathsConstructionException;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPathsBunch;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
 import com.traffic_simulator.simulation.graph.AreaGraph;
 import lombok.NonNull;
 import java.util.HashMap;

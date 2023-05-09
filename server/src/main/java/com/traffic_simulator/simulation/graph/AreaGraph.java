@@ -13,6 +13,7 @@ import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.buildings.ParkingZone;
 import com.traffic_simulator.simulation.models.buildings.types.LivingBuilding;
 import com.traffic_simulator.simulation.models.buildings.types.WorkplaceBuilding;
+import com.traffic_simulator.simulation.models.road.Lane;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.utils.SimulationUtils;
@@ -88,12 +89,12 @@ public class AreaGraph {
             start.getAttachmentPoint().addStartingRoad(road);
             end.getAttachmentPoint().addFinishingRoad(road);
 
-            if (!road.getRightLanes().isEmpty()) {
-                edges.add(new Edge(road, start, end, RoadSide.RIGHT));
+            for (Lane lane : road.getRightLanes()) {
+                edges.add(new Edge(road, lane, start, end, RoadSide.RIGHT));
                 start.addOutNode(end);
             }
-            if (!road.getLeftLanes().isEmpty()) {
-                edges.add(new Edge(road, end, start, RoadSide.LEFT));
+            for (Lane lane : road.getLeftLanes()) {
+                edges.add(new Edge(road, lane, end, start, RoadSide.LEFT));
                 start.addInNode(end);
             }
         }

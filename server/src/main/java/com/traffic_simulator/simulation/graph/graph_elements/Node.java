@@ -3,7 +3,9 @@ package com.traffic_simulator.simulation.graph.graph_elements;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +17,7 @@ import lombok.ToString;
 public class Node {
     private int nodeIndex;
     private AttachmentPoint attachmentPoint;
-    private Edge edgeToPrev;
+    private Set<Edge> edgesToPrev;
     private double weight = Double.POSITIVE_INFINITY;
 
     private List<Node> nodesList = new ArrayList<>();
@@ -27,13 +29,13 @@ public class Node {
 
     public Node(AttachmentPoint attachmentPoint) {
         this.attachmentPoint = attachmentPoint;
-        this.edgeToPrev = null;
+        this.edgesToPrev = new HashSet<>();
     }
 
     public Node(Node node) {          //copying constructor
         this.nodeIndex = node.nodeIndex;
         this.attachmentPoint = node.attachmentPoint;
-        this.edgeToPrev = node.edgeToPrev;
+        this.edgesToPrev = new HashSet<>(node.edgesToPrev);
         this.weight = node.weight;
         this.nodesList = new ArrayList<>(node.nodesList);
         this.outNodes = new ArrayList<>(node.outNodes);

@@ -1,7 +1,7 @@
-package com.traffic_simulator.simulation.simulation_runner.algorithms;
+package com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding;
 
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.car_path.CarPath;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPath;
 
 import java.util.HashMap;
 
@@ -12,7 +12,7 @@ public class PathRetriever {
         while (currentNode != start) {
             carPath.addNode(currentNode);
 
-            if (currentNode.getEdgeToPrev() == null) {
+            if (currentNode.getEdgesToPrev() == null) {
                 System.out.println("No road to previous node in computation!");
             }
             //carPath.getRoads().addFirst(currentNode.getEdgeToPrev());
