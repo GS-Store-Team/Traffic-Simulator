@@ -15,7 +15,7 @@ public class PathRetriever {
             if (currentNode.getEdgeToPrev() == null) {
                 System.out.println("No road to previous node in computation!");
             }
-            carPath.getRoads().addFirst(currentNode.getEdgeToPrev());
+            //carPath.getRoads().addFirst(currentNode.getEdgeToPrev());
             currentNode = hm.get(currentNode);
         }
         carPath.getNodes().addFirst(start);

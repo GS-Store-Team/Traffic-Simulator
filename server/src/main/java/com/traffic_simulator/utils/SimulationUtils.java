@@ -12,11 +12,13 @@ import com.traffic_simulator.simulation.models.supportive.Coordinates;
 
 public class SimulationUtils {
     public static CarDTO carToDTO(Car car) {
-        return new CarDTO(car.getId(), coordinateToPoint(car.getCurrentPosition()));
+        //return new CarDTO(car.getId(), coordinateToPoint(car.getCurrentPosition()));
+        return null;
     }
 
     public static BuildingDTO buildingToDTO(Building building) {
-        return new BuildingDTO(building.getId(), coordinateToPoint(building.getUpLeftCorner()), 0D, 0D, building.getType(), building.getName(), building.getParkingZone(), true);
+        return null;
+        //return new BuildingDTO(building.getId(), coordinateToPoint(building.getUpLeftCorner()), 0D, 0D, building.getType(), building.getName(), building.getParkingZone(), true);
     }
 
     public static PointDTO coordinateToPoint(long id, Coordinates coordinates) {
