@@ -8,6 +8,8 @@ import com.traffic_simulator.services.AreaVersionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/map")
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class MapConfigController {
 
     @GetMapping
     public FullMapDTO getMap() {
-        return null;
+        return new FullMapDTO(1L, new ArrayList<>());
     }
 
     @PostMapping("/{areaVersion}/roads")

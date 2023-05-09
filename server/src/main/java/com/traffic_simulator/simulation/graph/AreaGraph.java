@@ -82,17 +82,19 @@ public class AreaGraph {
 
             roads.add(road);
 
-            start.addNodeToList(end);
-            end.addNodeToList(start);
+            start.addNode(end);
+            end.addNode(start);
 
             start.getAttachmentPoint().addStartingRoad(road);
             end.getAttachmentPoint().addFinishingRoad(road);
 
             if (!road.getRightLanes().isEmpty()) {
                 edges.add(new Edge(road, start, end, RoadSide.RIGHT));
+                start.addOutNode(end);
             }
             if (!road.getLeftLanes().isEmpty()) {
                 edges.add(new Edge(road, end, start, RoadSide.LEFT));
+                start.addInNode(end);
             }
         }
 
@@ -128,5 +130,9 @@ public class AreaGraph {
             node.setWeight(Double.POSITIVE_INFINITY);
         }
     }
+
+    /*public AreaVersionDTO toAreaVersionDTO() {
+        return new AreaVersionDTO(areaSimulationContext.getAreaVersion().getId())
+    }*/
 }
 

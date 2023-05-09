@@ -50,8 +50,10 @@ public class SimulationController {
 
     @GetMapping("/run")
     public ResponseEntity<?> startSimulation() {
-        //if(simulationRunner == null) init();
-        //else simulationRunner.reset();
+        if (simulationRunner == null) {
+            init();
+        } else simulationRunner.reset();
+
         new Thread(tickGenerator).start();
         return ResponseEntity.ok().build();
     }
@@ -72,19 +74,19 @@ public class SimulationController {
 
     @GetMapping("/area_state")
     public ResponseEntity<AreaGraphSimulationStateDTO> getState() {
-        var simulationState = simulationRunner();
+        var simulationState = simulationRunner.;
         return simulationState != null ?
                 ResponseEntity.ok(simulationState) :
                 ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/config")
+    /*@GetMapping("/config")
     public ResponseEntity<FullMapDTO> getMapConfig() {
         var mapState = areaGraph.getCurrentMapConfig();
         return mapState != null ?
                 ResponseEntity.ok(mapState) :
                 ResponseEntity.noContent().build();
-    }
+    }*/
 
 
 }

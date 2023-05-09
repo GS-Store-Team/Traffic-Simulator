@@ -22,6 +22,9 @@ public class AreaSimulationContext {
     private List<BuildingDTO> buildingDTOList = new ArrayList<>();
     private List<RoadDTO> roadDTOList = new ArrayList<>();
 
+    public AreaSimulationContext() {
+        areaVersion = new AreaVersion();
+    }
     /*public AreaVersionDTO areaVersionDTO(Long id, UserDTO userDTO) {
         return new AreaVersionDTO(id, userDTO, true,)
     }

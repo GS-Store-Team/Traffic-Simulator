@@ -3,6 +3,7 @@ package com.traffic_simulator.simulation.simulation_runner.algorithms;
 
 import com.traffic_simulator.exceptions.PathsConstructionException;
 import com.traffic_simulator.simulation.graph.AreaGraph;
+import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
 import com.traffic_simulator.simulation.models.road.Road;
@@ -38,39 +39,24 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
 
         while (!unmarkedNodes.isEmpty()) {
             unmarkedNodes.remove(currentNode);
-
-            AttachmentPoint ref = currentNode.getAttachmentPoint();             //retrieve all roads which have a way to another nodeNe
-            List<Road> refRoads = new ArrayList<>();
-            refRoads.addAll(ref.getStartingRoads().stream().filter((Road r) -> !r.getRightLanes().isEmpty()).toList());
-            refRoads.addAll(ref.getFinishingRoads().stream().filter((Road r) -> !r.getLeftLanes().isEmpty()).toList());
-
-            for (Node neighbourNode : currentNode.getNodesList()) {
-                Road road;
-                try {                               //retrieve road, which is connected with current neighbourNode
-                    road = refRoads.stream()
-                            .filter((Road r) ->
-                                    ref.getStartingRoads().contains(r) & neighbourNode.getAttachmentPoint().getFinishingRoads().contains(r) ||
-                                            neighbourNode.getAttachmentPoint().getStartingRoads().contains(r) & ref.getFinishingRoads().contains(r))
-                            .min(Comparator.comparingDouble(Road::getWeight))
-                            .get();
-                } catch (NoSuchElementException exc) {
-                    throw exc;
-                }
-                if (neighbourNode.getWeight() > currentNode.getWeight() + road.getWeight()) {
+            for (Node neighbourNode : currentNode.getOutNodes()) {
+                Edge edgeToNeighbour = currentNode.getRightEdges().stream()
+                        .filter(e -> e.getEnd().equals(neighbourNode))
+                        .findFirst()
+                        .orElse(null);
+                if (neighbourNode.getWeight() > currentNode.getWeight() + edgeToNeighbour.getWeight()) {
                     if (unmarkedNodes.contains(neighbourNode)) {
-                        neighbourNode.setWeight(currentNode.getWeight() + road.getWeight());
-                        neighbourNode.setRoadToPrev(road);
+                        neighbourNode.setWeight(currentNode.getWeight() + edgeToNeighbour.getWeight());
+                        neighbourNode.setEdgeToPrev(edgeToNeighbour);
                         predecessors.put(neighbourNode, currentNode);
                     }
                 }
             }
 
             try {
-                currentNode = unmarkedNodes.stream()
-                        .min(Comparator.comparingDouble(Node::getWeight))
-                        .get();
-            } catch (NoSuchElementException exc) {
-                break;
+                currentNode = unmarkedNodes.get(0);
+            } catch (IndexOutOfBoundsException exc) {
+
             }
 
             if (currentNode.getWeight() == Double.POSITIVE_INFINITY) {              //if there are only unreachable nodes left

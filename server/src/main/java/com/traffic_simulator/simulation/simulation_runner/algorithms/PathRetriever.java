@@ -12,10 +12,10 @@ public class PathRetriever {
         while (currentNode != start) {
             carPath.addNode(currentNode);
 
-            if (currentNode.getRoadToPrev() == null) {
+            if (currentNode.getEdgeToPrev() == null) {
                 System.out.println("No road to previous node in computation!");
             }
-            carPath.getRoads().addFirst(currentNode.getRoadToPrev());
+            carPath.getRoads().addFirst(currentNode.getEdgeToPrev());
             currentNode = hm.get(currentNode);
         }
         carPath.getNodes().addFirst(start);

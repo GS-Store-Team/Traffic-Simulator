@@ -1,6 +1,7 @@
 
 package com.traffic_simulator.simulation.simulation_runner;
 
+import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
 import com.traffic_simulator.enums.BuildingType;
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.SimulationException;
@@ -69,6 +70,12 @@ public class SimulationRunner {
             navigator.update(secondsPassed);
         }
     }
+
+    /*public AreaGraphSimulationStateDTO getStateDto() {
+        AreaGraphSimulationStateDTO areaState = new AreaGraphSimulationStateDTO(
+
+        )
+    }*/
 
 //    private void setCarsNavigators(){
 //        navigators = cars.stream().map(car -> {
