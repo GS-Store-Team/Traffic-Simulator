@@ -15,15 +15,11 @@ public class PathRetriever {
             if (currentNode.getEdgesToPrev() == null) {
                 System.out.println("No road to previous node in computation!");
             }
-            //carPath.getRoads().addFirst(currentNode.getEdgeToPrev());
+            carPath.getEdges().addFirst(currentNode.getEdgesToPrev().stream().toList());
             currentNode = hm.get(currentNode);
         }
         carPath.getNodes().addFirst(start);
 
-        /*for (NodeNe node : carPath.getNodes()) {
-            System.out.print(node.hashCode() + " => ");
-        }
-        System.out.println();*/
         return carPath;
     }
 }

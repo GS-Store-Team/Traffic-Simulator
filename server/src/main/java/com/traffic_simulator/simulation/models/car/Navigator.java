@@ -10,10 +10,7 @@ import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Data
 @ToString
@@ -28,6 +25,7 @@ public class Navigator {
     private List<Cell> advance;
     private Node currentNode;
     private Edge currentEdge;
+    private List<Edge> currentEdgeBunch;
     private final CarPath carPath;
 
     private Coordinates currentCoordinate;
@@ -119,8 +117,9 @@ public class Navigator {
         switch (moveState) {
             case NODE -> {
                 moveCarInNode();
-                if (currentCoordinate == carPath.getEdges().peek().getStart().getAttachmentPoint().getCoordinates()) {
-                    currentEdge = carPath.getEdges().pop();
+                if (currentCoordinate == carPath.getEdges().peek().get(0).getStart().getAttachmentPoint().getCoordinates()) {
+                    currentEdgeBunch = carPath.getEdges().pop();
+                    currentEdge = currentEdgeBunch.get(0);
                     moveState = MoveState.ROAD;
                 }
             }
@@ -140,7 +139,7 @@ public class Navigator {
 
     }
 
-    private void changeLane() {
+    /*private void changeLane() {
         switch (moveState) {
             case NODE -> {
                 currentEdge = carPath.getEdges()
@@ -153,12 +152,19 @@ public class Navigator {
                 currentCoordinate = currentEdge.getStart().getAttachmentPoint().getCoordinates();
             }
             case ROAD -> {
-
+                currentEdge = carPath.getEdges()
+                        .stream()
+                        .toList()
+                        .stream()
+                        .min(
+                                Comparator.comparingDouble(Edge::getWeight))
+                        .get();
+                currentCoordinate = currentEdge.getStart().getAttachmentPoint().getCoordinates();
             }
             case NONE -> {
             }
         }
-    }
+    }*/
 
     private void moveCarInRoad(Coordinates roadStartPoint, Coordinates roadEndPoint) {
         double length = lengthRoad(roadStartPoint, roadEndPoint);

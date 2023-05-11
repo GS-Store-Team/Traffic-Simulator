@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/map")
@@ -31,7 +32,8 @@ public class MapConfigController {
     public FullMapDTO addRoad(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody RoadDTO roadDTO) {
-        return null;
+        areaVersionService.getState().areas().get(0).versions().stream().filter(a -> Objects.equals(a.id(), areaVersionId)).findFirst().get().roads().add(roadDTO);
+        return areaVersionService.getState();
     }
 
     @PatchMapping("/{areaVersion}/roads")
@@ -45,18 +47,21 @@ public class MapConfigController {
     public FullMapDTO deleteRoad(
             @PathVariable("areaVersion") Long areaVersionId,
             @PathVariable("id") Long roadId) {
-        return null;
+        RoadDTO roadDTO = areaVersionService.getState().areas().get(0).versions().stream().filter(a -> Objects.equals(a.id(), areaVersionId)).findFirst().get().roads().stream().filter(r -> r.id().equals(roadId)).findFirst().get();
+        areaVersionService.getState().areas().get(0).versions().stream().filter(a -> Objects.equals(a.id(), areaVersionId)).findFirst().get().roads().remove(roadDTO);
+        return areaVersionService.getState();
     }
 
     @PostMapping("/{areaVersion}/buildings")
     public FullMapDTO addBuilding(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody BuildingDTO buildingDTO) {
-        return null;
+        areaVersionService.getState().areas().get(0).versions().stream().filter(a -> Objects.equals(a.id(), areaVersionId)).findFirst().get().buildings().add(buildingDTO);
+        return areaVersionService.getState();
     }
 
     @PatchMapping("/{areaVersion}/buildings")
-    public FullMapDTO editRoad(
+    public FullMapDTO editBuilding(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody BuildingDTO buildingDTO) {
         return null;
@@ -66,7 +71,9 @@ public class MapConfigController {
     public FullMapDTO deleteBuilding(
             @PathVariable("areaVersion") Long areaVersionId,
             @PathVariable("id") Long buildingId) {
-        return null;
+        BuildingDTO buildingDTO = areaVersionService.getState().areas().get(0).versions().stream().filter(a -> Objects.equals(a.id(), areaVersionId)).findFirst().get().buildings().stream().filter(r -> r.id().equals(buildingId)).findFirst().get();
+        areaVersionService.getState().areas().get(0).versions().stream().filter(a -> Objects.equals(a.id(), areaVersionId)).findFirst().get().buildings().remove(buildingDTO);
+        return areaVersionService.getState();
     }
 
     @PostMapping("/{areaVersion}/parking")

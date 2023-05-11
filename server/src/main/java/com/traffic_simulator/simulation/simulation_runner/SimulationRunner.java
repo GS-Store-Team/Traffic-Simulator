@@ -1,9 +1,12 @@
 
 package com.traffic_simulator.simulation.simulation_runner;
 
+import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
+import com.traffic_simulator.dto.AreaVersionDTO;
 import com.traffic_simulator.enums.BuildingType;
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.SimulationException;
+import com.traffic_simulator.models.AreaVersion;
 import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.models.SimulationState;
@@ -43,12 +46,17 @@ public class SimulationRunner {
         }
     }
 
+    /*public AreaGraphSimulationStateDTO getState() {
+        AreaVersionDTO areaVersionDTO = new AreaVersionDTO()
+        AreaGraphSimulationStateDTO areaState = new AreaGraphSimulationStateDTO();
+        simulationState.getAreaGraph().getNodesSet();
+        simulationState.getAreaGraph().getBuildings();
+    }*/
     public void reset() {
 
     }
 
     public void update() throws SimulationException {
-        //System.out.println("UPDATE TICK# " + currentTick);
         updateNavigators(currentTick);
 
         if (currentTick >= GlobalSettings.dayLengthInSeconds) {
@@ -56,41 +64,11 @@ public class SimulationRunner {
         }
         currentTick++;
     }
-
-//    public SimulationDTO getCurrentSimulationState() {
-//        SimulationDTO simulationDTO = new SimulationDTO();
-//        simulationDTO.setCars(cars.stream().map(SimulationUtils::carToDTO).toList());
-//        simulationDTO.setBuildings(simulationState.getAllBuildings().stream().map(SimulationUtils::buildingToDTO).toList());
-//        return simulationDTO;
-//    }
-
     private void updateNavigators(long secondsPassed) {
         for (Navigator navigator : navigators) {
             navigator.update(secondsPassed);
         }
     }
-
-    /*public AreaGraphSimulationStateDTO getStateDto() {
-        AreaGraphSimulationStateDTO areaState = new AreaGraphSimulationStateDTO(
-
-        )
-    }*/
-
-//    private void setCarsNavigators(){
-//        navigators = cars.stream().map(car -> {
-//            NodeNe start = SimulationUtils.getNodeFromBuilding(car.getBuildingStart(), simulationState.getGraphMap());
-//            NodeNe end = SimulationUtils.getNodeFromBuilding(car.getBuildingEnd(), simulationState.getGraphMap());
-//
-//            CarPath carPath = PathRetriever.retrievePath(start, end, null); // 3rd param shouldn't be null
-//            if(carPath == null) throw new RuntimeException("invalid car path");
-//
-//            return new Navigator(
-//                    car,
-//                    simulationSettings.getAutomobileMinAcceleration(),
-//                    simulationSettings.getAutomobileMaxAcceleration(),
-//                    carPath);
-//        }).toList();
-//    }
 
     private void initCars() throws GraphConstructionException {
 

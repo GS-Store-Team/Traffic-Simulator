@@ -32,7 +32,7 @@ public class SimulationController {
     private AreaGraph areaGraph;
 
     @SneakyThrows
-    @PostConstruct
+    //@PostConstruct
     private void init() {
         this.areaGraph = new AreaGraph(areaSimulationContext);
 
@@ -83,6 +83,7 @@ public class SimulationController {
 
     @GetMapping("/config")
     public ResponseEntity<FullMapDTO> getMapConfig() {
+        init();
         return ResponseEntity.noContent().build();
 //        var mapState = areaGraph.getCurrentMapConfig();
 //        return mapState != null ?
