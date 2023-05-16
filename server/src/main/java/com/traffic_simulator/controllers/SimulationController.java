@@ -7,14 +7,13 @@ import com.traffic_simulator.exceptions.InvalidMapException;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.models.SimulationState;
+import com.traffic_simulator.simulation.simulation_runner.SimulationConfig;
 import com.traffic_simulator.simulation.simulation_runner.SimulationRunner;
 import com.traffic_simulator.simulation.simulation_runner.TickGenerator;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.PathFindingAlgorithm;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.StraightDijkstraAlgorithm;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("state")
 @RequiredArgsConstructor
 public class SimulationController {
+
     private final AreaSimulationContext areaSimulationContext;
+    @Autowired
     private SimulationRunner simulationRunner;
     private SimulationState roadMap;
+
+    @Autowired
     private TickGenerator tickGenerator;
+
     private PathFindingAlgorithm pathFindingAlgorithm;
+
+    //@Autowired
     private AreaGraph areaGraph;
+
+    @Autowired
+    private SimulationConfig simulationConfig;
 
     @SneakyThrows
     //@PostConstruct
@@ -42,10 +51,11 @@ public class SimulationController {
             System.out.println("Ya budu ispravlyat' " + e.getMessage());
         }
 
-        this.pathFindingAlgorithm = new StraightDijkstraAlgorithm(this.areaGraph);
+        simulationConfig.tickGenerator();
+        /*this.pathFindingAlgorithm = new StraightDijkstraAlgorithm(this.areaGraph);
         this.roadMap = new SimulationState(areaGraph, pathFindingAlgorithm);
         this.simulationRunner = new SimulationRunner(roadMap, new SimulationSettings());
-        this.tickGenerator = new TickGenerator(simulationRunner);
+        this.tickGenerator = new TickGenerator(simulationRunner);*/
     }
 
     @GetMapping("/run")

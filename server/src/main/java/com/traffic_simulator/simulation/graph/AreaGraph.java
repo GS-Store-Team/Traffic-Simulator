@@ -19,9 +19,13 @@ import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.utils.SimulationUtils;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
+@Scope("prototype")
 @ToString
 @Getter
 public class AreaGraph {

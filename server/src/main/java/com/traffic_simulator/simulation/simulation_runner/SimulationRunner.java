@@ -1,13 +1,11 @@
 
 package com.traffic_simulator.simulation.simulation_runner;
 
-import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
-import com.traffic_simulator.dto.AreaVersionDTO;
 import com.traffic_simulator.enums.BuildingType;
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.SimulationException;
-import com.traffic_simulator.models.AreaVersion;
 import com.traffic_simulator.simulation.GlobalSettings;
+import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.models.SimulationState;
 import com.traffic_simulator.simulation.models.buildings.Building;
@@ -57,6 +55,8 @@ public class SimulationRunner {
     }
 
     public void update() throws SimulationException {
+        updateEdges();
+        updateNodes();
         updateNavigators(currentTick);
 
         if (currentTick >= GlobalSettings.dayLengthInSeconds) {
@@ -70,6 +70,17 @@ public class SimulationRunner {
         }
     }
 
+    private void updateEdges() {
+        for (Edge edge : simulationState.getAreaGraph().getEdges()) {
+            edge.calculateWeight();
+        }
+    }
+
+    private void updateNodes() {
+        for (Node node : simulationState.getAreaGraph().getNodesSet()) {
+            node.calculateWeight();
+        }
+    }
     private void initCars() throws GraphConstructionException {
 
         HashMap<Node, CarPathsBunch> allPaths = simulationState.getPathfindingAlgorithm().compute();

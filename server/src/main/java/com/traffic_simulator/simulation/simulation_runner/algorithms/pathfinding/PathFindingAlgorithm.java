@@ -3,12 +3,15 @@ package com.traffic_simulator.simulation.simulation_runner.algorithms.pathfindin
 
 import com.traffic_simulator.exceptions.GraphConstructionException;
 import com.traffic_simulator.exceptions.PathsConstructionException;
+import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
-import com.traffic_simulator.simulation.graph.AreaGraph;
 import lombok.NonNull;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 
+@Component
 public abstract class PathFindingAlgorithm {
     protected AreaGraph graph;
     public PathFindingAlgorithm(@NonNull AreaGraph graph) {

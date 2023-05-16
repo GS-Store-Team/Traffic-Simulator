@@ -1,15 +1,15 @@
 package com.traffic_simulator.simulation.graph.graph_elements;
 
 import com.traffic_simulator.simulation.models.attachment_point.AttachmentPoint;
+import com.traffic_simulator.simulation.models.car.Navigator;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -27,9 +27,12 @@ public class Node {
     private List<Edge> rightEdges = new ArrayList<>();
     private List<Edge> leftEdges = new ArrayList<>();
 
+    private List<Navigator> navigators;
+
     public Node(AttachmentPoint attachmentPoint) {
         this.attachmentPoint = attachmentPoint;
         this.edgesToPrev = new HashSet<>();
+        this.navigators = new ArrayList<>();
     }
 
     public Node(Node node) {          //copying constructor
@@ -42,6 +45,7 @@ public class Node {
         this.inNodes = new ArrayList<>(node.inNodes);
         this.rightEdges = new ArrayList<>(node.rightEdges);
         this.leftEdges = new ArrayList<>(node.leftEdges);
+        this.navigators = new ArrayList<>();
     }
 
     public void addNode(Node node) {
@@ -58,5 +62,13 @@ public class Node {
         inNodes.add(node);
     }
 
+    public double calculateWeight() {
+        double weight = 0;
+        for (Navigator navigator : navigators) {
+            weight += 1;
+        }
+        this.weight = weight;
+        return weight;
+    }
 
 }

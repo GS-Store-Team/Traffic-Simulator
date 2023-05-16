@@ -6,10 +6,13 @@ import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 //TODO Придумать в каком виде извлекать путь
+
+@Component
 public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
 
     /**

@@ -1,18 +1,25 @@
 
 package com.traffic_simulator.simulation.models.car;
 
+import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.simulation.models.supportive.cell.Cell;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPath;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
-@Data
+@Setter
+@Getter
 @ToString
 public class Navigator {
     private double acceleration;
@@ -21,6 +28,7 @@ public class Navigator {
     private double accelerationLowerLimit;
     private long departureTime;
     private long workTime;
+    private double weight = 1;
 
     private List<Cell> advance;
     private Node currentNode;
@@ -108,11 +116,10 @@ public class Navigator {
         initSelfPositioning();
     }
 
-    public Coordinates getCurrentCoordinate() {
-        return currentCoordinate;
-    }
-
     private void updateCar() {
+
+        Edge oldEdge = currentEdge;
+        Node oldNode = currentNode;
 
         switch (moveState) {
             case NODE -> {
@@ -120,17 +127,24 @@ public class Navigator {
                 if (currentCoordinate == carPath.getEdges().peek().get(0).getStart().getAttachmentPoint().getCoordinates()) {
                     currentEdgeBunch = carPath.getEdges().pop();
                     currentEdge = currentEdgeBunch.get(0);
+
+                    currentNode.getNavigators().remove(this);
+                    currentEdge.getNavigators().add(this);
+
                     moveState = MoveState.ROAD;
                 }
             }
             case ROAD -> {
                 if (currentCoordinate == currentEdge.getStart().getAttachmentPoint().getCoordinates()) {
-                    moveCarInRoad(
-                            currentEdge.getStart().getAttachmentPoint().getCoordinates(),
+                    decideInRoad();
+                    moveInRoad(currentEdge.getStart().getAttachmentPoint().getCoordinates(),
                             currentEdge.getEnd().getAttachmentPoint().getCoordinates());
                 } else if (currentCoordinate == currentEdge.getEnd().getAttachmentPoint().getCoordinates()) {
                     currentNode = carPath.getNodes().pop();
                     moveState = MoveState.NODE;
+
+                    currentEdge.getNavigators().remove(this);
+                    currentNode.getNavigators().add(this);
                 }
             }
             case NONE -> {
@@ -139,35 +153,71 @@ public class Navigator {
 
     }
 
-    /*private void changeLane() {
-        switch (moveState) {
-            case NODE -> {
-                currentEdge = carPath.getEdges()
-                        .stream()
-                        .toList()
-                        .stream()
-                        .min(
-                                Comparator.comparingDouble(Edge::getWeight))
-                        .get();
-                currentCoordinate = currentEdge.getStart().getAttachmentPoint().getCoordinates();
-            }
-            case ROAD -> {
-                currentEdge = carPath.getEdges()
-                        .stream()
-                        .toList()
-                        .stream()
-                        .min(
-                                Comparator.comparingDouble(Edge::getWeight))
-                        .get();
-                currentCoordinate = currentEdge.getStart().getAttachmentPoint().getCoordinates();
-            }
-            case NONE -> {
-            }
-        }
-    }*/
+    public double getInEdgeRelativePosition() {
+        if (moveState == MoveState.ROAD) {
+            double fullNumber = currentEdgeLength();
+            double currentNumber = Math.sqrt(
+                    Math.pow(currentCoordinate.getX(), 2) + Math.pow(currentCoordinate.getY(), 2)
+                            - Math.pow(currentEdge.getStart().getAttachmentPoint().getCoordinates().getX(), 2) + Math.pow(currentEdge.getStart().getAttachmentPoint().getCoordinates().getY(), 2));
+            return currentNumber / fullNumber;
+        } else return 0;
+    }
 
-    private void moveCarInRoad(Coordinates roadStartPoint, Coordinates roadEndPoint) {
-        double length = lengthRoad(roadStartPoint, roadEndPoint);
+    private void decideInRoad() {
+        try {
+            Edge fasterEdge = currentEdgeBunch.stream().min(Comparator.comparingDouble(Edge::getWeight)).orElseThrow();
+            boolean canChangeLane = currentEdge.getNavigators().stream().anyMatch(
+                    navigator -> (navigator.currentEdge.equals(fasterEdge) &
+                            Math.abs(navigator.getCurrentCoordinate().getX() - this.currentCoordinate.getX()) < GlobalSettings.automobileLength * 4 ||
+                            Math.abs(navigator.getCurrentCoordinate().getY() - this.currentCoordinate.getY()) < GlobalSettings.automobileLength * 4 &
+                                    navigator.getInEdgeRelativePosition() < this.getInEdgeRelativePosition()
+                    )
+            );
+
+            if (canChangeLane) {
+                car.setCurrentVelocity(car.getCurrentVelocity() * 0.5f);
+                currentEdge.getNavigators().remove(this);
+                currentEdge = fasterEdge;
+                fasterEdge.getNavigators().add(this);
+                return;
+            }
+        } catch (NoSuchElementException ignored) {
+
+        }
+
+        try {
+            Navigator forwardNavigator = currentEdge.getNavigators().stream().filter(
+                    navigator -> (
+                            Math.abs(navigator.getCurrentCoordinate().getX() - this.currentCoordinate.getX()) <= GlobalSettings.automobileLength * 5 ||
+                                    Math.abs(navigator.getCurrentCoordinate().getY() - this.currentCoordinate.getY()) <= GlobalSettings.automobileLength * 5 &
+                                            navigator.getInEdgeRelativePosition() > this.getInEdgeRelativePosition()
+                    )
+            ).findFirst().orElseThrow();
+
+            double xSub = forwardNavigator.getCurrentCoordinate().getX() - this.currentCoordinate.getX();
+            double ySub = forwardNavigator.getCurrentCoordinate().getY() - this.currentCoordinate.getY();
+
+            if (xSub > GlobalSettings.automobileLength * 2 ||
+                    ySub > GlobalSettings.automobileLength * 2) {
+                car.setCurrentVelocity(car.getCurrentVelocity() * 0.5f);
+            } else if (xSub <= GlobalSettings.automobileLength ||
+                    ySub <= GlobalSettings.automobileLength) {
+                car.setCurrentVelocity(0);
+            } else {
+                if (car.getCurrentVelocity() <= 0) {
+                    car.setCurrentVelocity(3);
+                } else {
+                    car.setCurrentVelocity((car.getCurrentVelocity() * 1.5f) % SimulationSettings.automobileMaxVelocity);
+                }
+            }
+
+        } catch (NoSuchElementException ignored) {
+
+        }
+    }
+
+    private void moveInRoad(Coordinates roadStartPoint, Coordinates roadEndPoint) {
+        double length = currentEdgeLength();
         currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
         currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
         currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
@@ -178,7 +228,10 @@ public class Navigator {
 
     }
 
-    private double lengthRoad(Coordinates start, Coordinates end) {
+    private double currentEdgeLength() {
+        Coordinates start = currentEdge.getStart().getAttachmentPoint().getCoordinates();
+        Coordinates end = currentEdge.getEnd().getAttachmentPoint().getCoordinates();
+
         return Math.sqrt(Math.pow(end.getX() - start.getX(), 2) + Math.pow(end.getY() - start.getY(), 2));
     }
 }
