@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("state")
+@RequestMapping("/state")
 @RequiredArgsConstructor
 public class SimulationController {
     private final SimulationContext simulationContext;

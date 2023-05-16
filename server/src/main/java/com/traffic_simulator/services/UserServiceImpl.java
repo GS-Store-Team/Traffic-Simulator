@@ -8,15 +8,16 @@ import com.traffic_simulator.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
@@ -27,42 +28,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(UserDTO userDto) {
+    public void saveUser(UserDTO UserDTO) {
         User user = new User();
-        user.setUsername(userDto.getUsername());
+        user.setUsername(UserDTO.getUsername());
+        // encrypt the password using spring security
+        user.setPassword(passwordEncoder.encode(UserDTO.getPassword()));
 
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        Role role = roleRepository.findByName("ROLE_USER");
+        Role role = roleRepository.findByName("ROLE_ADMIN");
         if (role == null) {
             role = checkRoleExist();
         }
-        user.setRoles(List.of(role));
+        user.setRoles(Arrays.asList(role));
         userRepository.save(user);
     }
 
     @Override
-    public User findUserByUsername(String nickname) {
-        return userRepository.findByUsername(nickname);
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
     }
 
     @Override
     public List<UserDTO> findAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map((user) -> mapToUserDto(user))
+                .map((user) -> mapToUserDTO(user))
                 .collect(Collectors.toList());
     }
 
-    private UserDTO mapToUserDto(User user) {
-        UserDTO userDto = new UserDTO();
-        userDto.setUsername(user.getUsername());
-        return userDto;
+    private UserDTO mapToUserDTO(User user) {
+        UserDTO UserDTO = new UserDTO();
+        UserDTO.setId(user.getId());
+        UserDTO.setUsername(user.getUsername());
+        return UserDTO;
     }
 
     private Role checkRoleExist() {
         Role role = new Role();
-        role.setName("ROLE_USER");
+        role.setName("ROLE_ADMIN");
         return roleRepository.save(role);
     }
 }

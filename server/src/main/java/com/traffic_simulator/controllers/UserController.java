@@ -22,9 +22,10 @@ public class UserController {
     private UserServiceImpl userService;
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login";
     }
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         // create model object to store form data
@@ -34,27 +35,27 @@ public class UserController {
     }
 
     @PostMapping("/register/save")
-    public String registration(@Valid @ModelAttribute("user") UserDTO userDto,
+    public String registration(@Valid @ModelAttribute("user") UserDTO UserDTO,
                                BindingResult result,
                                Model model) {
-        User existingUser = userService.findUserByUsername(userDto.getUsername());
+        User existingUser = userService.findUserByUsername(UserDTO.getUsername());
 
         if (existingUser != null && existingUser.getUsername() != null && !existingUser.getUsername().isEmpty()) {
-            result.rejectValue("name", null,
-                    "There is already an account registered with the same nickname!");
+            result.rejectValue("username", null,
+                    "There is already an account registered with the same username");
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
-            return "register";
+            model.addAttribute("user", UserDTO);
+            return "/register";
         }
 
-        userService.saveUser(userDto);
+        userService.saveUser(UserDTO);
         return "redirect:/register?success";
     }
 
     @GetMapping("/users")
-    public String users(Model model){
+    public String users(Model model) {
         List<UserDTO> users = userService.findAllUsers();
         model.addAttribute("users", users);
         return "users";

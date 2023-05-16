@@ -4,7 +4,7 @@
 >
 <head>
     <meta charset="UTF-8">
-    <title>Registration and Login System</title>
+    <title>Traffic Simulator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
@@ -13,9 +13,8 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/index}">Registration and Login System</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" th:href="@{/index}">Traffic Simulator</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -27,7 +26,7 @@
         </div>
     </div>
 </nav>
-<br/><br/><br/>
+<br /><br /><br />
 <div class="container">
     <div class="row col-md-8 offset-md-2">
         <div class="card">
@@ -48,15 +47,15 @@
                 >
                     <div class="form-group mb-3">
                         <label class="form-label">Username</label>
-                        <label for="username"></label><input
+                        <input
                                 class="form-control"
                                 id="username"
                                 name="username"
                                 placeholder="Enter username"
-                                th:field="*{getUsername}"
+                                th:field="*{username}"
                                 type="text"
                         />
-                        <p th:errors="*{getUsername}" class="text-danger"
+                        <p th:errors = "*{username}" class="text-danger"
                            th:if="${#fields.hasErrors('username')}"></p>
                     </div>
 
@@ -70,7 +69,7 @@
                                 th:field="*{password}"
                                 type="password"
                         />
-                        <p th:errors="*{password}" class="text-danger"
+                        <p th:errors = "*{password}" class="text-danger"
                            th:if="${#fields.hasErrors('password')}"></p>
                     </div>
                     <div class="form-group">

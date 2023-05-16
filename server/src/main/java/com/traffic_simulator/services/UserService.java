@@ -6,8 +6,9 @@ import com.traffic_simulator.models.User;
 import java.util.List;
 
 public interface UserService {
-    void saveUser(UserDTO userDto);
-    List<UserDTO> findAllUsers();
+    void saveUser(UserDTO UserDTO);
 
     User findUserByUsername(String username);
+
+    List<UserDTO> findAllUsers();
 }
