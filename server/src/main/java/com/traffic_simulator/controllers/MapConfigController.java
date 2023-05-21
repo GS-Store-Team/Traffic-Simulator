@@ -32,7 +32,7 @@ public class MapConfigController {
     public FullMapDTO addRoad(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody RoadDTO roadDTO) {
-        areaVersionService.getState().areas().get(0).versions().stream().filter(a -> Objects.equals(a.id(), areaVersionId)).findFirst().get().roads().add(roadDTO);
+        areaVersionService.findById(areaVersionId).getRoads().add(roadDTO);
         return areaVersionService.getState();
     }
 

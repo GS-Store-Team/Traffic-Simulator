@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import java.util.List;
+
 @Configuration
 @AllArgsConstructor
 public class SimulationConfig {
@@ -17,7 +19,7 @@ public class SimulationConfig {
     @Autowired
     private StraightDijkstraAlgorithm straightDijkstraAlgorithm;
 
-    private AreaGraph areaGraph;
+    private List<AreaGraph> areaGraphs;
 
     @Bean
     @Scope("prototype")
@@ -33,7 +35,7 @@ public class SimulationConfig {
     @Bean
     @Scope("prototype")
     public SimulationState simulationState() {
-        return new SimulationState(areaGraph, straightDijkstraAlgorithm);
+        return new SimulationState(areaGraphs, straightDijkstraAlgorithm);
     }
 
     @Bean
