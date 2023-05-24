@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 @RequestMapping("/map")
 @RequiredArgsConstructor
@@ -27,57 +28,44 @@ public class MapConfigController {
         return areaVersionService.getState();
     }
 
+    @PostMapping("/areas/{areaId}/versions")
+    public FullMapDTO addAreaVersion(
+            @PathVariable("areaId") Long areaId,
+            @RequestBody String versionName) {
+        return areaVersionService.addAreaVersion(areaId, versionName);
+    }
+
+    @DeleteMapping("/areas/versions/{versionId}")
+    public FullMapDTO removeAreaVersion(@PathVariable("versionId") Long versionId) {
+        return areaVersionService.deleteAreaVersion(versionId);
+    }
+
     @PostMapping("/{areaVersion}/roads")
     public FullMapDTO addRoad(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody RoadDTO roadDTO) {
-        return null;
+        return areaVersionService.road(areaVersionId, roadDTO);
     }
 
-    @PatchMapping("/{areaVersion}/roads")
-    public FullMapDTO editRoad(
-            @PathVariable("areaVersion") Long areaVersionId,
-            @RequestBody RoadDTO roadDTO) {
-        return null;
-    }
-
-    @DeleteMapping("/{areaVersion}/roads/{id}")
-    public FullMapDTO deleteRoad(
-            @PathVariable("areaVersion") Long areaVersionId,
-            @PathVariable("id") Long roadId) {
-        return null;
+    @DeleteMapping("/roads/{id}")
+    public FullMapDTO deleteRoad(@PathVariable("id") Long roadId) {
+        return areaVersionService.removeRoad(roadId);
     }
 
     @PostMapping("/{areaVersion}/buildings")
     public FullMapDTO addBuilding(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody BuildingDTO buildingDTO) {
-        return null;
+        return areaVersionService.building(areaVersionId, buildingDTO);
     }
 
-    @PatchMapping("/{areaVersion}/buildings")
-    public FullMapDTO editRoad(
-            @PathVariable("areaVersion") Long areaVersionId,
-            @RequestBody BuildingDTO buildingDTO) {
-        return null;
-    }
-
-    @DeleteMapping("/{areaVersion}/buildings/{id}")
-    public FullMapDTO deleteBuilding(
-            @PathVariable("areaVersion") Long areaVersionId,
-            @PathVariable("id") Long buildingId) {
-        return null;
+    @DeleteMapping("/buildings/{id}")
+    public FullMapDTO deleteBuilding(@PathVariable("id") Long buildingId) {
+        return areaVersionService.removeBuilding(buildingId);
     }
 
     @PostMapping("/{areaVersion}/parking")
     public FullMapDTO addParking(
-            @PathVariable("areaVersion") Long areaVersionId,
-            @RequestBody ParkingDTO parkingDTO) {
-        return null;
-    }
-
-    @PatchMapping("/{areaVersion}/parking")
-    public FullMapDTO editParking(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody ParkingDTO parkingDTO) {
         return null;
