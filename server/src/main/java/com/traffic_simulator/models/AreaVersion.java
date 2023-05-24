@@ -3,6 +3,8 @@ package com.traffic_simulator.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -22,9 +24,9 @@ public class AreaVersion {
     @ManyToOne
     @JoinColumn(name = "area_id")
     private Area area;
-    @OneToMany(mappedBy = "areaVersion")
+    @OneToMany(mappedBy = "areaVersion", cascade = CascadeType.REMOVE)
     private List<Building> buildings;
-    @OneToMany(mappedBy = "areaVersion")
+    @OneToMany(mappedBy = "areaVersion", cascade = CascadeType.REMOVE)
     private List<Road> roads;
     private String label;
 }

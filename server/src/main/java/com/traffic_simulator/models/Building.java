@@ -15,12 +15,12 @@ public class Building {
     @ManyToOne
     @JoinColumn(name = "areaVersion_id")
     private AreaVersion areaVersion;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Point location;
     private Double inFlow;
     private Double outFlow;
     private BuildingType type;
     private String label;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Parking parking;
 }
