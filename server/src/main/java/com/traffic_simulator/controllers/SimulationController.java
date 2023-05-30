@@ -3,14 +3,17 @@ package com.traffic_simulator.controllers;
 
 import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
 import com.traffic_simulator.dto.FullMapDTO;
+import com.traffic_simulator.models.Area;
 import com.traffic_simulator.repository.AreaRepository;
 import com.traffic_simulator.repository.AreaVersionRepository;
 import com.traffic_simulator.simulation.graph.AreaGraph;
+import com.traffic_simulator.simulation.models.SimulationState;
 import com.traffic_simulator.simulation.simulation_runner.SimulationConfig;
 import com.traffic_simulator.simulation.simulation_runner.SimulationRunner;
 import com.traffic_simulator.simulation.simulation_runner.TickGenerator;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.StraightDijkstraAlgorithm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,19 +27,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SimulationController {
 
-    @Autowired
     private SimulationRunner simulationRunner;
 
-    @Autowired
     private TickGenerator tickGenerator;
     private List<AreaGraph> areaGraphs;
 
-    @Autowired
     private AreaRepository areaRepository;
 
-    @Autowired
+    private StraightDijkstraAlgorithm straightDijkstraAlgorithm;
+
     private SimulationConfig simulationConfig;
     private AreaVersionRepository areaVersionRepository;
+    private Map<Long, Long> areasToAreaVersionsMap;
     /*@SneakyThrows
     //@PostConstruct
     private void init() {
@@ -53,22 +55,30 @@ public class SimulationController {
 
     @GetMapping("/build")
     public ResponseEntity<?> build(Map<Long, Long> areasToAreaVersionsMap) {
+        this.areasToAreaVersionsMap = areasToAreaVersionsMap;
         for (Long areaId : areasToAreaVersionsMap.keySet()) {
             if (areasToAreaVersionsMap.get(areaId) != null) {
-                areaGraphs.add(new AreaGraph());
+                Area area = areaRepository.findById(areaId).orElseThrow();
+                areaGraphs.add(new AreaGraph(area, areasToAreaVersionsMap.get(areaId)));
             }
         }
         areaGraphs.forEach(AreaGraph::constructGraphMap);
 
-        simulationConfig.tickGenerator();
+        tickGenerator = new TickGenerator(
+                new SimulationRunner(
+                        new SimulationState(areaGraphs, new StraightDijkstraAlgorithm(), areasToAreaVersionsMap),
+                        new SimulationSettings())
+        );
 
-        return ResponseEntity.ok(simulationConfig.simulationState());
+        //simulationConfig.tickGenerator(areasToAreaVersionsMap);
+
+        return ResponseEntity.ok(tickGenerator.getSimulationRunner().getSimulationState());
     }
 
     @GetMapping("/run")
     public ResponseEntity<?> startSimulation() {
         if (simulationRunner == null) {
-            build();
+            build(areasToAreaVersionsMap);
         } else simulationRunner.reset();
 
         new Thread(tickGenerator).start();

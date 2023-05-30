@@ -23,6 +23,9 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
         super(areaGraph);
     }
 
+    public StraightDijkstraAlgorithm() {
+        super();
+    }
     @Override
     protected CarPathsBunch computeCarPath(Node start) throws PathsConstructionException {
         System.out.println("Dijkstra started! Start: " + start.getNodeIndex() + "\n");

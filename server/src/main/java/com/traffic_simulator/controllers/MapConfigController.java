@@ -4,6 +4,7 @@ import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.dto.ParkingDTO;
 import com.traffic_simulator.dto.RoadDTO;
+import com.traffic_simulator.models.Road;
 import com.traffic_simulator.models.areasConfig.AreasPlacement;
 import com.traffic_simulator.services.AreaVersionService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class MapConfigController {
     public FullMapDTO addRoad(
             @PathVariable("areaVersion") Long areaVersionId,
             @RequestBody RoadDTO roadDTO) {
-        areaVersionService.findById(areaVersionId).getRoads().add(roadDTO);
+        areaVersionService.findById(areaVersionId).getRoads().add(new Road());
         return areaVersionService.getState();
     }
 

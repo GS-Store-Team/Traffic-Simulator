@@ -1,6 +1,8 @@
 package com.traffic_simulator.simulation.graph;
 
 import com.traffic_simulator.dto.*;
+import com.traffic_simulator.models.Area;
+import com.traffic_simulator.models.AreaVersion;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
@@ -15,18 +17,15 @@ import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.utils.SimulationUtils;
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
-@Scope("prototype")
 @ToString
 @Getter
 public class AreaGraph {
     private List<Edge> edges = new ArrayList<>();
     private AreaDTO areaDTO;
+    private AreaVersion areaVersion;
     private AreaVersionDTO areaVersionDTO;
     private VersionValidation validation;
     private Set<Node> nodesSet = new HashSet<>();
@@ -55,6 +54,13 @@ public class AreaGraph {
                 .orElseThrow();
     }
 
+    public AreaGraph(Area areaVersion, Long versionId) {
+        this.areaVersion = areaVersion.getVersions().stream()
+                .filter(
+                        v -> v.getId().equals(versionId))
+                .findFirst()
+                .orElseThrow();
+    }
     public void constructGraphMap() {
         validation = new VersionValidation(areaVersionDTO);
         buildingErrors = validation.getBuildingsErrorId();

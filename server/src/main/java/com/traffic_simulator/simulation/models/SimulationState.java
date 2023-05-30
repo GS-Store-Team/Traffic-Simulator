@@ -32,24 +32,40 @@ public class SimulationState {
     }
 
     public List<Road> getAllRoads() {
-        return areaGraphs.getRoads();
+        List<Road> roads = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            roads.addAll(areaGraph.getRoads());
+        }
+        return roads;
     }
 
     public List<Building> getAllBuildings() {
-        return areaGraphs.getBuildings();
+        List<Building> buildings = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            buildings.addAll(areaGraph.getBuildings());
+        }
+        return buildings;
     }
 
     public List<LivingBuilding> getAllLivingBuildings() {
-        return areaGraphs.getLivingBuildings();
+        List<LivingBuilding> livingBuildings = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            livingBuildings.addAll(areaGraph.getLivingBuildings());
+        }
+        return livingBuildings;
     }
 
     public List<WorkplaceBuilding> getAllWorkplaceBuildings() {
-        return areaGraphs.getWorkplaceBuildings();
+        List<WorkplaceBuilding> workplaceBuildings = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            workplaceBuildings.addAll(areaGraph.getWorkplaceBuildings());
+        }
+        return workplaceBuildings;
     }
 
     private void init() {
         defaultInit(getAllLivingBuildings(), getAllWorkplaceBuildings());
-        for (Building building : areaGraphs.getBuildings()) {
+        for (Building building : getAllBuildings()) {
             if (building.getType() == BuildingType.LIVING) {
                 cars.addAll(building.getParkingZone().getCars());
             }
@@ -72,7 +88,6 @@ public class SimulationState {
     }
 
     public void update() {
-
-        areaGraphs.update();
+        areaGraphs.forEach(AreaGraph::update);
     }
 }

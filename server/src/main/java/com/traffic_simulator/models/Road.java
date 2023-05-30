@@ -1,5 +1,6 @@
 package com.traffic_simulator.models;
 
+import com.traffic_simulator.dto.RoadDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

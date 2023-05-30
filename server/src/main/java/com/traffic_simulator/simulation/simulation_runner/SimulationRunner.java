@@ -3,8 +3,10 @@ package com.traffic_simulator.simulation.simulation_runner;
 
 import com.traffic_simulator.enums.BuildingType;
 import com.traffic_simulator.exceptions.GraphConstructionException;
+import com.traffic_simulator.exceptions.PathsConstructionException;
 import com.traffic_simulator.exceptions.SimulationException;
 import com.traffic_simulator.simulation.GlobalSettings;
+import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.models.SimulationState;
 import com.traffic_simulator.simulation.models.buildings.Building;
@@ -12,11 +14,13 @@ import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.car.Navigator;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Getter
 public class SimulationRunner {
     private final SimulationState simulationState;
     private SimulationSettings simulationSettings;
@@ -62,6 +66,7 @@ public class SimulationRunner {
         }
         currentTick++;
     }
+
     private void updateNavigators(long secondsPassed) {
         for (Navigator navigator : navigators) {
             navigator.update(secondsPassed);
@@ -69,7 +74,7 @@ public class SimulationRunner {
     }
 
 
-    private void initCars() throws GraphConstructionException {
+    private void initCars() throws GraphConstructionException, PathsConstructionException {
 
         HashMap<Node, CarPathsBunch> allPaths = simulationState.getPathfindingAlgorithm().compute();
         List<Car> unmarkedCars = new ArrayList<>(cars);
@@ -77,19 +82,29 @@ public class SimulationRunner {
         int cycle = 1;
         long departureTime = 0;
         int carPackSize = simulationSettings.getSeedData().depCarPackSize();
-        List<Node> ends = simulationState.getAreaGraphs().getNodesSet()
-                .stream()
+        List<Node> ends = new ArrayList<>();
+        for (AreaGraph areaGraph : simulationState.getAreaGraphs()) {
+            ends.addAll(areaGraph.getNodesSet().stream().filter((Node n) -> !n.getAttachmentPoint().getConnectedBuildings()
+                            .stream()
+                            .filter((Building b) -> !b.getType().equals(BuildingType.LIVING))
+                            .toList()
+                            .isEmpty())
+                    .toList());
+        }
+                /*.stream()
                 .filter((Node n) -> !n.getAttachmentPoint().getConnectedBuildings()
                         .stream()
                         .filter((Building b) -> !b.getType().equals(BuildingType.LIVING))
                         .toList()
                         .isEmpty())
-                .toList();
+                .toList();*/
 
         while (!unmarkedCars.isEmpty()) {
             for (int i = 0; i < unmarkedCars.size(); i = (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
-                Node startPoint = simulationState.getAreaGraphs().getNodesSet().stream()
+                Node startPoint = simulationState.getAreaGraphs().stream()
+                        .map(a -> a.getNodesSet().stream().toList())
+                        .flatMap(List::stream)
                         .filter((Node n) -> n.getAttachmentPoint()
                                 .getConnectedBuildings()
                                 .contains(currentCar.getBuildingStart()))
