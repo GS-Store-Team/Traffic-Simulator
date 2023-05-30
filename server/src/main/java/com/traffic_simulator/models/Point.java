@@ -5,12 +5,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
-@AllArgsConstructor
 public class Point {
     @Id
     @GeneratedValue
@@ -18,7 +19,8 @@ public class Point {
     private Double x;
     private Double y;
 
-    public Point() {
-
+    public Point(Double x, Double y) {
+        this.x = x;
+        this.y = y;
     }
 }

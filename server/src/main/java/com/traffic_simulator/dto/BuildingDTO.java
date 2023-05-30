@@ -35,7 +35,7 @@ public record BuildingDTO(
                 0,
                 building.getType(),
                 building.getLabel(),
-                new ParkingDTO(building.getParking(), true),
+                building.getParking() == null ? null : new ParkingDTO(building.getParking(), true),
                 valid);
     }
 }

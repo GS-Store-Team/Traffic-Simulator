@@ -17,8 +17,8 @@ public class Road {
     private AreaVersion areaVersion;
     private Long forward;
     private Long reverse;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Point start;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private Point end;
 }
