@@ -21,8 +21,8 @@ public class Converters {
         return new AreaVersionDTO(
                 areaVersion.getId(),
                 new UserDTO(
-                        areaVersion.getUser().getId(),
-                        areaVersion.getUser().getName()),
+                        areaVersion.getUsr().getId(),
+                        areaVersion.getUsr().getName()),
                 areaVersion.getLocked(),
                 areaVersion.getCreated(),
                 areaVersion.getEdited(),

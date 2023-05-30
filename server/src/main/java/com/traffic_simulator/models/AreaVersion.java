@@ -16,7 +16,7 @@ public class AreaVersion {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "usr_id")
-    private User user;
+    private User usr;
     private Boolean locked;
     private Timestamp created;
     private Timestamp edited;

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public record AreaVersionDTO(
         Long id,
-        UserDTO user,
+        UserDTO usr,
         Boolean locked,
         Timestamp created,
         Timestamp edited,
@@ -20,7 +20,7 @@ public record AreaVersionDTO(
     public AreaVersionDTO(AreaVersion areaVersion) {
         this(
                 areaVersion.getId(),
-                new UserDTO(areaVersion.getUser().getId(), areaVersion.getUser().getName()),
+                new UserDTO(areaVersion.getUsr().getId(), areaVersion.getUsr().getName()),
                 areaVersion.getLocked(),
                 areaVersion.getCreated(),
                 areaVersion.getEdited(),

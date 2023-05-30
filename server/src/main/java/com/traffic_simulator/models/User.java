@@ -24,4 +24,10 @@ public class User {
     private String password;
     @OneToMany(mappedBy = "usr")
     private List<AreaVersion> areaVersions;
+
+    public User(String name, String password, List<AreaVersion> areaVersions) {
+        this.name = name;
+        this.password = password;
+        this.areaVersions = areaVersions;
+    }
 }
