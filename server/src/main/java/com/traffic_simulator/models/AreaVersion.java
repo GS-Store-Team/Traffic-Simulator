@@ -3,7 +3,6 @@ package com.traffic_simulator.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -17,7 +16,7 @@ public class AreaVersion {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "usr_id")
-    private Usr usr;
+    private User user;
     private Boolean locked;
     private Timestamp created;
     private Timestamp edited;

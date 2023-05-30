@@ -1,24 +1,26 @@
 
 package com.traffic_simulator.controllers;
 
-import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
 import com.traffic_simulator.dto.FullMapDTO;
+import com.traffic_simulator.dto.SimulationStateDTO;
 import com.traffic_simulator.models.Area;
 import com.traffic_simulator.repository.AreaRepository;
 import com.traffic_simulator.repository.AreaVersionRepository;
 import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.models.SimulationState;
-import com.traffic_simulator.simulation.simulation_runner.SimulationConfig;
 import com.traffic_simulator.simulation.simulation_runner.SimulationRunner;
 import com.traffic_simulator.simulation.simulation_runner.TickGenerator;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.StraightDijkstraAlgorithm;
+import com.traffic_simulator.utils.Converters;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,13 +32,12 @@ public class SimulationController {
     private SimulationRunner simulationRunner;
 
     private TickGenerator tickGenerator;
-    private List<AreaGraph> areaGraphs;
+    private List<AreaGraph> areaGraphs = new ArrayList<>();
 
+    @Autowired
     private AreaRepository areaRepository;
 
-    private StraightDijkstraAlgorithm straightDijkstraAlgorithm;
-
-    private SimulationConfig simulationConfig;
+    @Autowired
     private AreaVersionRepository areaVersionRepository;
     private Map<Long, Long> areasToAreaVersionsMap;
     /*@SneakyThrows
@@ -64,15 +65,12 @@ public class SimulationController {
         }
         areaGraphs.forEach(AreaGraph::constructGraphMap);
 
-        tickGenerator = new TickGenerator(
-                new SimulationRunner(
-                        new SimulationState(areaGraphs, new StraightDijkstraAlgorithm(), areasToAreaVersionsMap),
-                        new SimulationSettings())
-        );
+        simulationRunner = new SimulationRunner(
+                new SimulationState(areaGraphs, new StraightDijkstraAlgorithm(), areasToAreaVersionsMap),
+                new SimulationSettings());
+        tickGenerator = new TickGenerator(simulationRunner);
 
-        //simulationConfig.tickGenerator(areasToAreaVersionsMap);
-
-        return ResponseEntity.ok(tickGenerator.getSimulationRunner().getSimulationState());
+        return ResponseEntity.ok(Converters.simulationStateDTO(tickGenerator.getSimulationRunner().getSimulationState()));
     }
 
     @GetMapping("/run")
@@ -99,13 +97,12 @@ public class SimulationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/area_state")
-    public ResponseEntity<AreaGraphSimulationStateDTO> getState() {
-        return ResponseEntity.noContent().build();
-//        SimulationState simulationState = null;
-//        return simulationState != null ?
-//                ResponseEntity.ok(simulationState) :
-//                ResponseEntity.noContent().build();
+    @GetMapping("/simulation_state")
+    public ResponseEntity<SimulationStateDTO> getState() {
+        SimulationState simulationState = tickGenerator.getSimulationRunner().getSimulationState();
+        return simulationState != null ?
+                ResponseEntity.ok(Converters.simulationStateDTO(simulationState)) :
+                ResponseEntity.noContent().build();
     }
 
     @GetMapping("/config")
