@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class User {
+public class Usr {
     @Id
     @GeneratedValue
     private Long id;
@@ -25,7 +25,7 @@ public class User {
     @OneToMany(mappedBy = "usr")
     private List<AreaVersion> areaVersions;
 
-    public User(String name, String password, List<AreaVersion> areaVersions) {
+    public Usr(String name, String password, List<AreaVersion> areaVersions) {
         this.name = name;
         this.password = password;
         this.areaVersions = areaVersions;

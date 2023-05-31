@@ -9,7 +9,6 @@ import com.traffic_simulator.repository.AreaRepository;
 import com.traffic_simulator.repository.AreaVersionRepository;
 import com.traffic_simulator.repository.BuildingRepository;
 import com.traffic_simulator.repository.RoadRepository;
-import jakarta.persistence.GeneratedValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public class AreaVersionService {
     private final BuildingRepository buildingRepository;
 
     //delete this
-    private final User user = new User("admin", "1234", null);
+    private final Usr user = new Usr("admin", "1234", null);
 
     public FullMapDTO getState() {
         List<Area> areas = areaRepository.findAll();
