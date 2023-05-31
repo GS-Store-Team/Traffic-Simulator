@@ -3,7 +3,6 @@ package com.traffic_simulator.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 import java.sql.Timestamp;
 import java.util.List;

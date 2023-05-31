@@ -4,6 +4,7 @@ package com.traffic_simulator.controllers;
 import com.traffic_simulator.dto.AreaGraphSimulationStateDTO;
 import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.exceptions.InvalidMapException;
+import com.traffic_simulator.services.AreaVersionService;
 import com.traffic_simulator.simulation.context.AreaSimulationContext;
 import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.models.SimulationState;
@@ -16,10 +17,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SimulationController {
     private final AreaSimulationContext areaSimulationContext;
+    private final AreaVersionService areaVersionService;
     private SimulationRunner simulationRunner;
     private SimulationState roadMap;
     private TickGenerator tickGenerator;
@@ -37,13 +36,11 @@ public class SimulationController {
     @PostConstruct
     private void init() {
         this.areaGraph = new AreaGraph(areaSimulationContext);
-
         try {
             areaGraph.constructGraphMap();
         } catch (InvalidMapException e) {
             System.out.println("Ya budu ispravlyat' " + e.getMessage());
         }
-
         this.pathFindingAlgorithm = new StraightDijkstraAlgorithm(this.areaGraph);
         this.roadMap = new SimulationState(areaGraph, pathFindingAlgorithm);
         this.simulationRunner = new SimulationRunner(roadMap, new SimulationSettings());
@@ -84,12 +81,8 @@ public class SimulationController {
     }
 
     @GetMapping("/config")
-    public ResponseEntity<FullMapDTO> getMapConfig() {
-        return ResponseEntity.noContent().build();
-//        var mapState = areaGraph.getCurrentMapConfig();
-//        return mapState != null ?
-//                ResponseEntity.ok(mapState) :
-//                ResponseEntity.noContent().build();
+    public FullMapDTO getMapConfig() {
+        return areaVersionService.getState();
     }
 }
 

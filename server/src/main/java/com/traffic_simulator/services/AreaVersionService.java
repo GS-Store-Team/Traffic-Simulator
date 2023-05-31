@@ -4,16 +4,17 @@ import com.traffic_simulator.dto.AreaDTO;
 import com.traffic_simulator.dto.BuildingDTO;
 import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.dto.RoadDTO;
-import com.traffic_simulator.enums.BuildingType;
 import com.traffic_simulator.models.*;
-import com.traffic_simulator.repository.*;
+import com.traffic_simulator.repository.AreaRepository;
+import com.traffic_simulator.repository.AreaVersionRepository;
+import com.traffic_simulator.repository.BuildingRepository;
+import com.traffic_simulator.repository.RoadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -56,6 +57,13 @@ public class AreaVersionService {
 
     public FullMapDTO deleteAreaVersion(Long areaVersionId){
         areaVersionRepository.deleteById(areaVersionId);
+        return getState();
+    }
+
+    public FullMapDTO configureLock(Long areaVersionId, Boolean locked){
+        var version = areaVersionRepository.findById(areaVersionId).get();
+        version.setLocked(locked);
+        areaVersionRepository.save(version);
         return getState();
     }
 
@@ -108,6 +116,7 @@ public class AreaVersionService {
         building.setOutFlow(buildingDTO.outFlow());
         building.setType(buildingDTO.type());
         building.setLabel(buildingDTO.label());
+        building.setResidents(buildingDTO.residents());
 
         buildingRepository.save(building);
         return getState();

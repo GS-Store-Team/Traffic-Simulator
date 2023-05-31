@@ -19,6 +19,7 @@ public class Building {
     private Point location;
     private Double inFlow;
     private Double outFlow;
+    private Integer residents;
     private BuildingType type;
     private String label;
     @OneToOne(cascade = {CascadeType.ALL})
