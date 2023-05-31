@@ -27,10 +27,4 @@ public class SpringConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");
     }
-
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/users").setViewName("users");
-        registry.addViewController("/register").setViewName("register");
-        registry.addViewController("/login").setViewName("login");
-    }
 }
