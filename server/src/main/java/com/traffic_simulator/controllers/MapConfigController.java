@@ -40,6 +40,11 @@ public class MapConfigController {
         return areaVersionService.deleteAreaVersion(versionId);
     }
 
+    @PostMapping("/areas/versions/{versionId}/lock")
+    public FullMapDTO configureAreaVersion(@PathVariable("versionId") Long versionId, @RequestBody Boolean locked) {
+        return areaVersionService.configureLock(versionId, locked);
+    }
+
     @PostMapping("/{areaVersion}/roads")
     public FullMapDTO addRoad(
             @PathVariable("areaVersion") Long areaVersionId,
