@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("state")
+@RequestMapping("/simulation")
 @RequiredArgsConstructor
 public class SimulationController {
 
@@ -97,7 +97,7 @@ public class SimulationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/simulation_state")
+    @GetMapping("/state")
     public ResponseEntity<SimulationStateDTO> getState() {
         SimulationState simulationState = tickGenerator.getSimulationRunner().getSimulationState();
         return simulationState != null ?
