@@ -26,9 +26,9 @@ public class AreaVersionService {
     private final BuildingRepository buildingRepository;
 
     //delete this
-    private final Usr user = new Usr("admin", "1234", null);
+    private final Usr usr = new Usr(0L, "admin", "1234", null);
 
-    public FullMapDTO getState() {
+    public FullMapDTO getState(){
         List<Area> areas = areaRepository.findAll();
 
         return new FullMapDTO(
@@ -37,11 +37,11 @@ public class AreaVersionService {
         );
     }
 
-    public FullMapDTO addAreaVersion(Long areaId, String versionName) {
+    public FullMapDTO addAreaVersion(Long areaId, String versionName){
         Area area = areaRepository.getReferenceById(areaId);
         var areaVersion = new AreaVersion();
         areaVersion.setLabel(versionName);
-        areaVersion.setUsr(user);
+        areaVersion.setUsr(usr);
         var timestamp = new Timestamp(System.currentTimeMillis());
         areaVersion.setCreated(timestamp);
         areaVersion.setEdited(timestamp);
@@ -55,19 +55,26 @@ public class AreaVersionService {
         return getState();
     }
 
-    public FullMapDTO deleteAreaVersion(Long areaVersionId) {
+    public FullMapDTO deleteAreaVersion(Long areaVersionId){
         areaVersionRepository.deleteById(areaVersionId);
         return getState();
     }
 
-    public FullMapDTO road(Long areaVersionId, RoadDTO roadDTO) {
+    public FullMapDTO configureLock(Long areaVersionId, Boolean locked){
+        var version = areaVersionRepository.findById(areaVersionId).get();
+        version.setLocked(locked);
+        areaVersionRepository.save(version);
+        return getState();
+    }
+
+    public FullMapDTO road(Long areaVersionId, RoadDTO roadDTO){
         AreaVersion areaVersion = areaVersionRepository.getReferenceById(areaVersionId);
         areaVersion.setEdited(new Timestamp(System.currentTimeMillis()));
         areaVersionRepository.save(areaVersion);
 
         Road road = new Road();
 
-        if (roadDTO.id() != null) {
+        if(roadDTO.id() != null){
             road = roadRepository.findById(roadDTO.id()).get();
             Point start = road.getStart();
             start.setX(roadDTO.start().x());
@@ -76,7 +83,8 @@ public class AreaVersionService {
             Point end = road.getEnd();
             end.setX(roadDTO.end().x());
             end.setY(roadDTO.end().y());
-        } else {
+        }
+        else {
             road.setStart(new Point(roadDTO.start().x(), roadDTO.start().y()));
             road.setEnd(new Point(roadDTO.end().x(), roadDTO.end().y()));
         }
@@ -88,19 +96,19 @@ public class AreaVersionService {
         return getState();
     }
 
-    public FullMapDTO building(Long areaVersionId, BuildingDTO buildingDTO) {
+    public FullMapDTO building(Long areaVersionId, BuildingDTO buildingDTO){
         AreaVersion areaVersion = areaVersionRepository.getReferenceById(areaVersionId);
         areaVersion.setEdited(new Timestamp(System.currentTimeMillis()));
         areaVersionRepository.save(areaVersion);
 
         Building building = new Building();
 
-        if (buildingDTO.id() != null) {
+        if(buildingDTO.id() != null){
             building = buildingRepository.findById(buildingDTO.id()).get();
             Point location = building.getLocation();
             location.setX(buildingDTO.location().x());
             location.setY(buildingDTO.location().y());
-        } else {
+        }else {
             building.setLocation(new Point(buildingDTO.location().x(), buildingDTO.location().y()));
         }
         building.setAreaVersion(areaVersion);
@@ -108,17 +116,17 @@ public class AreaVersionService {
         building.setOutFlow(buildingDTO.outFlow());
         building.setType(buildingDTO.type());
         building.setLabel(buildingDTO.label());
+        building.setResidents(buildingDTO.residents());
 
         buildingRepository.save(building);
         return getState();
     }
 
-    public FullMapDTO removeRoad(Long roadId) {
+    public FullMapDTO removeRoad(Long roadId){
         roadRepository.deleteById(roadId);
         return getState();
     }
-
-    public FullMapDTO removeBuilding(Long buildingId) {
+    public FullMapDTO removeBuilding(Long buildingId){
         buildingRepository.deleteById(buildingId);
         return getState();
     }

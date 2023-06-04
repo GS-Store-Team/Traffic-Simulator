@@ -32,7 +32,7 @@ public record BuildingDTO(
                 new PointDTO(building.getLocation()),
                 building.getInFlow(),
                 building.getOutFlow(),
-                0,
+                building.getResidents(),
                 building.getType(),
                 building.getLabel(),
                 building.getParking() == null ? null : new ParkingDTO(building.getParking(), true),
