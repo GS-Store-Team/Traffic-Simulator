@@ -120,11 +120,7 @@ public class AreaGraph {
             }
         }
 
-        //Map<PointDTO, PointDTO> map1 = validation.getMap();
-
         for (BuildingDTO buildingDTO : areaVersionDTO.buildings()) {
-            //PointDTO pointDTO = map1.get(buildingDTO.location());
-            //Node node = map.get(pointDTO);
             Node node = new Node(
                     new AttachmentPoint(
                             new Coordinates(

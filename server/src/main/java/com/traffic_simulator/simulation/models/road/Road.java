@@ -13,7 +13,6 @@ import java.util.Map;
 
 @Getter
 @Setter
-//@ToString
 public class Road extends MapObject {
     private Coordinates startCoordinate;
     private Coordinates endCoordinate;
@@ -26,7 +25,6 @@ public class Road extends MapObject {
         this.endCoordinate = endPoint;
         this.rightLanes = new ArrayList<>();
         this.leftLanes = new ArrayList<>();
-        //this.naturalWeight = computeNaturalWeightByCoordinates();
         addLanes(rightLanesAmount, leftLanesAmount);
     }
 
@@ -38,22 +36,6 @@ public class Road extends MapObject {
             leftLanes.add(new Lane(i, endCoordinate, startCoordinate));
         }
     }
-
-    /*private List<Coordinates> laneCoordinatesShift(Coordinates startCoordinate, Coordinates endCoordinate) {
-        double x = Math.signum(endCoordinate.getX() - startCoordinate.getX());
-        double y = Math.signum(endCoordinate.getY() - startCoordinate.getY());
-
-        List<Coordinates> pair = new ArrayList<>();
-
-        if (x == 0 || y == 0) {
-            pair.add(new Coordinates(startCoordinate.getX()))
-        } else {
-
-        }
-
-        return new Coordinates(x, y);
-    }*/
-
     public double computeNaturalWeightByCoordinates() {
         return rightLanes.get(0).getCells().size() * GlobalSettings.cellNaturalWeightModifier;
     }
@@ -66,13 +48,9 @@ public class Road extends MapObject {
 
         return weight;
     }
-
-    //
     public double computeRightTrafficWeight() {
         return computeLanePackTrafficWeight(rightLanes);
     }
-
-    //
     public double computeLeftTrafficWeight() {
         return computeLanePackTrafficWeight(leftLanes);
     }

@@ -7,6 +7,7 @@ import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.simulation.models.supportive.cell.Cell;
+import com.traffic_simulator.simulation.models.supportive.cell.CrossroadCell;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPath;
 import lombok.Getter;
@@ -50,6 +51,20 @@ public class Navigator {
     public enum MoveState {NODE, ROAD, NONE}
 
     private MoveState moveState;
+
+    private CrossroadCell crossroadCellStart;
+    private CrossroadCell crossroadCellEnd;
+    private int xCellsRemaining = 0;
+    private int yCellsRemaining = 0;
+    private CrossroadCell currentCrossroadCell;
+    private CrossroadCell previousCrossroadCell;
+
+    private enum NodeMoveDirection {
+        HORIZONTAL,
+        VERTICAL
+    }
+
+    private NodeMoveDirection nodeMoveDirection;
 
     public Navigator(Car car, int accelerationLowerLimit, int accelerationUpperLimit, CarPath carPath) {
 
@@ -123,13 +138,17 @@ public class Navigator {
 
         switch (moveState) {
             case NODE -> {
+                decideInNode();
                 moveCarInNode();
-                if (currentCoordinate == carPath.getEdges().peek().get(0).getStart().getAttachmentPoint().getCoordinates()) {
+                if (currentCoordinate == crossroadCellEnd.getCoordinates()) {
                     currentEdgeBunch = carPath.getEdges().pop();
                     currentEdge = currentEdgeBunch.get(0);
 
                     currentNode.getNavigators().remove(this);
                     currentEdge.getNavigators().add(this);
+
+                    crossroadCellStart = null;
+                    crossroadCellEnd = null;
 
                     moveState = MoveState.ROAD;
                 }
@@ -224,8 +243,69 @@ public class Navigator {
         currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
     }
 
-    private void moveCarInNode() {
+    private void decideInNode() {
+        if (currentCrossroadCell == crossroadCellEnd) {
+            return;
+        }
+        if (crossroadCellStart == null || crossroadCellEnd == null) {
+            crossroadCellStart = currentEdge.getRefLane().getEndingCrossroadCell();
+            crossroadCellEnd = carPath.getEdges().peek()
+                    .get(
+                            currentEdge.getRefLane().getLocalId() % carPath.getEdges().peek().size())
+                    .getRefLane().getStartingCrossroadCell();
+            xCellsRemaining = currentNode.getAttachmentPoint().getXSide();
+            yCellsRemaining = currentNode.getAttachmentPoint().getYSide();
 
+            if (xCellsRemaining > yCellsRemaining) {
+                nodeMoveDirection = NodeMoveDirection.HORIZONTAL;
+            } else {
+                nodeMoveDirection = NodeMoveDirection.VERTICAL;
+            }
+        }
+
+        CrossroadCell[][] cellMatrix = currentNode.getAttachmentPoint().getCrossroadCellMatrix();
+
+        switch (nodeMoveDirection) {
+            case HORIZONTAL -> {
+                if (currentCrossroadCell.getX() != crossroadCellEnd.getX()) {
+                    if (currentCrossroadCell.getX() > crossroadCellEnd.getX()) {
+                        if (!currentCrossroadCell.isOccupied()) {
+                            previousCrossroadCell = currentCrossroadCell;
+                            currentCrossroadCell = currentCrossroadCell.getLeftCell();
+                        }
+                    } else if (currentCrossroadCell.getX() < crossroadCellEnd.getX()) {
+                        if (!currentCrossroadCell.isOccupied()) {
+                            previousCrossroadCell = currentCrossroadCell;
+                            currentCrossroadCell = currentCrossroadCell.getRightCell();
+                        }
+                    } else {
+                        nodeMoveDirection = NodeMoveDirection.VERTICAL;
+                    }
+                }
+            }
+            case VERTICAL -> {
+                if (currentCrossroadCell.getY() > crossroadCellEnd.getY()) {
+                    if (!currentCrossroadCell.isOccupied()) {
+                        previousCrossroadCell = currentCrossroadCell;
+                        currentCrossroadCell = currentCrossroadCell.getDownCell();
+                    }
+                } else if (currentCrossroadCell.getY() < crossroadCellEnd.getY()) {
+                    if (!currentCrossroadCell.isOccupied()) {
+                        previousCrossroadCell = currentCrossroadCell;
+                        currentCrossroadCell = currentCrossroadCell.getUpCell();
+                    }
+                } else {
+                    nodeMoveDirection = NodeMoveDirection.HORIZONTAL;
+                }
+            }
+        }
+    }
+
+    private void moveCarInNode() {
+        previousCrossroadCell.setOccupied(false);
+        currentCrossroadCell.setOccupied(true);
+        currentCoordinate.setX(currentCrossroadCell.getX());
+        currentCoordinate.setY(currentCrossroadCell.getY());
     }
 
     private double currentEdgeLength() {

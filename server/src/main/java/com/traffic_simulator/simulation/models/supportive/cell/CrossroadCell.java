@@ -13,7 +13,14 @@ public class CrossroadCell extends Cell {
     private CrossroadCell leftCell;
     private CrossroadCell rightCell;
 
-    public CrossroadCell(Coordinates coordinates) {
+    private int x;
+    private int y;
+
+    private boolean occupied = false;
+
+    public CrossroadCell(Coordinates coordinates, int x, int y) {
         super(coordinates);
+        this.x = x;
+        this.y = y;
     }
 }

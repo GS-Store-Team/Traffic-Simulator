@@ -4,6 +4,7 @@ import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.models.signs.road_signs.RoadSign;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.simulation.models.supportive.cell.Cell;
+import com.traffic_simulator.simulation.models.supportive.cell.CrossroadCell;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +23,9 @@ public class Lane {
     private List<RoadSign> roadSigns;
     private Coordinates startCoordinates;
     private Coordinates endCoordinates;
+
+    private CrossroadCell startingCrossroadCell;
+    private CrossroadCell endingCrossroadCell;
 
     public Lane(int localId, Coordinates startCoordinates, Coordinates endCoordinates) {
         this.cells = new ArrayList<>();
