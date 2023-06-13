@@ -11,45 +11,61 @@ import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.PathFindingAlgorithm;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Data
 public class SimulationState {
-    private AreaGraph areaGraph;
+    private List<AreaGraph> areaGraphs;
     private PathFindingAlgorithm pathfindingAlgorithm;
     private Set<Car> cars;
 
-    public SimulationState(AreaGraph areaGraph, PathFindingAlgorithm pathfindingAlgorithm) {
-        this.areaGraph = areaGraph;
+    private Map<Long, Long> areasToVersionsMap;
+
+    public SimulationState(List<AreaGraph> areaGraphs, PathFindingAlgorithm pathfindingAlgorithm, Map<Long, Long> areasToVersionsMap) {
+        this.areaGraphs = areaGraphs;
         this.pathfindingAlgorithm = pathfindingAlgorithm;
         this.cars = new HashSet<>();
+        this.areasToVersionsMap = areasToVersionsMap;
         init();
     }
 
     public List<Road> getAllRoads() {
-        return areaGraph.getRoads();
+        List<Road> roads = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            roads.addAll(areaGraph.getRoads());
+        }
+        return roads;
     }
 
     public List<Building> getAllBuildings() {
-        return areaGraph.getBuildings();
+        List<Building> buildings = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            buildings.addAll(areaGraph.getBuildings());
+        }
+        return buildings;
     }
 
     public List<LivingBuilding> getAllLivingBuildings() {
-        return areaGraph.getLivingBuildings();
+        List<LivingBuilding> livingBuildings = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            livingBuildings.addAll(areaGraph.getLivingBuildings());
+        }
+        return livingBuildings;
     }
 
     public List<WorkplaceBuilding> getAllWorkplaceBuildings() {
-        return areaGraph.getWorkplaceBuildings();
+        List<WorkplaceBuilding> workplaceBuildings = new ArrayList<>();
+        for (AreaGraph areaGraph : areaGraphs) {
+            workplaceBuildings.addAll(areaGraph.getWorkplaceBuildings());
+        }
+        return workplaceBuildings;
     }
 
     private void init() {
         defaultInit(getAllLivingBuildings(), getAllWorkplaceBuildings());
-        for (Building building : areaGraph.getBuildings()) {
+        for (Building building : getAllBuildings()) {
             if (building.getType() == BuildingType.LIVING) {
                 cars.addAll(building.getParkingZone().getCars());
             }
@@ -69,5 +85,9 @@ public class SimulationState {
                                 destinationBuildings.get(
                                         Math.abs(ThreadLocalRandom.current().nextInt()) % destinationBuildings.size())));
         });
+    }
+
+    public void update() {
+        areaGraphs.forEach(AreaGraph::update);
     }
 }

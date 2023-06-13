@@ -6,7 +6,6 @@ import com.traffic_simulator.simulation.GlobalSettings;
 import lombok.Getter;
 
 import java.util.concurrent.TimeUnit;
-
 @Getter
 public class TickGenerator implements Runnable {
     private SimulationRunner simulationRunner;

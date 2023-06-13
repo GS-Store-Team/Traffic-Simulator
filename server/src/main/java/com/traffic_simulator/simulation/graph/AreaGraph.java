@@ -1,10 +1,8 @@
 package com.traffic_simulator.simulation.graph;
 
-import com.traffic_simulator.dto.BuildingDTO;
-import com.traffic_simulator.dto.PointDTO;
-import com.traffic_simulator.dto.RoadDTO;
-import com.traffic_simulator.exceptions.InvalidMapException;
-import com.traffic_simulator.simulation.context.AreaSimulationContext;
+import com.traffic_simulator.dto.*;
+import com.traffic_simulator.models.Area;
+import com.traffic_simulator.models.AreaVersion;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
@@ -26,13 +24,18 @@ import java.util.*;
 @Getter
 public class AreaGraph {
     private List<Edge> edges = new ArrayList<>();
-    private final AreaSimulationContext areaSimulationContext;
-    private Validation validation;
+    private AreaDTO areaDTO;
+    private AreaVersion areaVersion;
+    private AreaVersionDTO areaVersionDTO;
+    private VersionValidation validation;
     private Set<Node> nodesSet = new HashSet<>();
     private List<Road> roads = new ArrayList<>();
     private List<Building> buildings = new ArrayList<>();
     private List<LivingBuilding> livingBuildings = new ArrayList<>();
     private List<WorkplaceBuilding> workplaceBuildings = new ArrayList<>();
+
+    private List<Long> buildingErrors;
+    private List<Long> roadErrors;
 
     //TODO Сделать свои исключения
 
@@ -42,24 +45,42 @@ public class AreaGraph {
      * Creates two edges (for left and right parts) for each road and connection between attachment point and building.
      **/
 
-    public AreaGraph(AreaSimulationContext areaSimulationContext) {
-        this.areaSimulationContext = areaSimulationContext;
+    public AreaGraph(AreaDTO areaDTO, Long versionId) {
+        this.areaDTO = areaDTO;
+        this.areaVersionDTO = areaDTO.versions().stream()
+                .filter(
+                        v -> v.id().equals(versionId))
+                .findFirst()
+                .orElseThrow();
     }
 
-    public void constructGraphMap() throws InvalidMapException {
-        validation = new Validation(areaSimulationContext);
-        validation.checkErrors();
+    public AreaGraph(Area areaVersion, Long versionId) {
+        this.areaVersion = areaVersion.getVersions().stream()
+                .filter(
+                        v -> v.getId().equals(versionId))
+                .findFirst()
+                .orElseThrow();
+    }
+    public void constructGraphMap() {
+        validation = new VersionValidation(areaVersionDTO);
+        buildingErrors = validation.getBuildingsErrorId();
+        roadErrors = validation.getRoadsErrorId();
+
         constructGraph();
     }
 
     public Map<String, List<Long>> getErrors() {
-        return validation.getErrors();
+        Map<String, List<Long>> errors = new HashMap<>();
+        errors.put("badRoads", roadErrors);
+        errors.put("badBuildings", buildingErrors);
+
+        return errors;
     }
 
     private void constructGraph() {
         Map<PointDTO, Node> map = new HashMap<>();
         Set<PointDTO> points = new HashSet<>();
-        for (RoadDTO roadDTO : areaSimulationContext.getRoadDTOList()) {
+        for (RoadDTO roadDTO : areaVersionDTO.roads()) {
             points.add(roadDTO.start());
             points.add(roadDTO.end());
         }
@@ -72,7 +93,7 @@ public class AreaGraph {
             nodesSet.add(node);
         }
 
-        for (RoadDTO roadDTO : areaSimulationContext.getRoadDTOList()) {
+        for (RoadDTO roadDTO : areaVersionDTO.roads()) {
             Node start = map.get(roadDTO.start());          //may equality check needed
             Node end = map.get(roadDTO.end());
             Road road = new Road(
@@ -99,11 +120,12 @@ public class AreaGraph {
             }
         }
 
-        Map<PointDTO, PointDTO> map1 = validation.getMap();
-
-        for (BuildingDTO buildingDTO : areaSimulationContext.getBuildingDTOList()) {
-            PointDTO pointDTO = map1.get(buildingDTO.location());
-            Node node = map.get(pointDTO);
+        for (BuildingDTO buildingDTO : areaVersionDTO.buildings()) {
+            Node node = new Node(
+                    new AttachmentPoint(
+                            new Coordinates(
+                                    buildingDTO.location().x(),
+                                    buildingDTO.location().y())));
             Building building;
             switch (buildingDTO.type()) {
                 case LIVING -> {
@@ -132,8 +154,21 @@ public class AreaGraph {
         }
     }
 
-    /*public AreaVersionDTO toAreaVersionDTO() {
-        return new AreaVersionDTO(areaSimulationContext.getAreaVersion().getId())
-    }*/
+    public void update() {
+        updateEdges();
+        updateNodes();
+    }
+
+    private void updateEdges() {
+        for (Edge edge : edges) {
+            edge.calculateWeight();
+        }
+    }
+
+    private void updateNodes() {
+        for (Node node : nodesSet) {
+            node.calculateWeight();
+        }
+    }
 }
 

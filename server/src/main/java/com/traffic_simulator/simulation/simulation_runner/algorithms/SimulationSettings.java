@@ -2,17 +2,16 @@ package com.traffic_simulator.simulation.simulation_runner.algorithms;
 
 import com.traffic_simulator.simulation.simulation_runner.seed.SeedData;
 import com.traffic_simulator.simulation.simulation_runner.seed.SeedDecoder;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class SimulationSettings {
-    private int automobileMaxAcceleration = 3;
-    private int automobileMinAcceleration = -10;
-    private double truckMaxAcceleration = 3;
-    private double truckMinAcceleration = -8;
-    private SeedData seedData = SeedDecoder.decode(1234567891234567L);
+    public static final float automobileMaxAcceleration = 3;
+    public static final float automobileMinAcceleration = -10;
+    public static final float automobileMaxVelocity = 20;
+    public static final float automobileMinVelocity = -5;
+
+    public static final float truckMaxAcceleration = 3;
+    public static final float truckMinAcceleration = -8;
+    public final SeedData seedData = SeedDecoder.decode(1234567891234567L);
 }

@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 @Getter
 @ToString
@@ -14,7 +15,7 @@ public class CarPath {
     private final Node start;
     private final Deque<Node> nodes;
     private final Node end;
-    private final Deque<Edge> edges;
+    private final Deque<List<Edge>> edges;
 
     public CarPath(Node start, Node end) {
         this.start = start;

@@ -15,4 +15,8 @@ public record PointDTO(
     public PointDTO (Point point) {
         this(point.getId(), point.getX(), point.getY());
     }
+
+    public PointDTO(Long id, int x, int y) {
+        this(id, (double)x, (double)y);
+    }
 }

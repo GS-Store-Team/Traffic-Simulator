@@ -1,7 +1,6 @@
 package com.traffic_simulator.dto;
 
 import com.traffic_simulator.models.AreaVersion;
-import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.stream.Collectors;
 
 public record AreaVersionDTO(
         Long id,
-        UserDTO user,
+        UserDTO usr,
         Boolean locked,
         Timestamp created,
         Timestamp edited,
