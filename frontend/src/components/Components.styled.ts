@@ -24,8 +24,28 @@ const Toolbar = styled.div`
   background-color: rgba(168, 143, 0, 0.2);
 `
 
+const Navigation = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 1;
+`
+
+const Icon = styled.div<{$disabled: boolean}> `
+  display: flex;
+  opacity: ${({$disabled}) => $disabled ? 0.4 : 0.7};
+  &:hover{
+    opacity: ${({$disabled}) => $disabled ? 0.4 : 1};
+  }
+`
+
 export const Styled = {
     Header,
     HeaderTitle,
     Toolbar,
+    Navigation,
+    Icon,
 }

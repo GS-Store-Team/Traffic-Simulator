@@ -7,13 +7,13 @@ const NoMatch = ({path}) => {
     const navigate = useNavigate();
     React.useEffect(() => {
         navigate(path);
-    }, []);
+    }, [navigate, path]);
     return (<div />);
 };
 
 export const publicRoutes = [
     {path:"/edit", component: <Editor />},
     {path:"/run", component: <Runner />},
-    {path:"*", component: <NoMatch path={"/run"} />}
+    {path: "*", component: <NoMatch path={"/run"} />}
 ]
 
