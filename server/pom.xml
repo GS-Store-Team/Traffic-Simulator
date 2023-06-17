@@ -11,6 +11,44 @@
 
   <build>
     <finalName>Traffic_Simulator</finalName>
+    <plugins>
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>3.2.1263</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <classPatterns>
+            <classPattern>com.traffic_simulator.controllers.*Controller</classPattern>
+            <classPattern>com.traffic_simulator.dto.*</classPattern>
+            <classPattern>com.traffic_simulator.enums.*</classPattern>
+          </classPatterns>
+          <generateSpringApplicationClient>true</generateSpringApplicationClient>
+          <outputKind>module</outputKind>
+          <outputFileType>implementationFile</outputFileType>
+          <outputFile>./../frontend/src/api/rest-client.ts</outputFile>
+          <sortDeclarations>true</sortDeclarations>
+          <sortTypeDeclarations>true</sortTypeDeclarations>
+          <noFileComment>true</noFileComment>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>cz.habarta.typescript-generator</groupId>
+            <artifactId>typescript-generator-spring</artifactId>
+            <version>3.2.1263</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
   </build>
 
   <properties>
@@ -18,7 +56,6 @@
     <maven.compiler.target>17</maven.compiler.target>
     <spring-boot-starter-version>3.0.0</spring-boot-starter-version>
   </properties>
-
 
   <dependencies>
 

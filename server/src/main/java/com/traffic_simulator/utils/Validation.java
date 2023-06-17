@@ -1,4 +1,4 @@
-package com.traffic_simulator.dto.validation;
+package com.traffic_simulator.utils;
 
 import com.traffic_simulator.dto.*;
 import com.traffic_simulator.models.areasConfig.AreasPlacement;
