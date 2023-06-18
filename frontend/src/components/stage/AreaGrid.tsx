@@ -5,6 +5,7 @@ import {StageContext} from "../../App";
 import {restClient} from "../../api/axios.config";
 import {AreasPlacement} from "../../api/rest-client";
 import {EditorContext} from "../../pages/Editor";
+import {RunnerContext} from "../../pages/Runner";
 
 interface AreaGridProps{
     size: Size
@@ -13,7 +14,7 @@ interface AreaGridProps{
 export const AreaGrid : FC<AreaGridProps> = ({size}) => {
     const { scale } = useContext(StageContext)
     const { area } = useContext(EditorContext)
-
+    const { state } = useContext(RunnerContext)
 
     const [placement, setPlacement] = useState<AreasPlacement>({elems:[]})
 
@@ -27,6 +28,12 @@ export const AreaGrid : FC<AreaGridProps> = ({size}) => {
         if(!area || currentArea?.areaVersionId === area.id) {
             tmp = currentArea ? currentArea.areaVersionId : -1
         }
+        if(state && currentArea){
+            tmp = -1
+            if(state.areaVersionDTO.map(v => v.id).includes(currentArea.areaVersionId)){
+                tmp = currentArea.areaVersionId
+            }
+        }
         switch (tmp){
             case 0: return "rgba(0,0,0,.1)"
             case 1: return "rgba(252,118,118,0.1)"
@@ -37,7 +44,7 @@ export const AreaGrid : FC<AreaGridProps> = ({size}) => {
             case 6: return "rgba(239,101,255,0.1)"
             default: return "white"
         }
-    }, [area, placement])
+    }, [area, placement, state])
 
     const grid = useMemo(() => {
         const arr = []

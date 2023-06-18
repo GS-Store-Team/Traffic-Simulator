@@ -43,7 +43,7 @@ public class Validation {
         boolean valid = versionValid;
         versionValid = true;
 
-        return new AreaVersionDTO(areaVersionDTO.id(), areaVersionDTO.usr(), areaVersionDTO.locked(),
+        return new AreaVersionDTO(areaVersionDTO.areaId(), areaVersionDTO.id(), areaVersionDTO.usr(), areaVersionDTO.locked(),
                 areaVersionDTO.created(), areaVersionDTO.edited(), areaVersionDTO.label(),
                 newBuildings, newRoads, valid);
     }

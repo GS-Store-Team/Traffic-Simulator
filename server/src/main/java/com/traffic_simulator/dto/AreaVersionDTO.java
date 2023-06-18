@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record AreaVersionDTO(
+        Long areaId,
         Long id,
         UserDTO usr,
         Boolean locked,
@@ -19,6 +20,7 @@ public record AreaVersionDTO(
 ){
     public AreaVersionDTO(AreaVersion areaVersion) {
         this(
+                areaVersion.getArea().getId(),
                 areaVersion.getId(),
                 new UserDTO(areaVersion.getUsr().getId(), areaVersion.getUsr().getName()),
                 areaVersion.getLocked(),

@@ -10,7 +10,7 @@ interface BaseStageProps {
     layers?: typeof Layer[]
 }
 
-const HEIGHT_SHIFT = 120
+export const HEIGHT_SHIFT = 120
 
 export const BaseStage : FC<BaseStageProps> = ({layers}) => {
     const { scale, setScale, coordinates, setCoordinates } = useContext(StageContext)

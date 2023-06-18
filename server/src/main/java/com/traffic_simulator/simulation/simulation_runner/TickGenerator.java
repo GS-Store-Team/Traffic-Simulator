@@ -29,11 +29,12 @@ public class TickGenerator implements Runnable {
                     }
                     System.out.println("tic");
 
-                    TimeUnit.MILLISECONDS.sleep(1000 / ticksPerSecond);     //inside of the if block! Important point in debugging!
+                    TimeUnit.MILLISECONDS.sleep(1000 / ticksPerSecond);
+                } else {
+                    TimeUnit.MILLISECONDS.sleep(200);
                 }
             }
-        } catch (InterruptedException ignore) {
-        }
+        } catch (InterruptedException ignore) {}
     }
 
     public void play() {
@@ -44,4 +45,3 @@ public class TickGenerator implements Runnable {
         running = false;
     }
 }
-

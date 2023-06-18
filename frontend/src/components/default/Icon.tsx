@@ -9,9 +9,14 @@ import lock from "../../ui/lock.png"
 import publish from "../../ui/publish.png"
 import ok from "../../ui/ok.png"
 import blocked from "../../ui/blocked.png"
+import reset from "../../ui/reset.png"
+import play from "../../ui/play.png"
+import pause from "../../ui/pause.png"
+import redSquare from "../../ui/redSquare.png"
+import arrow from "../../ui/arrow.png"
 
 export type IconType =
-    "home" | "minus" | "plus" | "settings" | "trash-bin" | "lock" | "publish" | "ok" | "blocked"
+    "home" | "minus" | "plus" | "settings" | "trash-bin" | "lock" | "publish" | "ok" | "blocked" | "reset" | "play" | "pause" | "red-square" | "arrow"
 
 function getPng(title : IconType){
     switch (title){
@@ -24,6 +29,11 @@ function getPng(title : IconType){
         case "publish": return publish
         case "ok": return ok
         case "blocked": return blocked
+        case "pause": return pause
+        case "play": return play
+        case "reset": return reset
+        case "red-square": return redSquare
+        case "arrow": return arrow
     }
 }
 
@@ -37,8 +47,8 @@ interface IconProps {
 export const Icon : FC<IconProps> = ({img, onClick, disabled = false, size = 22}) => {
     const handleClick = useCallback(() => !disabled && onClick && onClick(), [disabled, onClick])
     return(
-        <S.Icon $disabled={disabled} style={{width: `${size}px`, height: `${size}px`, maxWidth: `${size}px`, maxHeight: `${size}px`, cursor: disabled? 'not-allowed':'pointer'}} onClick={handleClick}>
-            <img style={{width: "100%", height: "100%"}} draggable={false} src={getPng(img)} alt={":("}/>
+        <S.Icon $disabled={disabled} style={{width: `${size}px`, height: `${size}px`, minWidth: `${size}px`, minHeight: `${size}px`, cursor: disabled? 'not-allowed':'pointer'}} onClick={handleClick}>
+            <img style={{width: `${size}px`, height: `${size}px`}} draggable={false} src={getPng(img)} alt={":("}/>
         </S.Icon>
     )
 }

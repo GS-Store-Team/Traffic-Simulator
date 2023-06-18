@@ -53,6 +53,8 @@ export const EditorToolbar = () => {
 
     return (
         <S.Toolbar>
+            {area && <S.AreaHeading>{area.label}</S.AreaHeading>}
+
             <FlexRow gap={"1em"}>
                 <DropdownButton title={area ? area.label.toUpperCase() : "FULL MAP"}>
                     <DropdownItem onClick={() => setAreaId(undefined)}>FULL MAP</DropdownItem>

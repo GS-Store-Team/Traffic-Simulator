@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {HEIGHT_SHIFT} from "./stage/BaseStage";
 
 const Header = styled.div`
   background-color: rgba(0, 169, 143, 0.8);
@@ -61,6 +62,27 @@ const VersionInfo = styled.div`
   align-items: flex-end;
 `
 
+const AreaHeading = styled.div`
+  position: absolute;
+  z-index: 1;
+  font-size: 30px;
+  top: ${HEIGHT_SHIFT}px;
+  left: 50%;
+  transform: translateX(-50%);
+`
+
+const Slider = styled.input`
+  background: linear-gradient(to right, rgba(0, 169, 143, 0.8) 0%, red 100%);
+  width: 80px;
+  border-radius: 2px;
+  margin: auto;
+  height: 4px;
+  accent-color: rebeccapurple;
+  box-shadow: 0 0 3px black;
+  -webkit-appearance: none;
+  cursor: pointer;
+`
+
 export const Styled = {
     Header,
     HeaderTitle,
@@ -68,4 +90,6 @@ export const Styled = {
     Navigation,
     Icon,
     VersionInfo,
+    AreaHeading,
+    Slider,
 }

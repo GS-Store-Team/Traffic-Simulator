@@ -19,6 +19,7 @@ public class Converters {
 
     public static AreaVersionDTO toAreaVersionDTO(AreaVersion areaVersion) {
         return new AreaVersionDTO(
+                areaVersion.getArea().getId(),
                 areaVersion.getId(),
                 new UserDTO(
                         areaVersion.getUsr().getId(),

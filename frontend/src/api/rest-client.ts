@@ -100,51 +100,43 @@ export class RestApplicationClient {
     }
 
     /**
-     * HTTP GET /simulation/build
-     * Java method: com.traffic_simulator.controllers.SimulationController.build
+     * HTTP POST /simulation/destroy
+     * Java method: com.traffic_simulator.controllers.SimulationController.destroy
      */
-    build(): RestResponse<any> {
-        return this.httpClient.request({ method: "GET", url: uriEncoding`simulation/build` });
+    destroy(): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`simulation/destroy` });
     }
 
     /**
-     * HTTP GET /simulation/config
-     * Java method: com.traffic_simulator.controllers.SimulationController.getMapConfig
+     * HTTP POST /simulation/play
+     * Java method: com.traffic_simulator.controllers.SimulationController.play
      */
-    getMapConfig(): RestResponse<FullMapDTO> {
-        return this.httpClient.request({ method: "GET", url: uriEncoding`simulation/config` });
+    play(): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`simulation/play` });
     }
 
     /**
-     * HTTP GET /simulation/run
-     * Java method: com.traffic_simulator.controllers.SimulationController.startSimulation
+     * HTTP POST /simulation/run
+     * Java method: com.traffic_simulator.controllers.SimulationController.run
      */
-    startSimulation(): RestResponse<any> {
-        return this.httpClient.request({ method: "GET", url: uriEncoding`simulation/run` });
-    }
-
-    /**
-     * HTTP GET /simulation/run/play
-     * Java method: com.traffic_simulator.controllers.SimulationController.playSimulation
-     */
-    playSimulation(): RestResponse<any> {
-        return this.httpClient.request({ method: "GET", url: uriEncoding`simulation/run/play` });
-    }
-
-    /**
-     * HTTP GET /simulation/run/stop
-     * Java method: com.traffic_simulator.controllers.SimulationController.stopSimulation
-     */
-    stopSimulation(): RestResponse<any> {
-        return this.httpClient.request({ method: "GET", url: uriEncoding`simulation/run/stop` });
+    run(): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`simulation/run` });
     }
 
     /**
      * HTTP GET /simulation/state
-     * Java method: com.traffic_simulator.controllers.SimulationController.getState
+     * Java method: com.traffic_simulator.controllers.SimulationController.state
      */
-    getState(): RestResponse<SimulationStateDTO> {
+    state(): RestResponse<SimulationStateDTO> {
         return this.httpClient.request({ method: "GET", url: uriEncoding`simulation/state` });
+    }
+
+    /**
+     * HTTP POST /simulation/stop
+     * Java method: com.traffic_simulator.controllers.SimulationController.stop
+     */
+    stop(): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`simulation/stop` });
     }
 }
 
@@ -156,6 +148,7 @@ export interface AreaDTO {
 }
 
 export interface AreaVersionDTO {
+    areaId: number;
     buildings: BuildingDTO[];
     created: Date;
     edited: Date;
