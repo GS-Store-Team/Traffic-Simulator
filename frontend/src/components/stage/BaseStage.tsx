@@ -1,18 +1,14 @@
-import React, {FC, useCallback, useContext, useEffect, useState} from "react";
-import {Layer, Stage} from "react-konva";
+import React, {FC, PropsWithChildren, useCallback, useContext, useEffect, useState} from "react";
+import {Stage} from "react-konva";
 import {Size} from "../../Types";
 import {AreaGrid} from "./AreaGrid";
 import Konva from "konva";
 import {StageContext} from "../../App";
 import {MAX_SCALE, MIN_SCALE, SCALE_BY} from "../../Constants";
 
-interface BaseStageProps {
-    layers?: typeof Layer[]
-}
-
 export const HEIGHT_SHIFT = 120
 
-export const BaseStage : FC<BaseStageProps> = ({layers}) => {
+export const BaseStage : FC<PropsWithChildren> = ({ children}) => {
     const { scale, setScale, coordinates, setCoordinates } = useContext(StageContext)
     const [size, setSize] = useState<Size>({width:window.innerWidth, height:window.innerHeight - HEIGHT_SHIFT})
 
@@ -60,7 +56,7 @@ export const BaseStage : FC<BaseStageProps> = ({layers}) => {
             onDragEnd={handleEndDrag}
         >
             <AreaGrid size={size}/>
-            {layers && layers.map(l => l)}
+            {children}
         </Stage>
     )
 }

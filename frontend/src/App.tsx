@@ -7,6 +7,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.js';
 import {Coordinates} from "./api/rest-client";
 import {INITIAL_SCALE} from "./Constants";
+import {DefaultObjectProvider} from "./components/contexts/DefaultObjectProvider";
 
 const router = createBrowserRouter([
     {path: "/editor", element: <Editor/>},
@@ -49,10 +50,12 @@ function App() {
     }, [coordinates, scale])
 
     return (
-        <StageContext.Provider value={context}>
-            <RouterProvider router={router}/>
-            {infoModal && <InfoModal $height={"300px"} title={"NETWORK ERROR"} message={infoModal} onOk={handleCloseModal}/>}
-        </StageContext.Provider>
+        <DefaultObjectProvider>
+            <StageContext.Provider value={context}>
+                <RouterProvider router={router}/>
+                {infoModal && <InfoModal $height={"300px"} title={"NETWORK ERROR"} message={infoModal} onOk={handleCloseModal}/>}
+            </StageContext.Provider>
+        </DefaultObjectProvider>
     );
 }
 

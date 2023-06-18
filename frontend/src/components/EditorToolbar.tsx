@@ -10,9 +10,12 @@ import {restClient} from "../api/axios.config";
 import {Modal} from "./default/modal/Modal";
 import {Input} from "./default/Form";
 import {Btn} from "./default/Btn";
+import {DefaultObjectContext} from "./contexts/DefaultObjectProvider";
 
 export const EditorToolbar = () => {
     const { map, setMap, area, setAreaId, version, setVersionId } = useContext(EditorContext)
+    const {dBuilding, dRoad} = useContext(DefaultObjectContext)
+
     const [newVersionDialog, setNewVersionDialog] = useState<boolean>(false)
     const [value, setValue] = useState<string>('')
     const [versionAsync, setVersionAsync] = useState<{id: number}>()
@@ -47,6 +50,9 @@ export const EditorToolbar = () => {
         })
     }, [setMap, version])
 
+    const handleAddBuilding = useCallback(() => version && restClient.addBuilding(version.id, dBuilding).then(res => setMap(res, true)), [dBuilding, setMap, version])
+    const handleAddRoad = useCallback(() => version && restClient.addRoad(version.id, dRoad).then(res => setMap(res, true)), [dRoad, setMap, version])
+
     if(!map){
         return <S.Toolbar/>
     }
@@ -71,8 +77,8 @@ export const EditorToolbar = () => {
             { version &&
                 <>
                     <FlexRow gap={"1em"}>
-                        <Btn info ><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD BUILDING</FlexRow></Btn>
-                        <Btn info ><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD ROAD</FlexRow></Btn>
+                        <Btn info onClick={handleAddBuilding}><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD BUILDING</FlexRow></Btn>
+                        <Btn info onClick={handleAddRoad}><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD ROAD</FlexRow></Btn>
                         { version.locked ?
                             <Btn danger onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"lock"}/>LOCKED</FlexRow></Btn>
                             : <Btn success onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"ok"} />PUBLISHED</FlexRow></Btn>

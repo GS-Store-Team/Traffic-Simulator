@@ -165,12 +165,12 @@ export interface AreasPlacement {
 }
 
 export interface BuildingDTO {
-    id: number;
+    id?: number;
     inFlow: number;
     label: string;
     location: PointDTO;
     outFlow: number;
-    parking: ParkingDTO;
+    parking?: ParkingDTO;
     residents: number;
     type: BuildingType;
     valid: boolean;
@@ -210,7 +210,7 @@ export interface Point {
 }
 
 export interface PointDTO {
-    id: number;
+    id?: number;
     x: number;
     y: number;
 }
@@ -218,7 +218,7 @@ export interface PointDTO {
 export interface RoadDTO {
     end: PointDTO;
     forward: number;
-    id: number;
+    id?: number;
     reverse: number;
     start: PointDTO;
     valid: boolean;
