@@ -18,8 +18,8 @@ export const Modal : React.FC<IModal> = ({onAccept, onDecline, children, $width,
             <S.Modal $height={$height} $width={$width}>
                 {children}
                 <S.Buttons>
-                    <Btn onClick={onDecline} style={{width: "90px"}}>DECLINE</Btn>
-                    <Btn disabled={disableAccept} style={{width: "90px"}} onClick={onAccept}>ACCEPT</Btn>
+                    <Btn secondary onClick={onDecline} style={{width: "90px"}}>DECLINE</Btn>
+                    <Btn primary disabled={disableAccept} style={{width: "90px"}} onClick={onAccept}>ACCEPT</Btn>
                 </S.Buttons>
             </S.Modal>
         </S.ModalBackground>

@@ -27,10 +27,10 @@ public class MapConfigController {
         return areaVersionService.getState();
     }
 
-    @PostMapping("/areas/{areaId}/versions")
+    @PostMapping("/areas/{areaId}/versions/{versionName}")
     public FullMapDTO addAreaVersion(
             @PathVariable("areaId") Long areaId,
-            @RequestBody String versionName) {
+            @PathVariable("versionName") String versionName) {
         return areaVersionService.addAreaVersion(areaId, versionName);
     }
 
@@ -39,8 +39,8 @@ public class MapConfigController {
         return areaVersionService.deleteAreaVersion(versionId);
     }
 
-    @PostMapping("/areas/versions/{versionId}/lock")
-    public FullMapDTO configureAreaVersion(@PathVariable("versionId") Long versionId, @RequestBody Boolean locked) {
+    @PostMapping("/areas/versions/{versionId}/lock/{locked}")
+    public FullMapDTO configureAreaVersion(@PathVariable("versionId") Long versionId, @PathVariable("locked") Boolean locked) {
         return areaVersionService.configureLock(versionId, locked);
     }
 

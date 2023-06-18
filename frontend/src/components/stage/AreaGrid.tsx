@@ -22,13 +22,10 @@ export const AreaGrid : FC<AreaGridProps> = ({size}) => {
     }, [])
 
     const areaColor = useCallback((key : number) => {
-        if(!area){
-            return
-        }
-        const currentArea = placement.elems.find(c => c.cellIds.includes(key))
+        const currentArea = placement?.elems.find(c => c.cellIds.includes(key))
         let tmp = -1
-        if(area && currentArea?.areaVersionId === area) {
-            tmp = currentArea.areaVersionId
+        if(!area || currentArea?.areaVersionId === area.id) {
+            tmp = currentArea ? currentArea.areaVersionId : -1
         }
         switch (tmp){
             case 0: return "rgba(0,0,0,.1)"
@@ -40,7 +37,7 @@ export const AreaGrid : FC<AreaGridProps> = ({size}) => {
             case 6: return "rgba(239,101,255,0.1)"
             default: return "white"
         }
-    }, [area, placement.elems])
+    }, [area, placement])
 
     const grid = useMemo(() => {
         const arr = []

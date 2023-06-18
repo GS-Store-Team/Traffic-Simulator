@@ -36,19 +36,19 @@ export class RestApplicationClient {
     }
 
     /**
-     * HTTP POST /map/areas/versions/{versionId}/lock
+     * HTTP POST /map/areas/versions/{versionId}/lock/{locked}
      * Java method: com.traffic_simulator.controllers.MapConfigController.configureAreaVersion
      */
-    configureAreaVersion(versionId: number, arg1: boolean): RestResponse<FullMapDTO> {
-        return this.httpClient.request({ method: "POST", url: uriEncoding`map/areas/versions/${versionId}/lock`, data: arg1 });
+    configureAreaVersion(versionId: number, locked: boolean): RestResponse<FullMapDTO> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`map/areas/versions/${versionId}/lock/${locked}` });
     }
 
     /**
-     * HTTP POST /map/areas/{areaId}/versions
+     * HTTP POST /map/areas/{areaId}/versions/{versionName}
      * Java method: com.traffic_simulator.controllers.MapConfigController.addAreaVersion
      */
-    addAreaVersion(areaId: number, arg1: string): RestResponse<FullMapDTO> {
-        return this.httpClient.request({ method: "POST", url: uriEncoding`map/areas/${areaId}/versions`, data: arg1 });
+    addAreaVersion(areaId: number, versionName: string): RestResponse<FullMapDTO> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`map/areas/${areaId}/versions/${versionName}` });
     }
 
     /**

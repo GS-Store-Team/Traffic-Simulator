@@ -5,12 +5,12 @@ const axiosWithInterceptors = axios
 axiosWithInterceptors.defaults.baseURL = 'http://localhost:8080/';
 
 axiosWithInterceptors.interceptors?.response.use(
-    response => response,
+    response => response.data,
     error => {
         if(error.code === "ERR_NETWORK") {
             window.dispatchEvent(new Event('ERR_NETWORK'))
         }
-        return error
+        return error.data
     }
 )
 

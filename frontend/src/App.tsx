@@ -4,6 +4,7 @@ import {Editor} from "./pages/Editor";
 import {Runner} from "./pages/Runner";
 import {InfoModal} from "./components/default/modal/InfoModal";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/js/bootstrap.js';
 import {Coordinates} from "./api/rest-client";
 import {INITIAL_SCALE} from "./Constants";
 

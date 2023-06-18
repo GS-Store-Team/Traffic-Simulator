@@ -22,6 +22,10 @@ const HeaderTitle = styled.div<{ selected: boolean}>`
 const Toolbar = styled.div`
   height: 60px;
   background-color: rgba(168, 143, 0, 0.2);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
 `
 
 const Navigation = styled.div`
@@ -42,10 +46,26 @@ const Icon = styled.div<{$disabled: boolean}> `
   }
 `
 
+const VersionInfo = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0,0,0,.2);
+  width: 220px;
+  height: 160px;
+  z-index: 1;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  align-items: flex-end;
+`
+
 export const Styled = {
     Header,
     HeaderTitle,
     Toolbar,
     Navigation,
     Icon,
+    VersionInfo,
 }

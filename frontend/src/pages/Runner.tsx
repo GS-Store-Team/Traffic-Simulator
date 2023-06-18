@@ -1,11 +1,11 @@
 import {Header} from "../components/Header";
-import {Toolbar} from "../components/Toolbar";
+import {RunnerToolbar} from "../components/RunnerToolbar";
 
 export const Runner = () => {
     return (
         <>
             <Header page={"runner"}/>
-            <Toolbar page={"runner"}/>
+            <RunnerToolbar/>
         </>
     )
 }

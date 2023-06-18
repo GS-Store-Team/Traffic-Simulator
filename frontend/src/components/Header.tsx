@@ -21,8 +21,8 @@ export const Header : FC<HeaderProps> = ({page}) => {
         setCoordinates({x: 0, y: 0})
     }, [setCoordinates, setScale])
 
-    const handleClickPlus = useCallback(() => setScale(scale * SCALE_BY), [scale, setScale])
-    const handleClickMinus = useCallback(() => setScale(scale / SCALE_BY), [scale, setScale])
+    const handleClickPlus = useCallback(() => setScale(scale * Math.pow(SCALE_BY, 3)), [scale, setScale])
+    const handleClickMinus = useCallback(() => setScale(scale / Math.pow(SCALE_BY, 3)), [scale, setScale])
 
     const homeDisabled = useMemo(() => scale === INITIAL_SCALE && coordinates.x === 0 && coordinates.y === 0, [coordinates.x, coordinates.y, scale])
 
