@@ -60,6 +60,14 @@ export class RestApplicationClient {
     }
 
     /**
+     * HTTP GET /map/me
+     * Java method: com.traffic_simulator.controllers.MapConfigController.me
+     */
+    me(): RestResponse<number> {
+        return this.httpClient.request({ method: "GET", url: uriEncoding`map/me` });
+    }
+
+    /**
      * HTTP DELETE /map/roads/{id}
      * Java method: com.traffic_simulator.controllers.MapConfigController.deleteRoad
      */
@@ -119,8 +127,8 @@ export class RestApplicationClient {
      * HTTP POST /simulation/run
      * Java method: com.traffic_simulator.controllers.SimulationController.run
      */
-    run(): RestResponse<void> {
-        return this.httpClient.request({ method: "POST", url: uriEncoding`simulation/run` });
+    run(arg0: { [index: string]: number }): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`simulation/run`, data: arg0 });
     }
 
     /**

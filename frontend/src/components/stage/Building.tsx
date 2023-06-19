@@ -41,8 +41,6 @@ export const Building : FC<BuildingProps> = ({building, readonly}) => {
             .then(res => setMap(res, true))
         , [building, setMap, version])
 
-    console.log("road")
-
     return(
         <Group draggable={!readonly}
                onDragMove={ceilPosition}

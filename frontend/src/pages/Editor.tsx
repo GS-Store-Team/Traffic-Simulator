@@ -33,7 +33,7 @@ export const Editor = () => {
     const [version, setVersion] = useState<AreaVersionDTO>()
 
     useEffect(() => {
-        restClient.getMap().then(response => setMap(response))
+        restClient.getMap().then(setMap)
     }, [])
 
     const handleSelectArea = useCallback((id: number) => {

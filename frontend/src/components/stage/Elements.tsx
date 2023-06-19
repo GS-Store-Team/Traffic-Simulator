@@ -15,8 +15,8 @@ interface ElementsProps{
 export const Elements : FC<ElementsProps> = ({buildings, roads, cars, readonly = false}) => {
     return (
         <Layer>
-            {buildings.map(b => <Building key={b.id} building={b} readonly/>)}
-            {roads.map(r => <Road key={r.id} road={r} readonly/>)}
+            {buildings.map(b => <Building key={b.id} building={b} readonly={readonly}/>)}
+            {roads.map(r => <Road key={r.id} road={r} readonly={readonly}/>)}
             {cars.map(c => <Car key={c.id} car={c}/>)}
         </Layer>
     )
