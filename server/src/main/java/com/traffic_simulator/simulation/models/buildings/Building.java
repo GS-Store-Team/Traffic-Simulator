@@ -18,7 +18,7 @@ public class Building extends MapObject {
     private final long id;
     BuildingType type;
     private Coordinates upLeftCorner;
-    private Coordinates center = new Coordinates(0,0);
+    private Coordinates center = new Coordinates(0, 0);
     private int width = 50;
     private AttachmentPoint connectedPoint = null;
 
@@ -38,7 +38,7 @@ public class Building extends MapObject {
         this.parkingZone = new ParkingZone(50, upLeftCorner);
     }
 
-    public Building(long id, Coordinates upLeftCorner,   String name, String street, String index, ParkingZone parkingZone) {
+    public Building(long id, Coordinates upLeftCorner, String name, String street, String index, ParkingZone parkingZone) {
         super();
         this.id = id;
         this.upLeftCorner = upLeftCorner;
