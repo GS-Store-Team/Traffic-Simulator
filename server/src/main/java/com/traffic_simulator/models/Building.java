@@ -20,6 +20,7 @@ public class Building {
     private Double inFlow;
     private Double outFlow;
     private Integer residents;
+    @Enumerated(EnumType.STRING)
     private BuildingType type;
     private String label;
     @OneToOne(cascade = {CascadeType.ALL})

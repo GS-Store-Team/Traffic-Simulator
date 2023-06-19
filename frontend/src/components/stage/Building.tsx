@@ -11,10 +11,10 @@ import {StageContext} from "../../App";
 
 interface BuildingProps{
     building: BuildingDTO
-
+    readonly: boolean
 }
 
-export const Building : FC<BuildingProps> = ({building}) => {
+export const Building : FC<BuildingProps> = ({building, readonly}) => {
     const { setBuilding } = useContext(ElementsConfigContext);
     const { setMap, version } = useContext(EditorContext);
     const { scale } = useContext(StageContext);
@@ -44,7 +44,7 @@ export const Building : FC<BuildingProps> = ({building}) => {
     console.log("road")
 
     return(
-        <Group draggable={true}
+        <Group draggable={!readonly}
                onDragMove={ceilPosition}
                onDragEnd={handleDrag}
         >

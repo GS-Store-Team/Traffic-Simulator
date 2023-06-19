@@ -2,10 +2,11 @@ import {Header} from "../components/Header";
 import {RunnerToolbar} from "../components/RunnerToolbar";
 import {BaseStage} from "../components/stage/BaseStage";
 import React, {createContext, useCallback, useEffect, useMemo, useState} from "react";
-import {SimulationStateDTO} from "../api/rest-client";
+import {BuildingDTO, RoadDTO, SimulationStateDTO} from "../api/rest-client";
 import {Queue, SimulationState} from "../Types";
 import {restClient} from "../api/axios.config";
 import {MIN_FPS, STATE_QUEUE_SIZE} from "../Constants";
+import {Elements} from "../components/stage/Elements";
 
 type RunnerContextType = {
     state?: SimulationStateDTO
@@ -109,6 +110,9 @@ export const Runner = () => {
         size: stateQueue.queue.length
     }), [handleNext, handlePrev, state, stateQueue.position, stateQueue.queue.length, stateStatus])
 
+    const buildings: BuildingDTO[] = useMemo(() => state ? state.areaVersionDTO.flatMap(v => v.buildings) : [], [state])
+    const roads: RoadDTO[] = useMemo(() => state ? state.areaVersionDTO.flatMap(v => v.roads) : [], [state])
+
     return (
         <RunnerContext.Provider value={context}>
             <Header page={"runner"}/>
@@ -121,7 +125,15 @@ export const Runner = () => {
                            fps={fps}
                            setFps={setFps}
             />
-            <BaseStage/>
+            <BaseStage>
+                { state &&
+                    <Elements buildings={buildings}
+                              roads={roads}
+                              cars={state.cars}
+                              readonly={true}
+                    />
+                }
+            </BaseStage>
         </RunnerContext.Provider>
     )
 }

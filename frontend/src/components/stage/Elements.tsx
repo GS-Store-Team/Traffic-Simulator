@@ -9,13 +9,14 @@ interface ElementsProps{
     buildings: BuildingDTO[];
     roads: RoadDTO[];
     cars: CarDTO[];
+    readonly?: boolean;
 }
 
-export const Elements : FC<ElementsProps> = ({buildings, roads, cars}) => {
+export const Elements : FC<ElementsProps> = ({buildings, roads, cars, readonly = false}) => {
     return (
         <Layer>
-            {buildings.map(b => <Building key={b.id} building={b}/>)}
-            {roads.map(r => <Road key={r.id} road={r}/>)}
+            {buildings.map(b => <Building key={b.id} building={b} readonly/>)}
+            {roads.map(r => <Road key={r.id} road={r} readonly/>)}
             {cars.map(c => <Car key={c.id} car={c}/>)}
         </Layer>
     )

@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/simulation")
@@ -24,7 +21,9 @@ public class SimulationController {
 
     @PostMapping("/run")
     public void run(Map<Long, Long> areaIdVersionId) {
-        simulationProvider.run(areaIdVersionId);
+        var map = new HashMap<Long, Long>();
+        map.put(0L, 0L);
+        simulationProvider.run(map);
     }
 
     @PostMapping("/stop")
