@@ -20,14 +20,14 @@ import java.util.Map;
 @Getter
 @Setter
 public class AttachmentPoint extends MapObject {
-    private final Coordinates coordinates;
-    private final List<Building> connectedBuildings;
-    private final List<Road> startingRoads;
-    private final List<Road> finishingRoads;
-    private final List<Road> allRoads;
+    private Coordinates coordinates;
+    private List<Building> connectedBuildings;
+    private List<Road> startingRoads;
+    private List<Road> finishingRoads;
+    private List<Road> allRoads;
 
     private Road referenceRoad;
-    private final Map<Road, Double> roadsByAngle;
+    private Map<Road, Double> roadsByAngle;
     private CrossroadCell[][] CrossroadCellMatrix;
     private int xSide = 0;
     private int ySide = 0;

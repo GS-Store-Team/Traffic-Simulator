@@ -17,7 +17,6 @@ import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,7 +79,6 @@ public class SimulationRunner {
         }
 
         List<Car> unmarkedCars = new ArrayList<>(cars);
-        int tempId = 1;
         int cycle = 1;
         long departureTime = 0;
         int carPackSize = simulationSettings.getSeedData().depCarPackSize();
@@ -93,25 +91,19 @@ public class SimulationRunner {
                             .isEmpty())
                     .toList());
         }
-                /*.stream()
-                .filter((Node n) -> !n.getAttachmentPoint().getConnectedBuildings()
-                        .stream()
-                        .filter((Building b) -> !b.getType().equals(BuildingType.LIVING))
-                        .toList()
-                        .isEmpty())
-                .toList();*/
 
         while (!unmarkedCars.isEmpty()) {
-            for (int i = 0; i < unmarkedCars.size(); i = (i + carPackSize) % unmarkedCars.size()) {
+            for (int i = 0; i < unmarkedCars.size(); i++) {//= (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
-                Node startPoint = simulationState.getAreaGraphs().stream()
+                List<Node> tempList = simulationState.getAreaGraphs().stream()
                         .map(a -> a.getNodesSet().stream().toList())
                         .flatMap(List::stream)
                         .filter((Node n) -> n.getAttachmentPoint()
                                 .getConnectedBuildings()
                                 .contains(currentCar.getBuildingStart()))
-                        .toList()
-                        .get(0);
+                        .toList();
+
+                Node startPoint = tempList.get(0);
                 Node endPoint = ends.get((simulationSettings.getSeedData().coeff() * 10 / cycle + i) % ends.size());
                 int temp = 1;
                 while (endPoint == startPoint) {

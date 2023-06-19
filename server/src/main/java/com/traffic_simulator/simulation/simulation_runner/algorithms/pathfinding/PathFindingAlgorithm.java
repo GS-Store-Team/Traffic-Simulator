@@ -6,16 +6,12 @@ import com.traffic_simulator.exceptions.PathsConstructionException;
 import com.traffic_simulator.simulation.graph.AreaGraph;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
-import lombok.NonNull;
 
 import java.util.HashMap;
 
 public abstract class PathFindingAlgorithm {
-    protected AreaGraph graph;
 
-    /*public PathFindingAlgorithm(@NonNull AreaGraph graph) {
-        this.graph = graph;
-    }*/
+    protected AreaGraph graph;
 
     public PathFindingAlgorithm() {
     }

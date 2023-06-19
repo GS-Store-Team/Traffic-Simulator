@@ -63,6 +63,7 @@ public class AreaGraph {
                 .orElseThrow();
         this.areaVersionDTO = Converters.toAreaVersionDTO(this.areaVersion);
     }
+
     public void constructGraphMap() {
         //validation = new VersionValidation(areaVersionDTO);
         //buildingErrors = validation.getBuildingsErrorId();
@@ -113,21 +114,42 @@ public class AreaGraph {
             end.getAttachmentPoint().addFinishingRoad(road);
 
             for (Lane lane : road.getRightLanes()) {
-                edges.add(new Edge(road, lane, start, end, RoadSide.RIGHT));
+                Edge edge = new Edge(road, lane, start, end, RoadSide.RIGHT);
+                edges.add(edge);
+
                 start.addOutNode(end);
+                start.getRightEdges().add(edge);
+
+                end.addInNode(start);
+                end.getLeftEdges().add(edge);
             }
             for (Lane lane : road.getLeftLanes()) {
-                edges.add(new Edge(road, lane, end, start, RoadSide.LEFT));
+                Edge edge = new Edge(road, lane, end, start, RoadSide.LEFT);
+                edges.add(edge);
+
                 start.addInNode(end);
+                start.getLeftEdges().add(edge);
+
+                end.addOutNode(start);
+                end.getRightEdges().add(edge);
             }
         }
 
         for (BuildingDTO buildingDTO : areaVersionDTO.buildings()) {
-            Node node = new Node(
+            /*Node node = new Node(
                     new AttachmentPoint(
                             new Coordinates(
                                     buildingDTO.location().x(),
-                                    buildingDTO.location().y())));
+                                    buildingDTO.location().y())));*/
+            Node node = nodesSet.stream()
+                    .toList()
+                    .stream()
+                    .filter(n ->
+                            n.getAttachmentPoint().getCoordinates().getX() == buildingDTO.location().x() &
+                                    n.getAttachmentPoint().getCoordinates().getY() == buildingDTO.location().y())
+                    .toList()
+                    .get(0);
+
             Building building;
             switch (buildingDTO.type()) {
                 case LIVING -> {
@@ -135,18 +157,26 @@ public class AreaGraph {
                     livingBuilding.setResidingCars(buildingDTO.residents());
                     livingBuildings.add(livingBuilding);
                     building = livingBuilding;
+                    node.getAttachmentPoint().addBuilding(building);
+                    // node.getAttachmentPoint().getConnectedBuildings().add(building);
+
                 }
                 case WORKING -> {
                     WorkplaceBuilding workplaceBuilding = new WorkplaceBuilding(0, new Coordinates(buildingDTO.location().x(), buildingDTO.location().y()), buildingDTO.type());
                     workplaceBuildings.add(workplaceBuilding);
                     building = workplaceBuilding;
+                    node.getAttachmentPoint().addBuilding(building);
+                    // node.getAttachmentPoint().getConnectedBuildings().add(building);
                 }
-                default ->
-                        building = new Building(0, new Coordinates(buildingDTO.location().x(), buildingDTO.location().y()), buildingDTO.type());
+                default -> {
+                    building = new Building(0, new Coordinates(buildingDTO.location().x(), buildingDTO.location().y()), buildingDTO.type());
+                    node.getAttachmentPoint().addBuilding(building);
+                    //node.getAttachmentPoint().getConnectedBuildings().add(building);
+                }
             }
             building.setParkingZone(new ParkingZone(Math.toIntExact(buildingDTO.parking().capacity()), SimulationUtils.pointToCoordinates(buildingDTO.location())));
             buildings.add(building);
-            node.getAttachmentPoint().addBuilding(building);
+            nodesSet.add(node);
         }
     }
 

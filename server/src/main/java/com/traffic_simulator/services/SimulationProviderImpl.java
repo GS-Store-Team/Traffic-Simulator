@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
-@SessionScope
+//@SessionScope
 public class SimulationProviderImpl implements SimulationProvider {
     private SimulationRunner simulationRunner;
     private TickGenerator tickGenerator;
