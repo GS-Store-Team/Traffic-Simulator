@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Group} from "react-konva";
+import {Circle} from "react-konva";
 import {CarDTO} from "../../api/rest-client";
 
 interface CarProps{
@@ -8,8 +8,10 @@ interface CarProps{
 
 export const Car : FC<CarProps> = ({car}) => {
     return(
-        <Group>
-
-        </Group>
+        <Circle x={car.coordinates.x}
+                y={car.coordinates.y}
+                radius={6}
+                fill={"red"}
+        />
     )
 }

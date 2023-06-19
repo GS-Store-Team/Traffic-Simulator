@@ -14,7 +14,7 @@ import {DefaultObjectContext} from "./contexts/DefaultObjectProvider";
 
 export const EditorToolbar = () => {
     const { map, setMap, area, setAreaId, version, setVersionId } = useContext(EditorContext)
-    const {dBuilding, dRoad} = useContext(DefaultObjectContext)
+    const {dBuilding, dRoad, configure} = useContext(DefaultObjectContext)
 
     const [newVersionDialog, setNewVersionDialog] = useState<boolean>(false)
     const [value, setValue] = useState<string>('')
@@ -79,6 +79,7 @@ export const EditorToolbar = () => {
                     <FlexRow gap={"1em"}>
                         <Btn info onClick={handleAddBuilding}><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD BUILDING</FlexRow></Btn>
                         <Btn info onClick={handleAddRoad}><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD ROAD</FlexRow></Btn>
+                        <Btn secondary onClick={configure}><Icon img={"settings"}/></Btn>
                         { version.locked ?
                             <Btn danger onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"lock"}/>LOCKED</FlexRow></Btn>
                             : <Btn success onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"ok"} />PUBLISHED</FlexRow></Btn>

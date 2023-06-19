@@ -31,10 +31,10 @@ public class AreaVersionService {
 
     public FullMapDTO getState(){
         List<Area> areas = areaRepository.findAll();
-        return Validation.validate(new FullMapDTO(
+        return new FullMapDTO(
                 0L,
                 areas.stream().map(a -> new AreaDTO(a, a.getVersions(), true)).collect(Collectors.toList())
-        ));
+        );
     }
 
     public FullMapDTO addAreaVersion(Long areaId, String versionName){

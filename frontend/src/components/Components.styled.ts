@@ -83,6 +83,14 @@ const Slider = styled.input`
   cursor: pointer;
 `
 
+const AreaConfigHeading = styled.span`
+  font-size: 20px;
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
 export const Styled = {
     Header,
     HeaderTitle,
@@ -92,4 +100,5 @@ export const Styled = {
     VersionInfo,
     AreaHeading,
     Slider,
+    AreaConfigHeading,
 }

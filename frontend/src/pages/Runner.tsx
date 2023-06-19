@@ -56,7 +56,8 @@ export const Runner = () => {
     }, [stateStatus, fps, fetchNewState])
 
     const handleRun = useCallback((map: Map<number, number>) => {
-        restClient.run().then(() => {
+        const r: { [index: string]: number } = Object.fromEntries(Array.from(map.entries()).map(e => [e[0], e[1]]))
+        restClient.run(r).then(() => {
             setStateStatus("STARTED")
         })
     }, [])

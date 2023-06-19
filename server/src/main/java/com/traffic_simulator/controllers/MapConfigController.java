@@ -81,4 +81,8 @@ public class MapConfigController {
             @PathVariable("id") Long parkingZoneId) {
         return null;
     }
+    @GetMapping("/me")
+    public Long me(){
+        return 0L;
+    }
 }
