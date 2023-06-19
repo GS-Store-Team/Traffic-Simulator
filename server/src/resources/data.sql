@@ -20,6 +20,23 @@ VALUES (0, '2011-05-16 15:36:38', '2011-05-16 15:36:38', 'first_edition', false,
 INSERT INTO point(id, x, y)
 VALUES (0, 20, 20);
 INSERT INTO point(id, x, y)
+VALUES (1, 120, 120);
+INSERT INTO road(id, forward, reverse, area_version_id, end_id, start_id)
+VALUES (0, 2, 2, 0, 0, 1);
+
+INSERT INTO parking(id, capacity, location_id)
+VALUES (0, 10, 0);
+INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
+VALUES (0, 10, 'branch I house 1', 10, 50, 'LIVING', 0, 0, 0);
+
+INSERT INTO parking(id, capacity, location_id)
+VALUES (1, 10, 1);
+INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
+VALUES (1, 10, 'branch I house 2', 10, 50, 'WORKING', 0, 1, 1);
+
+/*INSERT INTO point(id, x, y)
+VALUES (0, 20, 20);
+INSERT INTO point(id, x, y)
 VALUES (1, 20, 120);
 INSERT INTO road(id, forward, reverse, area_version_id, end_id, start_id)
 VALUES (0, 2, 2, 0, 0, 1); -- ROAD 1
@@ -116,32 +133,57 @@ VALUES (21, 2, 2, 0, 16, 13); -- ROAD 22
 INSERT INTO road(id, forward, reverse, area_version_id, end_id, start_id)
 VALUES (22, 2, 2, 0, 14, 4); -- ROAD 23
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (0, 10, 0);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (0, 10, 'my home', 10, 50, 'LIVING', 0, 0, null);
-INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (1, 10, 'house 2', 10, 50, 'LIVING', 0, 0, null);
+VALUES (0, 10, 'my home', 10, 50, 'LIVING', 0, 0, 0);
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (1, 10, 0);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (2, 10, 'branch I house 1', 10, 50, 'LIVING', 0, 6, null);
-INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (3, 10, 'branch I house 2', 10, 50, 'LIVING', 0, 6, null);
+VALUES (1, 10, 'house 2', 10, 50, 'LIVING', 0, 0, 1);
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (2, 10, 6);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (4, 10, 'branch II house 1', 10, 50, 'LIVING', 0, 7, null);
+VALUES (2, 10, 'branch I house 1', 10, 50, 'LIVING', 0, 6, 2);
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (3, 10, 6);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (5, 10, 'work 1', 10, 50, 'WORKING', 0, 3, null);
+VALUES (3, 10, 'branch I house 2', 10, 50, 'LIVING', 0, 6, 3);
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (4, 10, 7);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (6, 10, 'work 2', 10, 50, 'WORKING', 0, 13, null);
+VALUES (4, 10, 'branch II house 1', 10, 50, 'LIVING', 0, 7, 4);
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (5, 10, 3);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (7, 10, 'work 3', 10, 50, 'WORKING', 0, 10, null);
-INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (8, 10, 'work 4', 10, 50, 'WORKING', 0, 10, null);
+VALUES (5, 10, 'work 1', 10, 50, 'WORKING', 0, 3, 5);
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (6, 10, 13);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (9, 10, 'work 5', 10, 50, 'WORKING', 0, 16, null);
-INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
-VALUES (10, 10, 'work 6', 10, 50, 'WORKING', 0, 16, null);
+VALUES (6, 10, 'work 2', 10, 50, 'WORKING', 0, 13, 6);
 
+INSERT INTO parking(id, capacity, location_id)
+VALUES (7, 10, 10);
+INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
+VALUES (7, 10, 'work 3', 10, 50, 'WORKING', 0, 10, 7);
+
+INSERT INTO parking(id, capacity, location_id)
+VALUES (8, 10, 10);
+INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
+VALUES (8, 10, 'work 4', 10, 50, 'WORKING', 0, 10, 8);
+
+INSERT INTO parking(id, capacity, location_id)
+VALUES (9, 10, 16);
+INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
+VALUES (9, 10, 'work 5', 10, 50, 'WORKING', 0, 16, 9);
+
+INSERT INTO parking(id, capacity, location_id)
+VALUES (10, 10, 16);
+INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
+VALUES (10, 10, 'work 6', 10, 50, 'WORKING', 0, 16, 10);*/

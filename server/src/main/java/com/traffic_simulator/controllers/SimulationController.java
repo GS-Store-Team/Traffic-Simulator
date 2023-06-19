@@ -23,6 +23,7 @@ public class SimulationController {
     public void run(Map<Long, Long> areaIdVersionId) {
         var map = new HashMap<Long, Long>();
         map.put(0L, 0L);
+        System.out.println("Hello!");
         simulationProvider.run(map);
     }
 

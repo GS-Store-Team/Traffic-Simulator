@@ -72,6 +72,10 @@ public class Validation {
 
         HashMap<PointDTO, Integer> map = new HashMap<>();
         for (RoadDTO roadDTO : roads) {
+            map.put(roadDTO.start(), 0);
+            map.put(roadDTO.end(), 0);
+        }
+        for (RoadDTO roadDTO : roads) {
             map.put(roadDTO.start(), map.get(roadDTO.start()) + 1);
             map.put(roadDTO.end(), map.get(roadDTO.end()) + 1);
         }

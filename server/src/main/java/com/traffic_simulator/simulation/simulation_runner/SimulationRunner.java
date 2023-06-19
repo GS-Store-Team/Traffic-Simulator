@@ -17,6 +17,7 @@ import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,7 +74,11 @@ public class SimulationRunner {
 
     private void initCars() throws GraphConstructionException, PathsConstructionException {
 
-        HashMap<Node, CarPathsBunch> allPaths = simulationState.getPathfindingAlgorithm().compute();
+        HashMap<Node, CarPathsBunch> allPaths = new HashMap<>();
+        for (AreaGraph areaGraph : simulationState.getAreaGraphs()) {
+            allPaths.putAll(simulationState.getPathfindingAlgorithm().compute(areaGraph));
+        }
+
         List<Car> unmarkedCars = new ArrayList<>(cars);
         int tempId = 1;
         int cycle = 1;

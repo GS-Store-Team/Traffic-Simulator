@@ -19,9 +19,9 @@ public class StraightDijkstraAlgorithm extends PathFindingAlgorithm {
      * Common  <a href="https://e-maxx.ru/algo/dijkstra">Dijkstra algorithm</a>.<br>
      * Called "straight" because builds routes without loops.
      */
-    public StraightDijkstraAlgorithm(AreaGraph areaGraph) {
+    /*public StraightDijkstraAlgorithm(AreaGraph areaGraph) {
         super(areaGraph);
-    }
+    }*/
 
     public StraightDijkstraAlgorithm() {
         super();

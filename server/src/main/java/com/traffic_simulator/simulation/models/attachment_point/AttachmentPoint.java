@@ -57,16 +57,16 @@ public class AttachmentPoint extends MapObject {
         startingRoads.add(road);
         allRoads.add(road);
 
-        orderRoad(road);
-        configureCrossroad();
+        //orderRoad(road);
+        //configureCrossroad();
     }
 
     public void addFinishingRoad(Road road) {
         finishingRoads.add(road);
         allRoads.add(road);
 
-        orderRoad(road);
-        configureCrossroad();
+        //orderRoad(road);
+        //configureCrossroad();
     }
 
     private void configureCrossroad() {

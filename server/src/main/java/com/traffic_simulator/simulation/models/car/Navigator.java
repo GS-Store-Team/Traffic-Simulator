@@ -138,8 +138,8 @@ public class Navigator {
 
         switch (moveState) {
             case NODE -> {
-                decideInNode();
-                moveCarInNode();
+                //decideInNode();
+                //moveCarInNode();
                 if (currentCoordinate == crossroadCellEnd.getCoordinates()) {
                     currentEdgeBunch = carPath.getEdges().pop();
                     currentEdge = currentEdgeBunch.get(0);

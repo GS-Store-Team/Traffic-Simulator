@@ -13,14 +13,15 @@ import java.util.HashMap;
 public abstract class PathFindingAlgorithm {
     protected AreaGraph graph;
 
-    public PathFindingAlgorithm(@NonNull AreaGraph graph) {
+    /*public PathFindingAlgorithm(@NonNull AreaGraph graph) {
         this.graph = graph;
-    }
+    }*/
 
     public PathFindingAlgorithm() {
     }
 
-    public HashMap<Node, CarPathsBunch> compute() throws GraphConstructionException, PathsConstructionException {
+    public HashMap<Node, CarPathsBunch> compute(AreaGraph graph) throws GraphConstructionException, PathsConstructionException {
+        this.graph = graph;
         HashMap<Node, CarPathsBunch> result = new HashMap<>();
 
         if (graph == null) {

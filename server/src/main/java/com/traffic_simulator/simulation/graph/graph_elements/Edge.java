@@ -33,9 +33,14 @@ public class Edge {
 
     public double calculateWeight() {
         double weight = 0;
-        for (Navigator navigator : navigators) {
-            weight += 1;
+        try {
+            for (Navigator navigator : navigators) {
+                weight += 1;
+            }
+        } catch (NullPointerException exception) {
+
         }
+
         this.weight = weight;
         return weight;
     }

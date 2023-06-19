@@ -4,6 +4,7 @@ import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.dto.SimulationStateDTO;
 import com.traffic_simulator.interfaces.SimulationProvider;
 import com.traffic_simulator.models.Area;
+import com.traffic_simulator.models.AreaVersion;
 import com.traffic_simulator.repository.AreaRepository;
 import com.traffic_simulator.repository.AreaVersionRepository;
 import com.traffic_simulator.simulation.graph.AreaGraph;
@@ -33,6 +34,8 @@ public class SimulationProviderImpl implements SimulationProvider {
 
     private final AreaRepository areaRepository;
 
+    private final AreaVersionRepository areaVersionRepository;
+
 
     public void build(Map<Long, Long> areaIdVersionId) {
          var areaGraphs = new ArrayList<AreaGraph>();
@@ -40,9 +43,9 @@ public class SimulationProviderImpl implements SimulationProvider {
         for (Long areaId : areaIdVersionId.keySet()) {
             if (areaIdVersionId.get(areaId) != null) {
                 Area area = areaRepository.findById(areaId).orElseThrow();
-                areaGraphs.add(new AreaGraph(area, areaIdVersionId.get(areaId)));
+                areaGraphs.add(new AreaGraph(area, areaIdVersionId.get(area.getId())));
             }
-        }
+         }
         areaGraphs.forEach(AreaGraph::constructGraphMap);
 
         simulationRunner = new SimulationRunner(

@@ -12,8 +12,8 @@ public class Parking {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
-    private Building building;
+    //@OneToOne
+    //private Building building;
     private Long capacity;
     @OneToOne
     private Point location;

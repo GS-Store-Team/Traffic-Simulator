@@ -14,6 +14,7 @@ import com.traffic_simulator.simulation.models.buildings.types.WorkplaceBuilding
 import com.traffic_simulator.simulation.models.road.Lane;
 import com.traffic_simulator.simulation.models.road.Road;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
+import com.traffic_simulator.utils.Converters;
 import com.traffic_simulator.utils.SimulationUtils;
 import lombok.Getter;
 import lombok.ToString;
@@ -27,7 +28,7 @@ public class AreaGraph {
     private AreaDTO areaDTO;
     private AreaVersion areaVersion;
     private AreaVersionDTO areaVersionDTO;
-    private VersionValidation validation;
+    //private VersionValidation validation;
     private Set<Node> nodesSet = new HashSet<>();
     private List<Road> roads = new ArrayList<>();
     private List<Building> buildings = new ArrayList<>();
@@ -60,11 +61,12 @@ public class AreaGraph {
                         v -> v.getId().equals(versionId))
                 .findFirst()
                 .orElseThrow();
+        this.areaVersionDTO = Converters.toAreaVersionDTO(this.areaVersion);
     }
     public void constructGraphMap() {
-        validation = new VersionValidation(areaVersionDTO);
-        buildingErrors = validation.getBuildingsErrorId();
-        roadErrors = validation.getRoadsErrorId();
+        //validation = new VersionValidation(areaVersionDTO);
+        //buildingErrors = validation.getBuildingsErrorId();
+        //roadErrors = validation.getRoadsErrorId();
 
         constructGraph();
     }
