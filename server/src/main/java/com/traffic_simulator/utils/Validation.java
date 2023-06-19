@@ -1,4 +1,4 @@
-package com.traffic_simulator.dto.validation;
+package com.traffic_simulator.utils;
 
 import com.traffic_simulator.dto.*;
 import com.traffic_simulator.models.areasConfig.AreasPlacement;
@@ -43,7 +43,7 @@ public class Validation {
         boolean valid = versionValid;
         versionValid = true;
 
-        return new AreaVersionDTO(areaVersionDTO.id(), areaVersionDTO.usr(), areaVersionDTO.locked(),
+        return new AreaVersionDTO(areaVersionDTO.areaId(), areaVersionDTO.id(), areaVersionDTO.usr(), areaVersionDTO.locked(),
                 areaVersionDTO.created(), areaVersionDTO.edited(), areaVersionDTO.label(),
                 newBuildings, newRoads, valid);
     }

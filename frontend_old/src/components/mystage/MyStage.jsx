@@ -98,8 +98,6 @@ export const MyStage = ({layers}) => {
             <Stage
                 x={stage.x}
                 y={stage.y}
-                offsetX={width/2}
-                offsetY={height/2}
                 width={width}
                 height={height+20}
                 scaleX={stage.scale}

@@ -53,9 +53,6 @@ public class SimulationRunner {
         simulationState.getAreaGraph().getNodesSet();
         simulationState.getAreaGraph().getBuildings();
     }*/
-    public void reset() {
-
-    }
 
     public void update() throws SimulationException {
         simulationState.update();

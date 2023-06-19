@@ -9,6 +9,7 @@ import com.traffic_simulator.repository.AreaRepository;
 import com.traffic_simulator.repository.AreaVersionRepository;
 import com.traffic_simulator.repository.BuildingRepository;
 import com.traffic_simulator.repository.RoadRepository;
+import com.traffic_simulator.utils.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +31,10 @@ public class AreaVersionService {
 
     public FullMapDTO getState(){
         List<Area> areas = areaRepository.findAll();
-
-        return new FullMapDTO(
+        return Validation.validate(new FullMapDTO(
                 0L,
                 areas.stream().map(a -> new AreaDTO(a, a.getVersions(), true)).collect(Collectors.toList())
-        );
+        ));
     }
 
     public FullMapDTO addAreaVersion(Long areaId, String versionName){
