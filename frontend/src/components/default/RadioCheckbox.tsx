@@ -10,8 +10,8 @@ interface RadioCheckboxProps {
 export const RadioCheckbox: FC<RadioCheckboxProps> = ({current, options, onChange}) => {
     return (
         <>
-            {options.map(o =>
-                <Form.Check inline id="switch2" className="pl-5">
+            {options.map((o, index) =>
+                <Form.Check key={index} inline id="switch2" className="pl-5">
                     <Form.Check.Input checked={current === o} onChange={() => onChange(o)}/>
                     <Form.Check.Label>{o}</Form.Check.Label>
                 </Form.Check>

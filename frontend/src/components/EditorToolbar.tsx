@@ -89,6 +89,12 @@ export const EditorToolbar = () => {
 
                     <S.VersionInfo>
                         <span style={{width: "100%", overflow: "hidden", textOverflow:"ellipsis", whiteSpace: "nowrap"}}>{version.label.toUpperCase()}</span>
+                        <div style={{height: "10px"}}/>
+                        <div style={{fontSize: "12px", width: "100%", textAlign: "right"}}>
+                            <div>last change: {new Date(version.edited).toLocaleTimeString("en-US").toString()}</div>
+                            <div>created: {new Date(version.edited).toLocaleTimeString("en-US").toString()}</div>
+                        </div>
+                        <div style={{height: "10px"}}/>
                         <FlexRow gap={"10px"}>visibility: <Icon img={version.locked ? "lock" : "ok"}/></FlexRow>
                         <FlexRow gap={"10px"}>valid: <Icon img={version.valid ? "ok" : "blocked"}/></FlexRow>
                         <span>roads count: {version.roads.length}</span>

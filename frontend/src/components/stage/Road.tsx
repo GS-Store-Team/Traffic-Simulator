@@ -12,6 +12,7 @@ interface RoadProps{
 
 export const Road : FC<RoadProps> = ({road, readonly}) => {
     const { scale } = useContext(StageContext);
+    //const { configureRoad, viewRoad } = useContext(ElementsConfigContext);
 
     // const [visible, setVisible] = useState(false);
     // const [roadState, setRoadState] = useState({

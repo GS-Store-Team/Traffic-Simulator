@@ -33,6 +33,16 @@ export const Editor = () => {
     const [version, setVersion] = useState<AreaVersionDTO>()
 
     useEffect(() => {
+        if(map && area){
+            const renewedArea = map?.areas.find(a => a.id === area.id)
+            setArea(renewedArea)
+            if(renewedArea && version){
+                setVersion(renewedArea.versions.find(v => v.id === version.id))
+            }
+        }
+    }, [area, map, version])
+
+    useEffect(() => {
         restClient.getMap().then(setMap)
     }, [])
 
@@ -62,7 +72,7 @@ export const Editor = () => {
 
     return (
         <EditorContext.Provider value={context}>
-            <ElementsConfigProvider setMap={setMap} areaVersionId={version?.areaId}>
+            <ElementsConfigProvider setMap={setMap} areaVersionId={version?.id}>
                 <Header page={"editor"}/>
                 <EditorToolbar/>
                 <BaseStage>
