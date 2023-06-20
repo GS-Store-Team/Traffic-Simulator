@@ -18,9 +18,10 @@ public class TickGenerator implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("in thread");
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                if (running) {
+                if (!running) {
                     try {
                         simulationRunner.update();
                     } catch (SimulationException exc) {

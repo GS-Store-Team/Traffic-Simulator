@@ -73,7 +73,8 @@ public class Navigator {
         this.advance = new ArrayList<>();
         this.moveState = MoveState.NONE;
 
-        initTimers();
+        this.departureTime = 0L;
+        this.workTime = 0L;
 
         this.accelerationUpperLimit = accelerationUpperLimit;
         this.accelerationLowerLimit = accelerationLowerLimit;
@@ -85,7 +86,7 @@ public class Navigator {
     }
 
     private void initTimers() {
-        this.departureTime = 0;
+        this.departureTime = 0L;
         this.workTime = 0;
     }
 
@@ -100,7 +101,9 @@ public class Navigator {
             this.moveState = MoveState.NODE;
             this.currentEdge = null;
             currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
-            System.out.println("Car#" + car.getId() + " appeared: " + this.currentNode.getNodeIndex());
+            car.setCurrentPosition(currentCoordinate);
+            System.out.println("Car#" + car.getId() + " appeared: " + this.currentNode.getNodeIndex() + " car coordinate: "
+                    + car.getCurrentPosition());
         } catch (NoSuchElementException e) {
             System.out.println("No nodes in Car#" + car.getId() + " path! Init place: " + carPath.getStart().getNodeIndex());
         }
@@ -108,6 +111,8 @@ public class Navigator {
     }
 
     public void update(long currentTick) {
+        System.out.println("In update");
+        System.out.println("time: " + departureTime + " " + carRunning + " tick: " + currentTick);
         if (currentTick >= departureTime & !carRunning) {
             carRunning = true;
         }
@@ -133,13 +138,13 @@ public class Navigator {
 
     private void updateCar() {
 
-        Edge oldEdge = currentEdge;
-        Node oldNode = currentNode;
+       /* Edge oldEdge = currentEdge;
+        Node oldNode = currentNode;*/
 
         switch (moveState) {
             case NODE -> {
-                //decideInNode();
-                //moveCarInNode();
+                decideInNode();
+                moveCarInNode();
                 if (currentCoordinate == crossroadCellEnd.getCoordinates()) {
                     currentEdgeBunch = carPath.getEdges().pop();
                     currentEdge = currentEdgeBunch.get(0);
@@ -236,19 +241,34 @@ public class Navigator {
     }
 
     private void moveInRoad(Coordinates roadStartPoint, Coordinates roadEndPoint) {
+
+
+        System.out.println("here");
+        System.out.println("rs" + roadStartPoint.getX() + " " + roadStartPoint.getY());
         double length = currentEdgeLength();
         currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
         currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
         currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
         currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
+
     }
 
     private void decideInNode() {
+        currentEdgeBunch = carPath.getEdges().pop();
+        currentEdge = currentEdgeBunch.get(0);
         if (currentCrossroadCell == crossroadCellEnd) {
+            crossroadCellStart = currentEdge.getRefLane().getEndingCrossroadCell();
+            currentCrossroadCell = crossroadCellStart;
+            previousCrossroadCell = crossroadCellStart;
             return;
         }
+        crossroadCellStart = currentEdge.getRefLane().getEndingCrossroadCell();
+        currentCrossroadCell = crossroadCellStart;
+        previousCrossroadCell = crossroadCellStart;
         if (crossroadCellStart == null || crossroadCellEnd == null) {
             crossroadCellStart = currentEdge.getRefLane().getEndingCrossroadCell();
+            currentCrossroadCell = crossroadCellStart;
+            previousCrossroadCell = crossroadCellStart;
             crossroadCellEnd = carPath.getEdges().peek()
                     .get(
                             currentEdge.getRefLane().getLocalId() % carPath.getEdges().peek().size())
@@ -302,6 +322,10 @@ public class Navigator {
     }
 
     private void moveCarInNode() {
+        System.out.println();
+        crossroadCellStart = currentEdge.getRefLane().getEndingCrossroadCell();
+        currentCrossroadCell = crossroadCellStart;
+        previousCrossroadCell = currentCrossroadCell;
         previousCrossroadCell.setOccupied(false);
         currentCrossroadCell.setOccupied(true);
         currentCoordinate.setX(currentCrossroadCell.getX());

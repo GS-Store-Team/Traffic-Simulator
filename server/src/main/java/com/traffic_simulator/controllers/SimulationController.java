@@ -25,6 +25,7 @@ public class SimulationController {
         map.put(0L, 0L);
         System.out.println("Hello!");
         simulationProvider.run(map);
+        System.out.println("after hello");
     }
 
     @PostMapping("/stop")

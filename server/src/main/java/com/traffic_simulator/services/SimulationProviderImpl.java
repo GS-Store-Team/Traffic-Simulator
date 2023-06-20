@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,11 +48,12 @@ public class SimulationProviderImpl implements SimulationProvider {
             }
          }
         areaGraphs.forEach(AreaGraph::constructGraphMap);
-
+        System.out.println("before simulation");
         simulationRunner = new SimulationRunner(
                 new SimulationState(areaGraphs, new StraightDijkstraAlgorithm(), areaIdVersionId),
                 new SimulationSettings()
         );
+        System.out.println("sumulation ruuner" + simulationRunner);
         tickGenerator = new TickGenerator(simulationRunner);
     }
 
@@ -59,6 +61,7 @@ public class SimulationProviderImpl implements SimulationProvider {
         destroy();
         build(areaIdVersionId);
         currentThread = new Thread(tickGenerator);
+        System.out.println("before thread");
         currentThread.start();
     }
 
@@ -76,6 +79,9 @@ public class SimulationProviderImpl implements SimulationProvider {
     }
 
     public SimulationStateDTO state(){
+        if (simulationRunner == null){
+            build(new HashMap<>());
+        }
         return Converters.simulationStateDTO(simulationRunner.getSimulationState());
     }
 }

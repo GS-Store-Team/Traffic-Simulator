@@ -95,6 +95,7 @@ public class SimulationRunner {
         while (!unmarkedCars.isEmpty()) {
             for (int i = 0; i < unmarkedCars.size(); i++) {//= (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
+                System.out.println("car coordinates:" + currentCar.getCurrentPosition());
                 List<Node> tempList = simulationState.getAreaGraphs().stream()
                         .map(a -> a.getNodesSet().stream().toList())
                         .flatMap(List::stream)
@@ -116,7 +117,8 @@ public class SimulationRunner {
                         -20,
                         allPaths.get(startPoint).getCarPathsByEnds().get(endPoint));
 
-                navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
+                //navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
+                navigator.setDepartureTime(0);
                 navigator.setWorkTime((simulationSettings.getSeedData().coeff() * simulationSettings.getSeedData().destTimeSpend()) % GlobalSettings.dayLengthInSeconds);
 
                 navigators.add(navigator);
