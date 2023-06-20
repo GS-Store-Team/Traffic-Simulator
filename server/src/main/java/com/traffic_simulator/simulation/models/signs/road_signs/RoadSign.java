@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @ToString
-public abstract class RoadSign {
+public abstract class RoadSign implements Serializable {
     private final String tmp = "RoadSign";
     private float beginRatio;
     private float endRatio;

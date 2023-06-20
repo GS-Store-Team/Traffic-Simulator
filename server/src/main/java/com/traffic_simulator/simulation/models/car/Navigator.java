@@ -13,7 +13,9 @@ import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.SerializationUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.NoSuchElementException;
 @Setter
 @Getter
 @ToString
-public class Navigator {
+public class Navigator implements Serializable {
     private double acceleration;
     private double velocity;
     private double accelerationUpperLimit;
@@ -48,7 +50,7 @@ public class Navigator {
 
     private RoadSide roadSide;
 
-    public enum MoveState {NODE, ROAD, NONE}
+    public enum MoveState implements Serializable {NODE, ROAD, NONE}
 
     private MoveState moveState;
 
@@ -59,7 +61,7 @@ public class Navigator {
     private CrossroadCell currentCrossroadCell;
     private CrossroadCell previousCrossroadCell;
 
-    private enum NodeMoveDirection {
+    private enum NodeMoveDirection implements Serializable {
         HORIZONTAL,
         VERTICAL
     }
@@ -69,7 +71,7 @@ public class Navigator {
     public Navigator(Car car, int accelerationLowerLimit, int accelerationUpperLimit, CarPath carPath) {
 
         this.car = car;
-        this.carPath = carPath;
+        this.carPath = SerializationUtils.clone(carPath);
         this.advance = new ArrayList<>();
         this.moveState = MoveState.NONE;
 
@@ -143,20 +145,23 @@ public class Navigator {
 
         switch (moveState) {
             case NODE -> {
-                decideInNode();
-                moveCarInNode();
-                if (currentCoordinate == crossroadCellEnd.getCoordinates()) {
-                    currentEdgeBunch = carPath.getEdges().pop();
-                    currentEdge = currentEdgeBunch.get(0);
+                //decideInNode();
+                //moveCarInNode();
+                //if (currentCoordinate == crossroadCellEnd.getCoordinates()) {
+                currentEdgeBunch = carPath.getEdges().pop();
+                //currentEdgeBunch = carPath.getEdges().pollFirst();
 
-                    currentNode.getNavigators().remove(this);
-                    currentEdge.getNavigators().add(this);
+                currentEdge = currentEdgeBunch.get(0);
 
-                    crossroadCellStart = null;
-                    crossroadCellEnd = null;
+                currentNode.getNavigators().remove(this);
+                currentEdge.getNavigators().add(this);
 
-                    moveState = MoveState.ROAD;
-                }
+                crossroadCellStart = null;
+                crossroadCellEnd = null;
+
+                moveState = MoveState.ROAD;
+                car.setCurrentPosition(currentCoordinate);
+                //}
             }
             case ROAD -> {
                 if (currentCoordinate == currentEdge.getStart().getAttachmentPoint().getCoordinates()) {
@@ -164,7 +169,7 @@ public class Navigator {
                     moveInRoad(currentEdge.getStart().getAttachmentPoint().getCoordinates(),
                             currentEdge.getEnd().getAttachmentPoint().getCoordinates());
                 } else if (currentCoordinate == currentEdge.getEnd().getAttachmentPoint().getCoordinates()) {
-                    currentNode = carPath.getNodes().pop();
+                    currentNode = carPath.getNodes().pollFirst();
                     moveState = MoveState.NODE;
 
                     currentEdge.getNavigators().remove(this);
@@ -173,6 +178,7 @@ public class Navigator {
             }
             case NONE -> {
             }
+
         }
 
     }
@@ -250,7 +256,7 @@ public class Navigator {
         currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
         currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
         currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
-
+        car.setCurrentPosition(currentCoordinate);
     }
 
     private void decideInNode() {

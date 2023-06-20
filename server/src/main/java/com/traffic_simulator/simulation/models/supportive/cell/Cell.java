@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Getter @ToString
-public class Cell {
+public class Cell implements Serializable {
     private Coordinates coordinates;
 
     private double trafficWeight;

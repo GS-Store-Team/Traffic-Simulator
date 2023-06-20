@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
-public class Lane {
+public class Lane implements Serializable {
 
     private int localId;
     private List<Cell> cells;

@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Setter
 @Getter
 @ToString
-public abstract class MapObject {
+public abstract class MapObject implements Serializable {
     protected double naturalWeight;
     protected Map<Integer, Double> trafficWeight;
     public MapObject() {

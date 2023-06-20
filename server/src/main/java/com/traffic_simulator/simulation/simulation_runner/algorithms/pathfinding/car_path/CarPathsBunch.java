@@ -4,11 +4,12 @@ import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
 @ToString
-public class CarPathsBunch {
+public class CarPathsBunch implements Serializable {
     private final Node start;
     private final HashMap<Node, CarPath> carPathsByEnds;
 

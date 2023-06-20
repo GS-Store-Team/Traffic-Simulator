@@ -6,12 +6,13 @@ import com.traffic_simulator.simulation.models.road.Road;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @ToString
 @Getter
-public class Edge {
+public class Edge implements Serializable {
     private final Road refRoad;
     private final Lane refLane;
     private final Node start;
@@ -31,6 +32,15 @@ public class Edge {
         this.navigators = new ArrayList<>();
     }
 
+    public Edge(Edge edge) {
+        this.refRoad = edge.getRefRoad();
+        this.refLane = edge.getRefLane();
+        this.start = edge.getStart();
+        this.end = edge.getEnd();
+        this.roadSide = edge.getRoadSide();
+        this.weight = calculateWeight();
+        this.navigators = new ArrayList<>();
+    }
     public double calculateWeight() {
         double weight = 0;
         try {

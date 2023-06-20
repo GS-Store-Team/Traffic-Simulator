@@ -3,9 +3,11 @@ package com.traffic_simulator.simulation.models.supportive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class Coordinates{
+public class Coordinates implements Serializable {
     private double x;
     private double y;
 

@@ -5,13 +5,14 @@ import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
 @Getter
 @ToString
-public class CarPath {
+public class CarPath implements Serializable {
     private final Node start;
     private final Deque<Node> nodes;
     private final Node end;
@@ -22,6 +23,13 @@ public class CarPath {
         this.nodes = new ArrayDeque<>();
         this.end = end;
         this.edges = new ArrayDeque<>();
+    }
+
+    public CarPath(CarPath carPath) {
+        this.start = new Node(carPath.getStart());
+        this.nodes = new ArrayDeque<>(carPath.getNodes());
+        this.end = new Node(carPath.getEnd());
+        this.edges = carPath.getEdges();
     }
 
     public void addNode(Node node) {

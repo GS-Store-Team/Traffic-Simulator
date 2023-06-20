@@ -6,9 +6,11 @@ import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Data
 @ToString
-public class Car {
+public class Car implements Serializable {
     private final long id;
     private float currentVelocity;        //per tick
     private float currentAcceleration = 1;    //per tick

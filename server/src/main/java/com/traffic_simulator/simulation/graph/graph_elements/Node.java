@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class Node {
+public class Node implements Serializable {
     private int nodeIndex;
     private AttachmentPoint attachmentPoint;
     private Set<Edge> edgesToPrev;

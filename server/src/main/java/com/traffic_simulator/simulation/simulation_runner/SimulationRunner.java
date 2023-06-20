@@ -13,6 +13,7 @@ import com.traffic_simulator.simulation.models.buildings.Building;
 import com.traffic_simulator.simulation.models.car.Car;
 import com.traffic_simulator.simulation.models.car.Navigator;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
+import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPath;
 import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.car_path.CarPathsBunch;
 import lombok.Getter;
 
@@ -112,14 +113,16 @@ public class SimulationRunner {
                     temp++;
                 }
 
+                CarPath carPath = allPaths.get(startPoint).getCarPathsByEnds().get(endPoint);
+
                 Navigator navigator = new Navigator(unmarkedCars.get(i),
                         20,
                         -20,
-                        allPaths.get(startPoint).getCarPathsByEnds().get(endPoint));
+                        carPath);
 
                 //navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
-                navigator.setDepartureTime(0);
-                navigator.setWorkTime((simulationSettings.getSeedData().coeff() * simulationSettings.getSeedData().destTimeSpend()) % GlobalSettings.dayLengthInSeconds);
+                navigator.setDepartureTime(i);
+                navigator.setWorkTime(5);//((simulationSettings.getSeedData().coeff() * simulationSettings.getSeedData().destTimeSpend()) % GlobalSettings.dayLengthInSeconds);
 
                 navigators.add(navigator);
                 unmarkedCars.remove(i);
