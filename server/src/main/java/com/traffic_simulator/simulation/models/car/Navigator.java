@@ -103,8 +103,15 @@ public class Navigator implements Serializable {
     private void initSelfPositioning() {
         try {
             this.currentNode = carPath.getNodes().pop();
-            this.moveState = MoveState.NODE;
-            this.currentEdge = null;
+            this.moveState = MoveState.ROAD;
+            currentEdgeBunch = carPath.getEdges().pop();
+            //currentEdgeBunch = carPath.getEdges().pollFirst();
+            currentEdge = currentEdgeBunch.get(0);
+
+            currentNode.getNavigators().remove(this);
+            currentEdge.getNavigators().add(this);
+
+
             currentCoordinate = currentNode.getAttachmentPoint().getCoordinates();
             car.setCurrentPosition(currentCoordinate);
             System.out.println("Car#" + car.getId() + " appeared: " + this.currentNode.getNodeIndex() + " car coordinate: "
@@ -151,18 +158,41 @@ public class Navigator implements Serializable {
                 //decideInNode();
                 //moveCarInNode();
                 //if (currentCoordinate == crossroadCellEnd.getCoordinates()) {
-                currentEdgeBunch = carPath.getEdges().pop();
-                //currentEdgeBunch = carPath.getEdges().pollFirst();
-                currentEdge = currentEdgeBunch.get(0);
+                if (carPath.getEdges().peek() == null){
+                    System.out.println("currentX " + currentCoordinate.getX());
+                    System.out.println("currentY " + currentCoordinate.getY());
+                    System.out.println("finalX" + currentEdge.getEnd().getAttachmentPoint().getCoordinates().getX());
+                    System.out.println("finalY" + currentEdge.getEnd().getAttachmentPoint().getCoordinates().getY());
+                    if (currentCoordinate.getX() == currentEdge.getEnd().getAttachmentPoint().getCoordinates().getX() &&
+                            currentCoordinate.getY() == currentEdge.getEnd().getAttachmentPoint().getCoordinates().getY()) {
+                        System.out.println("in if");
+                        if (carPath.getNodes().peek() != null) {
+                            currentNode = carPath.getNodes().pollFirst();
+                            moveState = MoveState.NODE;
+                            currentEdge.getNavigators().remove(this);
+                            currentNode.getNavigators().add(this);
+                        }
+                    }
+                    else if (currentCoordinate == currentEdge.getStart().getAttachmentPoint().getCoordinates()) {
+                        decideInRoad();
+                        moveInRoad(currentEdge.getStart().getAttachmentPoint().getCoordinates(),
+                                currentEdge.getEnd().getAttachmentPoint().getCoordinates());
+                    }
+                }
+                else {
 
-                currentNode.getNavigators().remove(this);
-                currentEdge.getNavigators().add(this);
+                    //currentEdgeBunch = carPath.getEdges().pollFirst();
+                    currentEdge = currentEdgeBunch.get(0);
 
-                crossroadCellStart = null;
-                crossroadCellEnd = null;
+                    currentNode.getNavigators().remove(this);
+                    currentEdge.getNavigators().add(this);
 
-                moveState = MoveState.ROAD;
-                car.setCurrentPosition(currentCoordinate);
+                    crossroadCellStart = null;
+                    crossroadCellEnd = null;
+
+                    moveState = MoveState.ROAD;
+                    car.setCurrentPosition(currentCoordinate);
+                }
                 //}
             }
             case ROAD -> {
@@ -267,12 +297,19 @@ public class Navigator implements Serializable {
             this.hacCounted = true;
             double minWeight = 1000;
             int id = 0;
+
             for (Lane lane : currentEdge.getRefRoad().getLeftLanes()) {
-                if (lane.computeTrafficWeight()<minWeight){
-                    minWeight =  lane.computeTrafficWeight();
+                System.out.println("refadress: "+lane);
+                System.out.println("Counter: "+lane.getCounter() + " id: " +lane.getLocalId());
+                if (lane.getCounter()<minWeight){
+                    minWeight =  lane.getCounter();
                     id = lane.getLocalId();
                 }
             }
+            System.out.println("refaddressafter: " + currentEdge.getRefRoad().getLeftLanes().get(id) );
+            currentEdge.getRefRoad().getLeftLanes().get(id).setCounter(currentEdge.getRefRoad().getLeftLanes().get(id).getCounter()+1);
+            System.out.println("afterCounter: "+currentEdge.getRefRoad().getLeftLanes().get(id).getCounter() + "id: "
+                    +currentEdge.getRefRoad().getLeftLanes().get(id).getLocalId() );
             currentCoordinate.setY(currentEdge.getRefRoad().getLeftLanes().get(id).getStartCoordinates().getY()+5*currentSin*(id+1));
             currentCoordinate.setX(currentEdge.getRefRoad().getLeftLanes().get(id).getStartCoordinates().getX());
         }else{

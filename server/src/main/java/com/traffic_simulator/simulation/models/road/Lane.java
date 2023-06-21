@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@ToString
+
 @Getter
 @Setter
 public class Lane implements Serializable {
@@ -27,6 +27,7 @@ public class Lane implements Serializable {
 
     private CrossroadCell startingCrossroadCell;
     private CrossroadCell endingCrossroadCell;
+    private int counter = 0;
 
     public Lane(int localId, Coordinates startCoordinates, Coordinates endCoordinates) {
         this.cells = new ArrayList<>();
