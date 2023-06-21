@@ -25,7 +25,7 @@ INSERT INTO road(id, forward, reverse, area_version_id, end_id, start_id)
 VALUES (0, 2, 2, 0, 0, 1);
 
 INSERT INTO parking(id, capacity, location_id)
-VALUES (0, 1, 0);
+VALUES (0, 2, 0);
 INSERT INTO building(id, in_flow, label, out_flow, residents, type, area_version_id, location_id, parking_id)
 VALUES (0, 10, 'branch I house 1', 10, 50, 'LIVING', 0, 0, 0);
 

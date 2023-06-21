@@ -93,7 +93,7 @@ public class SimulationRunner {
                     .toList());
         }
 
-        while (!unmarkedCars.isEmpty()) {
+
             for (int i = 0; i < unmarkedCars.size(); i++) {//= (i + carPackSize) % unmarkedCars.size()) {
                 Car currentCar = unmarkedCars.get(i);
                 System.out.println("car coordinates:" + currentCar.getCurrentPosition());
@@ -125,14 +125,14 @@ public class SimulationRunner {
                 navigator.setWorkTime(5);//((simulationSettings.getSeedData().coeff() * simulationSettings.getSeedData().destTimeSpend()) % GlobalSettings.dayLengthInSeconds);
 
                 navigators.add(navigator);
-                unmarkedCars.remove(i);
+                //unmarkedCars.remove(i);
                 if (unmarkedCars.isEmpty()) {
                     break;
                 }
             }
             departureTime = (departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds;
             cycle++;
-        }
+
 
         System.out.println("Cars initialization completed!");
     }

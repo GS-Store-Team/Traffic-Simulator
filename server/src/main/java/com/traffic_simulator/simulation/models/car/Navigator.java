@@ -5,6 +5,7 @@ import com.traffic_simulator.simulation.GlobalSettings;
 import com.traffic_simulator.simulation.graph.graph_elements.Edge;
 import com.traffic_simulator.simulation.graph.graph_elements.Node;
 import com.traffic_simulator.simulation.graph.graph_elements.RoadSide;
+import com.traffic_simulator.simulation.models.road.Lane;
 import com.traffic_simulator.simulation.models.supportive.Coordinates;
 import com.traffic_simulator.simulation.models.supportive.cell.Cell;
 import com.traffic_simulator.simulation.models.supportive.cell.CrossroadCell;
@@ -152,7 +153,6 @@ public class Navigator implements Serializable {
                 //if (currentCoordinate == crossroadCellEnd.getCoordinates()) {
                 currentEdgeBunch = carPath.getEdges().pop();
                 //currentEdgeBunch = carPath.getEdges().pollFirst();
-
                 currentEdge = currentEdgeBunch.get(0);
 
                 currentNode.getNavigators().remove(this);
@@ -265,8 +265,16 @@ public class Navigator implements Serializable {
             currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
             currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
             this.hacCounted = true;
-            currentCoordinate.setY(currentEdge.getRefRoad().getLeftLanes().get(0).getStartCoordinates().getY()+5*currentSin);
-            currentCoordinate.setX(currentEdge.getRefRoad().getLeftLanes().get(0).getStartCoordinates().getX());
+            double minWeight = 1000;
+            int id = 0;
+            for (Lane lane : currentEdge.getRefRoad().getLeftLanes()) {
+                if (lane.computeTrafficWeight()<minWeight){
+                    minWeight =  lane.computeTrafficWeight();
+                    id = lane.getLocalId();
+                }
+            }
+            currentCoordinate.setY(currentEdge.getRefRoad().getLeftLanes().get(id).getStartCoordinates().getY()+5*currentSin*(id+1));
+            currentCoordinate.setX(currentEdge.getRefRoad().getLeftLanes().get(id).getStartCoordinates().getX());
         }else{
             currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
             currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
