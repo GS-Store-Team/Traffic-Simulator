@@ -254,8 +254,12 @@ public class Navigator implements Serializable {
         double length = currentEdgeLength();
         currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
         currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
+        System.out.println("cos and sin: " + currentCos + " " + currentSin);
+        car.setCurrentVelocity(10);
+        System.out.println("velocity:" + car.getCurrentVelocity() );
         currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
         currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
+        System.out.println("new coordinate: " + currentCoordinate.getX() + " " + currentCoordinate.getY());
         car.setCurrentPosition(currentCoordinate);
     }
 
@@ -328,8 +332,16 @@ public class Navigator implements Serializable {
     }
 
     private void moveCarInNode() {
-        System.out.println();
+
+
+
+
+
+
+
         crossroadCellStart = currentEdge.getRefLane().getEndingCrossroadCell();
+        System.out.println("current edge:" + currentEdge.getRefLane().getEndingCrossroadCell());
+        System.out.println("starter: "+ crossroadCellStart);
         currentCrossroadCell = crossroadCellStart;
         previousCrossroadCell = currentCrossroadCell;
         previousCrossroadCell.setOccupied(false);

@@ -20,7 +20,7 @@ VALUES (0, '2011-05-16 15:36:38', '2011-05-16 15:36:38', 'first_edition', false,
 INSERT INTO point(id, x, y)
 VALUES (0, 20, 20);
 INSERT INTO point(id, x, y)
-VALUES (1, 120, 120);
+VALUES (1, 400, 400);
 INSERT INTO road(id, forward, reverse, area_version_id, end_id, start_id)
 VALUES (0, 2, 2, 0, 0, 1);
 
