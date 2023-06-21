@@ -15,4 +15,5 @@ public class Coordinates implements Serializable {
         this.x = x;
         this.y = y;
     }
+
 }

@@ -14,9 +14,9 @@ export const Car : FC<CarProps> = ({car}) => {
                 <Circle
                     x={car.coordinates.x}
                     y={car.coordinates.y}
-                    strokeWidth={0.9}
+                    strokeWidth={2}
                     stroke={"red"}
-                    radius={10}
+                    radius={1}
                     visible={true}
                 />
             </Group>

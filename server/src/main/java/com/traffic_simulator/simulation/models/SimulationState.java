@@ -85,6 +85,7 @@ public class SimulationState {
                                 destinationBuildings.get(
                                         Math.abs(ThreadLocalRandom.current().nextInt()) % destinationBuildings.size())));
         });
+        System.out.println("living buildings: "+lb);
     }
 
     public void update() {

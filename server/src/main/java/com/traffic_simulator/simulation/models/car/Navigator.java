@@ -60,6 +60,8 @@ public class Navigator implements Serializable {
     private int yCellsRemaining = 0;
     private CrossroadCell currentCrossroadCell;
     private CrossroadCell previousCrossroadCell;
+    private int i = 0;
+    private boolean hacCounted = false;
 
     private enum NodeMoveDirection implements Serializable {
         HORIZONTAL,
@@ -164,16 +166,22 @@ public class Navigator implements Serializable {
                 //}
             }
             case ROAD -> {
-                if (currentCoordinate == currentEdge.getStart().getAttachmentPoint().getCoordinates()) {
+                System.out.println("currentX " + currentCoordinate.getX());
+                System.out.println("currentY " + currentCoordinate.getY());
+                System.out.println("finalX" + currentEdge.getEnd().getAttachmentPoint().getCoordinates().getX());
+                System.out.println("finalY" + currentEdge.getEnd().getAttachmentPoint().getCoordinates().getY());
+                if (currentCoordinate.getX() == currentEdge.getEnd().getAttachmentPoint().getCoordinates().getX() &&
+                currentCoordinate.getY() == currentEdge.getEnd().getAttachmentPoint().getCoordinates().getY()) {
+                    System.out.println("in if");
+                    currentNode = carPath.getNodes().pollFirst();
+                    moveState = MoveState.NODE;
+                    currentEdge.getNavigators().remove(this);
+                    currentNode.getNavigators().add(this);
+                }
+                else if (currentCoordinate == currentEdge.getStart().getAttachmentPoint().getCoordinates()) {
                     decideInRoad();
                     moveInRoad(currentEdge.getStart().getAttachmentPoint().getCoordinates(),
                             currentEdge.getEnd().getAttachmentPoint().getCoordinates());
-                } else if (currentCoordinate == currentEdge.getEnd().getAttachmentPoint().getCoordinates()) {
-                    currentNode = carPath.getNodes().pollFirst();
-                    moveState = MoveState.NODE;
-
-                    currentEdge.getNavigators().remove(this);
-                    currentNode.getNavigators().add(this);
                 }
             }
             case NONE -> {
@@ -251,16 +259,27 @@ public class Navigator implements Serializable {
 
         System.out.println("here");
         System.out.println("rs" + roadStartPoint.getX() + " " + roadStartPoint.getY());
-        double length = currentEdgeLength();
-        currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
-        currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
+        car.setCurrentVelocity(50);
+        if (!this.hacCounted) {
+            double length = currentEdgeLength();
+            currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
+            currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
+            this.hacCounted = true;
+            currentCoordinate.setY(currentEdge.getRefRoad().getLeftLanes().get(0).getStartCoordinates().getY()+5*currentSin);
+            currentCoordinate.setX(currentEdge.getRefRoad().getLeftLanes().get(0).getStartCoordinates().getX());
+        }else{
+            currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
+            currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
+        }
         System.out.println("cos and sin: " + currentCos + " " + currentSin);
-        car.setCurrentVelocity(10);
-        System.out.println("velocity:" + car.getCurrentVelocity() );
-        currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
-        currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
+
         System.out.println("new coordinate: " + currentCoordinate.getX() + " " + currentCoordinate.getY());
         car.setCurrentPosition(currentCoordinate);
+        if (Math.sqrt(Math.pow(roadEndPoint.getX() - currentCoordinate.getX(),2) +
+                Math.pow(roadEndPoint.getY() - currentCoordinate.getY(),2)) < car.getCurrentVelocity() ){
+            currentCoordinate.setY(roadEndPoint.getY());
+            currentCoordinate.setX(roadEndPoint.getX());
+        }
     }
 
     private void decideInNode() {

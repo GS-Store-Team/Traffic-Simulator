@@ -30,10 +30,14 @@ public class Road extends MapObject {
 
     private void addLanes(int rightLanesAmount, int leftLanesAmount) {
         for (int i = 0; i < rightLanesAmount; i++) {
-            rightLanes.add(new Lane(i, startCoordinate, endCoordinate));
+            Coordinates newStartCoordinates = new Coordinates(startCoordinate.getX(), startCoordinate.getY());
+            Coordinates newFinishCoordinates = new Coordinates(endCoordinate.getX(), endCoordinate.getY());
+            rightLanes.add(new Lane(i, newFinishCoordinates, newStartCoordinates));
         }
         for (int i = 0; i < leftLanesAmount; i++) {
-            leftLanes.add(new Lane(i, endCoordinate, startCoordinate));
+            Coordinates newStartCoordinates = new Coordinates(startCoordinate.getX(), startCoordinate.getY());
+            Coordinates newFinishCoordinates = new Coordinates(endCoordinate.getX(), endCoordinate.getY());
+            leftLanes.add(new Lane(i,newFinishCoordinates, newStartCoordinates));
         }
     }
     public double computeNaturalWeightByCoordinates() {
