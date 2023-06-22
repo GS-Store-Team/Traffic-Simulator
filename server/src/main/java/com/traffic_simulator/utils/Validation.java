@@ -43,6 +43,9 @@ public class Validation {
         boolean valid = versionValid;
         versionValid = true;
 
+        if (newRoads.isEmpty())
+            valid = false;
+
         return new AreaVersionDTO(areaVersionDTO.areaId(), areaVersionDTO.id(), areaVersionDTO.usr(), areaVersionDTO.locked(),
                 areaVersionDTO.created(), areaVersionDTO.edited(), areaVersionDTO.label(),
                 newBuildings, newRoads, valid);
@@ -71,13 +74,20 @@ public class Validation {
         List<RoadDTO> newRoads = new ArrayList<>();
 
         HashMap<PointDTO, Integer> map = new HashMap<>();
+        HashMap<PointDTO, Boolean> mapBoolean = new HashMap<>();
         for (RoadDTO roadDTO : roads) {
-            map.put(roadDTO.start(), 0);
-            map.put(roadDTO.end(), 0);
+            map.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()), 0);
+            map.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), 0);
+
+            mapBoolean.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()), true);
+            mapBoolean.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), true);
         }
         for (RoadDTO roadDTO : roads) {
-            map.put(roadDTO.start(), map.get(roadDTO.start()) + 1);
-            map.put(roadDTO.end(), map.get(roadDTO.end()) + 1);
+            map.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()),
+                    map.get(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y())) + 1);
+
+            map.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()),
+                    map.get(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y())) + 1);
         }
         List<PointDTO> singlePoints = new ArrayList<>();
 
@@ -94,20 +104,69 @@ public class Validation {
             }
         }
 
-        for (RoadDTO roadDTO : roads) {
-            if (!pointInArea(roadDTO.end(), areaID) || !pointInArea(roadDTO.start(), areaID)) {
-                RoadDTO newRoadDTO = new RoadDTO(roadDTO.id(), roadDTO.start(), roadDTO.end(),
-                        roadDTO.forward(), roadDTO.reverse(), false);
-                newRoads.add(newRoadDTO);
-            } else if (troublePoints.contains(roadDTO.start()) || troublePoints.contains(roadDTO.end())) {
-                RoadDTO newRoadDTO = new RoadDTO(roadDTO.id(), roadDTO.start(), roadDTO.end(),
-                        roadDTO.forward(), roadDTO.reverse(), false);
-                newRoads.add(newRoadDTO);
-            } else {
-                RoadDTO newRoadDTO = new RoadDTO(roadDTO.id(), roadDTO.start(), roadDTO.end(),
-                        roadDTO.forward(), roadDTO.reverse(), true);
-                newRoads.add(newRoadDTO);
+        for (RoadDTO roadDTO : roads){
+            if (map.get(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y())) > 4 ||
+                    map.get(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y())) > 4){
+                mapBoolean.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()), false);
+                mapBoolean.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), false);
+
             }
+            else if (!pointInArea(roadDTO.start(), areaID) ||
+                    !pointInArea(roadDTO.end(), areaID)) {
+                if (!pointInArea(roadDTO.start(), areaID))
+                    mapBoolean.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()), false);
+                else
+                    mapBoolean.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), false);
+
+            }
+            else if (map.get(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y())) > 4 ||
+                    map.get(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y())) > 4){
+                mapBoolean.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()), false);
+                mapBoolean.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), false);
+            }
+            else {
+                BuildingDTO rememberBuilding = null;
+                if (map.get(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y())) == 1){
+                    boolean state = false;
+                    for (BuildingDTO buildingDTO : buildings){
+                        if (isInRadius(new PointDTO(0L, buildingDTO.location().x() + (float) GlobalSettings.buildingWidth / 2,
+                                buildingDTO.location().y() + (float) GlobalSettings.buildingWidth / 2), roadDTO.start())) {
+                            mapBoolean.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()), true);
+                            state = true;
+                            rememberBuilding = buildingDTO;
+                        }
+                    }
+                    if (!state)
+                        mapBoolean.put(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y()), false);
+                }
+                if (map.get(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y())) == 1){
+                    boolean state = false;
+                    for (BuildingDTO buildingDTO : buildings){
+                        if (isInRadius(new PointDTO(0L, buildingDTO.location().x() + (float) GlobalSettings.buildingWidth / 2,
+                                buildingDTO.location().y() + (float) GlobalSettings.buildingWidth / 2), roadDTO.end())) {
+                            if (rememberBuilding == null){
+                                mapBoolean.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), true);
+                                state = true;
+                            } else if (rememberBuilding.id() != buildingDTO.id()) {
+                                mapBoolean.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), true);
+                                state = true;
+                            }
+                        }
+                    }
+                    if (!state)
+                        mapBoolean.put(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y()), false);
+                }
+            }
+        }
+
+        for (RoadDTO roadDTO : roads) {
+            RoadDTO newRoadDTO = new RoadDTO(roadDTO.id(), roadDTO.start(), roadDTO.end(),
+                    roadDTO.forward(), roadDTO.reverse(),
+                    mapBoolean.get(new PointDTO(0L, roadDTO.start().x(), roadDTO.start().y())) &&
+                            mapBoolean.get(new PointDTO(0L, roadDTO.end().x(), roadDTO.end().y())));
+            newRoads.add(newRoadDTO);
+            if (!newRoadDTO.valid())
+                versionValid = false;
         }
         return newRoads;
     }
@@ -129,8 +188,9 @@ public class Validation {
                             (point.y() >= leftTopPointCell.y()) &&
                             (point.x() <= rightBottomPointCell.x()) &&
                             (point.y() <= rightBottomPointCell.y());
-                    if (isInCell)
+                    if (isInCell){
                         return true;
+                    }
                 }
                 return false;
             }
