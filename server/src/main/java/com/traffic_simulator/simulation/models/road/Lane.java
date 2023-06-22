@@ -17,7 +17,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Lane implements Serializable {
+public class Lane  {
 
     private int localId;
     private List<Cell> cells;

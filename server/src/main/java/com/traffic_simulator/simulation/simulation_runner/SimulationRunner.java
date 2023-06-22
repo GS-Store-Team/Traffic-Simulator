@@ -121,7 +121,7 @@ public class SimulationRunner {
                         carPath);
 
                 //navigator.setDepartureTime((departureTime + simulationSettings.getSeedData().depTimeShift()) % GlobalSettings.dayLengthInSeconds);
-                navigator.setDepartureTime(i);
+                navigator.setDepartureTime(i+1);
                 navigator.setWorkTime(5);//((simulationSettings.getSeedData().coeff() * simulationSettings.getSeedData().destTimeSpend()) % GlobalSettings.dayLengthInSeconds);
 
                 navigators.add(navigator);

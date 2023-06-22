@@ -7,10 +7,11 @@ interface CarProps{
 }
 
 export const Car : FC<CarProps> = ({car}) => {
+    console.log(car)
     return(
         <Circle x={car.coordinates.x}
                 y={car.coordinates.y}
-                radius={1}
+                radius={2}
                 fill={"red"}
         />
     )

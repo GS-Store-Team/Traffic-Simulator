@@ -12,7 +12,7 @@ import java.util.List;
 
 @ToString
 @Getter
-public class Edge implements Serializable {
+public class Edge  {
     private final Road refRoad;
     private final Lane refLane;
     private final Node start;

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class CarPath implements Serializable {
+public class CarPath {
     private final Node start;
     private final Deque<Node> nodes;
     private final Node end;
@@ -29,7 +29,7 @@ public class CarPath implements Serializable {
         this.start = new Node(carPath.getStart());
         this.nodes = new ArrayDeque<>(carPath.getNodes());
         this.end = new Node(carPath.getEnd());
-        this.edges = carPath.getEdges();
+        this.edges = new ArrayDeque<>(carPath.getEdges());
     }
 
     public void addNode(Node node) {

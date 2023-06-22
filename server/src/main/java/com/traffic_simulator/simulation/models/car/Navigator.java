@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 @Setter
 @Getter
 @ToString
-public class Navigator implements Serializable {
+public class Navigator {
     private double acceleration;
     private double velocity;
     private double accelerationUpperLimit;
@@ -41,8 +41,8 @@ public class Navigator implements Serializable {
     private final CarPath carPath;
 
     private Coordinates currentCoordinate;
-    private double currentCos;
-    private double currentSin;
+    private static Double currentCos;
+    private static Double currentSin;
 
     private int index;
     private boolean carRunning;
@@ -74,7 +74,7 @@ public class Navigator implements Serializable {
     public Navigator(Car car, int accelerationLowerLimit, int accelerationUpperLimit, CarPath carPath) {
 
         this.car = car;
-        this.carPath = SerializationUtils.clone(carPath);
+        this.carPath = new CarPath(carPath);
         this.advance = new ArrayList<>();
         this.moveState = MoveState.NONE;
 
@@ -289,12 +289,16 @@ public class Navigator implements Serializable {
 
         System.out.println("here");
         System.out.println("rs" + roadStartPoint.getX() + " " + roadStartPoint.getY());
-        car.setCurrentVelocity(50);
-        if (!this.hacCounted) {
+        System.out.println("roadStrart and roadEnd: " +roadStartPoint + " " + roadEndPoint );
+        car.setCurrentVelocity(10);
+        if (!hacCounted) {
+            System.out.println("In hasCounted" );
             double length = currentEdgeLength();
-            currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
-            currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
-            this.hacCounted = true;
+            if (currentCos==null && currentSin==null) {
+                currentCos = (roadEndPoint.getX() - roadStartPoint.getX()) / length;
+                currentSin = (roadEndPoint.getY() - roadStartPoint.getY()) / length;
+            }
+            hacCounted = true;
             double minWeight = 1000;
             int id = 0;
 
@@ -310,9 +314,12 @@ public class Navigator implements Serializable {
             currentEdge.getRefRoad().getLeftLanes().get(id).setCounter(currentEdge.getRefRoad().getLeftLanes().get(id).getCounter()+1);
             System.out.println("afterCounter: "+currentEdge.getRefRoad().getLeftLanes().get(id).getCounter() + "id: "
                     +currentEdge.getRefRoad().getLeftLanes().get(id).getLocalId() );
-            currentCoordinate.setY(currentEdge.getRefRoad().getLeftLanes().get(id).getStartCoordinates().getY()+5*currentSin*(id+1));
-            currentCoordinate.setX(currentEdge.getRefRoad().getLeftLanes().get(id).getStartCoordinates().getX());
+            currentCoordinate.setY(currentEdge.getRefRoad().getLeftLanes().get(0).getStartCoordinates().getY()+5*currentSin*(1));
+            currentCoordinate.setX(currentEdge.getRefRoad().getLeftLanes().get(0).getStartCoordinates().getX());
         }else{
+            System.out.println("currentSin: " + currentSin);
+            System.out.println("velocity: " + car.getCurrentVelocity());
+
             currentCoordinate.setX(currentCoordinate.getX() + car.getCurrentVelocity() * currentCos);
             currentCoordinate.setY(currentCoordinate.getY() + car.getCurrentVelocity() * currentSin);
         }

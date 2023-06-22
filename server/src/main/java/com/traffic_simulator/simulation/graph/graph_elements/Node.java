@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class Node implements Serializable {
+public class Node  {
     private int nodeIndex;
     private AttachmentPoint attachmentPoint;
     private Set<Edge> edgesToPrev;

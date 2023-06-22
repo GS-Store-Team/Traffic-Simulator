@@ -10,7 +10,7 @@ import java.util.*;
 @Setter
 @Getter
 @ToString
-public abstract class MapObject implements Serializable {
+public abstract class MapObject  {
     protected double naturalWeight;
     protected Map<Integer, Double> trafficWeight;
     public MapObject() {
