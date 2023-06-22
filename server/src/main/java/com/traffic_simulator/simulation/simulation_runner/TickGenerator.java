@@ -1,41 +1,33 @@
 
 package com.traffic_simulator.simulation.simulation_runner;
 
-import com.traffic_simulator.exceptions.SimulationException;
-import com.traffic_simulator.simulation.GlobalSettings;
 import lombok.Getter;
 
 import java.util.concurrent.TimeUnit;
+
 @Getter
 public class TickGenerator implements Runnable {
-    private SimulationRunner simulationRunner;
-    private long ticksPerSecond = GlobalSettings.ticksPerSecond;
+    private Simulation simulation;
+    private long fps = 1;
     private boolean running;
 
-    public TickGenerator(SimulationRunner simulationRunner) {
-        this.simulationRunner = simulationRunner;
+    public TickGenerator(Simulation simulation) {
+        this.simulation = simulation;
     }
 
     @Override
     public void run() {
-        System.out.println("in thread");
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                if (!running) {
-                    try {
-                        simulationRunner.update();
-                    } catch (SimulationException exc) {
-                        this.stop();
-                        System.out.println(exc.getMessage());
-                    }
-                    System.out.println("tic");
-
-                    TimeUnit.MILLISECONDS.sleep(1000 / ticksPerSecond);
+                if (running) {
+                    simulation.update();
+                    TimeUnit.MILLISECONDS.sleep(1000 / fps);
                 } else {
                     TimeUnit.MILLISECONDS.sleep(200);
                 }
             }
-        } catch (InterruptedException ignore) {}
+        } catch (InterruptedException ignore) {
+        }
     }
 
     public void play() {

@@ -1,68 +1,44 @@
 package com.traffic_simulator.services;
 
-import com.traffic_simulator.dto.FullMapDTO;
 import com.traffic_simulator.dto.SimulationStateDTO;
 import com.traffic_simulator.interfaces.SimulationProvider;
-import com.traffic_simulator.models.Area;
-import com.traffic_simulator.models.AreaVersion;
-import com.traffic_simulator.repository.AreaRepository;
 import com.traffic_simulator.repository.AreaVersionRepository;
-import com.traffic_simulator.simulation.graph.AreaGraph;
-import com.traffic_simulator.simulation.models.SimulationState;
-import com.traffic_simulator.simulation.simulation_runner.SimulationRunner;
+import com.traffic_simulator.simulation.AreaGraph;
+import com.traffic_simulator.simulation.simulation_runner.PathFindingAlgorithm;
+import com.traffic_simulator.simulation.simulation_runner.Simulation;
 import com.traffic_simulator.simulation.simulation_runner.TickGenerator;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.SimulationSettings;
-import com.traffic_simulator.simulation.simulation_runner.algorithms.pathfinding.StraightDijkstraAlgorithm;
 import com.traffic_simulator.utils.Converters;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-//@SessionScope
 public class SimulationProviderImpl implements SimulationProvider {
-    private SimulationRunner simulationRunner;
     private TickGenerator tickGenerator;
     private Thread currentThread;
-
-    private final AreaRepository areaRepository;
-
+    private Simulation simulation;
     private final AreaVersionRepository areaVersionRepository;
 
-
-    public void build(Map<Long, Long> areaIdVersionId) {
-         var areaGraphs = new ArrayList<AreaGraph>();
-
-        for (Long areaId : areaIdVersionId.keySet()) {
-            if (areaIdVersionId.get(areaId) != null) {
-                Area area = areaRepository.findById(areaId).orElseThrow();
-                areaGraphs.add(new AreaGraph(area, areaIdVersionId.get(area.getId())));
-            }
-         }
-        areaGraphs.forEach(AreaGraph::constructGraphMap);
-        System.out.println("before simulation");
-        simulationRunner = new SimulationRunner(
-                new SimulationState(areaGraphs, new StraightDijkstraAlgorithm(), areaIdVersionId),
-                new SimulationSettings()
-        );
-        System.out.println("sumulation ruuner" + simulationRunner);
-        tickGenerator = new TickGenerator(simulationRunner);
+    public void build(Map<Long, Long> map) {
+        var areaGraphs = map.values()
+                 .stream()
+                 .map(id -> areaVersionRepository.findById(id).orElseThrow())
+                 .map(AreaGraph::new)
+                 .collect(Collectors.toList());
+        simulation = new Simulation(areaGraphs, new PathFindingAlgorithm());
+        tickGenerator = new TickGenerator(simulation);
     }
 
     public void run(Map<Long, Long> areaIdVersionId){
         destroy();
         build(areaIdVersionId);
         currentThread = new Thread(tickGenerator);
-        System.out.println("before thread");
         currentThread.start();
+        play();
     }
 
     public void stop(){
@@ -77,11 +53,7 @@ public class SimulationProviderImpl implements SimulationProvider {
             currentThread.interrupt();
         }
     }
-
     public SimulationStateDTO state(){
-        if (simulationRunner == null){
-            build(new HashMap<>());
-        }
-        return Converters.simulationStateDTO(simulationRunner.getSimulationState());
+        return Optional.ofNullable(simulation).orElseThrow().getState();
     }
 }

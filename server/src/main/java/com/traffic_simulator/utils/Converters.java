@@ -2,21 +2,11 @@ package com.traffic_simulator.utils;
 
 import com.traffic_simulator.dto.*;
 import com.traffic_simulator.models.AreaVersion;
-import com.traffic_simulator.simulation.graph.AreaGraph;
-import com.traffic_simulator.simulation.models.SimulationState;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import com.traffic_simulator.simulation.models.Car;
+import com.traffic_simulator.simulation.models.Coordinate;
+import com.traffic_simulator.simulation.models.SBuilding;
 
 public class Converters {
-    public static SimulationStateDTO simulationStateDTO(SimulationState simulationState) {
-        List<AreaVersionDTO> areaVersionDTOS = simulationState.getAreaGraphs().stream().map(AreaGraph::getAreaVersionDTO).toList();
-        return new SimulationStateDTO(areaVersionDTOS, simulationState.getCars().stream()
-                .map(c -> new CarDTO(c.getId(), c.getCurrentPosition()))
-                .collect(Collectors.toSet())
-        );
-    }
-
     public static AreaVersionDTO toAreaVersionDTO(AreaVersion areaVersion) {
         return new AreaVersionDTO(
                 areaVersion.getArea().getId(),
@@ -31,5 +21,23 @@ public class Converters {
                 areaVersion.getBuildings().stream().map(b -> new BuildingDTO(b, true)).toList(),
                 areaVersion.getRoads().stream().map(r -> new RoadDTO(r, true)).toList(),
                 true);
+    }
+
+    public static CarDTO carToDTO(Car car) {
+        //return new CarDTO(car.getId(), coordinateToPoint(car.getCurrentPosition()));
+        return null;
+    }
+
+    public static BuildingDTO buildingToDTO(SBuilding building) {
+        return null;
+        //return new BuildingDTO(building.getId(), coordinateToPoint(building.getUpLeftCorner()), 0D, 0D, building.getType(), building.getName(), building.getParkingZone(), true);
+    }
+
+    public static PointDTO coordinateToPoint(Coordinate coordinate) {
+        return new PointDTO(coordinate);
+    }
+
+    public static Coordinate pointToCoordinates(PointDTO pointDTO) {
+        return new Coordinate(pointDTO.x(), pointDTO.y());
     }
 }

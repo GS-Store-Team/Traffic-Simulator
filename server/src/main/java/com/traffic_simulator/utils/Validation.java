@@ -3,7 +3,6 @@ package com.traffic_simulator.utils;
 import com.traffic_simulator.dto.*;
 import com.traffic_simulator.models.areasConfig.AreasPlacement;
 import com.traffic_simulator.models.areasConfig.Elem;
-import com.traffic_simulator.simulation.GlobalSettings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +13,7 @@ public class Validation {
     public static final int BUILDING_WIDTH = 50;
     public static final int CELL_SIZE = 300;
     public static final int CELLS_COUNT = 20;
+    public static final int BUILDING_CONNECTION_RADIUS = 60;
     private static boolean versionValid = true;
 
     public static FullMapDTO validate(FullMapDTO fullMapDTO) {
@@ -88,8 +88,8 @@ public class Validation {
         List<PointDTO> troublePoints = new ArrayList<>();
         for (BuildingDTO building : buildings) {
             for (PointDTO point : singlePoints) {
-                if (!isInRadius(new PointDTO(0L, building.location().x() + (float) GlobalSettings.buildingWidth / 2,
-                        building.location().y() + (float) GlobalSettings.buildingWidth / 2), point))
+                if (!isInRadius(new PointDTO(0L, building.location().x() + (float) BUILDING_WIDTH / 2,
+                        building.location().y() + (float) BUILDING_WIDTH / 2), point))
                     troublePoints.add(point);
             }
         }
@@ -141,6 +141,6 @@ public class Validation {
     private static boolean isInRadius(PointDTO centerPoint, PointDTO pointDTO) {
         return (Math.pow(centerPoint.x() - pointDTO.x(), 2) +
                 Math.pow(centerPoint.y() - pointDTO.y(), 2)) <=
-                Math.pow(GlobalSettings.buildingConnectionRadius, 2);
+                Math.pow(BUILDING_CONNECTION_RADIUS, 2);
     }
 }
