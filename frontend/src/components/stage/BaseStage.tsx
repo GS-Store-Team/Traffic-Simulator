@@ -4,7 +4,7 @@ import {Size} from "../../Types";
 import {AreaGrid} from "./AreaGrid";
 import Konva from "konva";
 import {StageContext} from "../../App";
-import {MAX_SCALE, MIN_SCALE, SCALE_BY} from "../../Constants";
+import {CELL_SIZE, MAX_SCALE, MIN_SCALE, SCALE_BY} from "../../Constants";
 
 export const HEIGHT_SHIFT = 120
 
@@ -12,11 +12,11 @@ export const BaseStage : FC<PropsWithChildren> = ({ children}) => {
     const { scale, setScale, coordinates, setCoordinates } = useContext(StageContext)
     const [size, setSize] = useState<Size>({width:window.innerWidth, height:window.innerHeight - HEIGHT_SHIFT})
 
-    // useEffect(() => {
-    //     const handleResize = () => setSize({width: window.innerWidth, height:window.innerHeight - HEIGHT_SHIFT})
-    //     window.addEventListener("resize", handleResize)
-    //     return () => window.removeEventListener("resize", handleResize)
-    // }, [])
+    useEffect(() => {
+        const handleResize = () => setSize({width: window.innerWidth, height:window.innerHeight - HEIGHT_SHIFT})
+        window.addEventListener("resize", handleResize)
+        return () => window.removeEventListener("resize", handleResize)
+    }, [])
 
     const handleWheel = useCallback((e: Konva.KonvaEventObject<WheelEvent>) => {
         e.evt.preventDefault();
@@ -43,6 +43,8 @@ export const BaseStage : FC<PropsWithChildren> = ({ children}) => {
 
     return (
         <Stage
+            offsetX={CELL_SIZE * 10 - size.width/2}
+            offsetY={CELL_SIZE * 10 - size.height/2}
             x={coordinates.x}
             y={coordinates.y}
             scaleX={scale}
@@ -52,7 +54,7 @@ export const BaseStage : FC<PropsWithChildren> = ({ children}) => {
             draggable={true}
             onWheel={handleWheel}
         >
-            <AreaGrid size={size}/>
+            <AreaGrid />
             {children}
         </Stage>
     )

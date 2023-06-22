@@ -1,17 +1,13 @@
-import React, {FC, useCallback, useContext, useEffect, useMemo, useState} from "react";
-import {Group, Layer, Line, Rect} from "react-konva";
-import {Size} from "../../Types";
+import React, {useCallback, useContext, useEffect, useMemo, useState} from "react";
+import {Circle, Group, Layer, Line, Rect} from "react-konva";
 import {StageContext} from "../../App";
 import {restClient} from "../../api/axios.config";
 import {AreasPlacement} from "../../api/rest-client";
 import {EditorContext} from "../../pages/Editor";
 import {RunnerContext} from "../../pages/Runner";
+import {CELL_SIZE} from "../../Constants";
 
-interface AreaGridProps{
-    size: Size
-}
-
-export const AreaGrid : FC<AreaGridProps> = ({size}) => {
+export const AreaGrid = () => {
     const { scale } = useContext(StageContext)
     const { area } = useContext(EditorContext)
     const { state } = useContext(RunnerContext)
@@ -48,33 +44,28 @@ export const AreaGrid : FC<AreaGridProps> = ({size}) => {
 
     const grid = useMemo(() => {
         const arr = []
-        const cellSize = 300
         const count = 20
-        const offsetX = size.width /2 - cellSize * 20 / 2
-        const offsetY = size.height/2 - cellSize * 20 / 2
-
         for(let i = 0; i<count; i++)
             for(let j = 0; j<count; j++){
                 const key = i*count + j
-                arr.push(<Rect key={key} x={j*cellSize + offsetX} y={i*cellSize + offsetY} fill={areaColor(key)} stroke={"black"} strokeWidth={1/10/scale} width={cellSize} height={cellSize}/>)
+                arr.push(<Rect key={key} x={j*CELL_SIZE } y={i*CELL_SIZE } fill={areaColor(key)} stroke={"black"} strokeWidth={1/10/scale} width={CELL_SIZE} height={CELL_SIZE}/>)
             }
 
         return arr
-    }, [areaColor, scale, size.height, size.width])
+    }, [areaColor, scale])
+
+    const shift = CELL_SIZE * 10
 
     return(
         <Layer>
             <Group>
                 {grid.map(r => r)}
-                <Line x={0}
-                      y={0}
-                      points={[size.width/2 - 10 / scale, size.height/2, size.width/2 + 10 / scale, size.height/2]}
+                <Circle x={0} y={0} fill={"red"} width={10}/>
+                <Line points={[shift - 10 / scale, shift, shift + 10 / scale, shift]}
                       strokeWidth={2/scale}
                       stroke={"red"}
                 />
-                <Line x={0}
-                      y={0}
-                      points={[size.width/2, size.height/2 - 10 / scale, size.width/2, size.height/2 + 10 / scale]}
+                <Line points={[shift, shift - 10 / scale, shift, shift + 10 / scale]}
                       strokeWidth={2/scale}
                       stroke={"red"}
                 />
