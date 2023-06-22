@@ -12,11 +12,11 @@ export const BaseStage : FC<PropsWithChildren> = ({ children}) => {
     const { scale, setScale, coordinates, setCoordinates } = useContext(StageContext)
     const [size, setSize] = useState<Size>({width:window.innerWidth, height:window.innerHeight - HEIGHT_SHIFT})
 
-    useEffect(() => {
-        const handleResize = () => setSize({width: window.innerWidth, height:window.innerHeight - HEIGHT_SHIFT})
-        window.addEventListener("resize", handleResize)
-        return () => window.removeEventListener("resize", handleResize)
-    }, [])
+    // useEffect(() => {
+    //     const handleResize = () => setSize({width: window.innerWidth, height:window.innerHeight - HEIGHT_SHIFT})
+    //     window.addEventListener("resize", handleResize)
+    //     return () => window.removeEventListener("resize", handleResize)
+    // }, [])
 
     const handleWheel = useCallback((e: Konva.KonvaEventObject<WheelEvent>) => {
         e.evt.preventDefault();
@@ -41,8 +41,6 @@ export const BaseStage : FC<PropsWithChildren> = ({ children}) => {
         setScale(newScale);
     }, [scale, setCoordinates, setScale])
 
-    const handleEndDrag = useCallback((e: Konva.KonvaEventObject<DragEvent>) => setCoordinates({x: e.target.x(), y: e.target.y()}),[setCoordinates])
-
     return (
         <Stage
             x={coordinates.x}
@@ -53,7 +51,6 @@ export const BaseStage : FC<PropsWithChildren> = ({ children}) => {
             height={size.height}
             draggable={true}
             onWheel={handleWheel}
-            onDragEnd={handleEndDrag}
         >
             <AreaGrid size={size}/>
             {children}

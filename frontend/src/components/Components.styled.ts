@@ -52,10 +52,8 @@ const VersionInfo = styled.div`
   bottom: 10px;
   right: 10px;
   background-color: rgba(0,0,0,.2);
-  width: 220px;
-  height: 160px;
   z-index: 1;
-  padding: 20px 10px;
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
@@ -83,6 +81,37 @@ const Slider = styled.input`
   cursor: pointer;
 `
 
+const AreaConfigHeading = styled.span`
+  font-size: 20px;
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+const PreviewBlock = styled.div`
+  min-width: 250px;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background-color: rgba(0,0,0,.2);
+  border-radius: 5px;
+  padding:  10px 20px;
+  z-index: 1;
+`
+
+const PreviewCoords = styled.div`
+  position: absolute;
+  left: 10px;
+  top: ${HEIGHT_SHIFT + 10}px;
+  background-color: rgba(0,0,0,.2);
+  border-radius: 5px;
+  padding:  10px 20px;
+  z-index: 1;
+  display: flex;
+  gap: 1em;
+`
+
 export const Styled = {
     Header,
     HeaderTitle,
@@ -92,4 +121,7 @@ export const Styled = {
     VersionInfo,
     AreaHeading,
     Slider,
+    AreaConfigHeading,
+    PreviewBlock,
+    PreviewCoords,
 }

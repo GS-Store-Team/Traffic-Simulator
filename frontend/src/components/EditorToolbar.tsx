@@ -14,24 +14,17 @@ import {DefaultObjectContext} from "./contexts/DefaultObjectProvider";
 
 export const EditorToolbar = () => {
     const { map, setMap, area, setAreaId, version, setVersionId } = useContext(EditorContext)
-    const {dBuilding, dRoad} = useContext(DefaultObjectContext)
+    const {dBuilding, dRoad, configure} = useContext(DefaultObjectContext)
 
     const [newVersionDialog, setNewVersionDialog] = useState<boolean>(false)
     const [value, setValue] = useState<string>('')
-    const [versionAsync, setVersionAsync] = useState<{id: number}>()
-
-    useEffect(() => {
-        if(versionAsync){
-            setVersionId(versionAsync.id)
-        }
-    }, [setVersionId, versionAsync])
 
     const handleAddVersion = useCallback(() => setNewVersionDialog(true), [])
     const handleDeclineAddVersion = useCallback(() => setNewVersionDialog(false), [])
     const addVersion = useCallback(() => {
         setNewVersionDialog(false)
         if(area) {
-            restClient.addAreaVersion(area.id, value).then(setMap)
+            restClient.addAreaVersion(area.id, value).then(res => setMap(res, true))
         }
     }, [area, setMap, value])
     const handleChangeInput = useCallback((e: React.FormEvent<HTMLInputElement>) => setValue(e.currentTarget.value), [])
@@ -44,14 +37,11 @@ export const EditorToolbar = () => {
         if(!version) {
             return
         }
-        restClient.configureAreaVersion(version.id, !version.locked).then(response => {
-            setMap(response)
-            setVersionAsync({id: version.id})
-        })
+        restClient.configureAreaVersion(version.id, !version.locked).then(setMap)
     }, [setMap, version])
 
-    const handleAddBuilding = useCallback(() => version && restClient.addBuilding(version.id, dBuilding).then(res => setMap(res, true)), [dBuilding, setMap, version])
-    const handleAddRoad = useCallback(() => version && restClient.addRoad(version.id, dRoad).then(res => setMap(res, true)), [dRoad, setMap, version])
+    const handleAddBuilding = useCallback(() => version && restClient.addBuilding(version.id, dBuilding).then(setMap), [dBuilding, setMap, version])
+    const handleAddRoad = useCallback(() => version && restClient.addRoad(version.id, dRoad).then(setMap), [dRoad, setMap, version])
 
     if(!map){
         return <S.Toolbar/>
@@ -79,6 +69,7 @@ export const EditorToolbar = () => {
                     <FlexRow gap={"1em"}>
                         <Btn info onClick={handleAddBuilding}><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD BUILDING</FlexRow></Btn>
                         <Btn info onClick={handleAddRoad}><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD ROAD</FlexRow></Btn>
+                        <Btn secondary onClick={configure}><Icon img={"settings"}/></Btn>
                         { version.locked ?
                             <Btn danger onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"lock"}/>LOCKED</FlexRow></Btn>
                             : <Btn success onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"ok"} />PUBLISHED</FlexRow></Btn>
@@ -88,6 +79,12 @@ export const EditorToolbar = () => {
 
                     <S.VersionInfo>
                         <span style={{width: "100%", overflow: "hidden", textOverflow:"ellipsis", whiteSpace: "nowrap"}}>{version.label.toUpperCase()}</span>
+                        <div style={{height: "10px"}}/>
+                        <div style={{fontSize: "12px", width: "100%", textAlign: "right"}}>
+                            <div>last change: {new Date(version.edited).toLocaleTimeString("en-US").toString()}</div>
+                            <div>created: {new Date(version.edited).toLocaleTimeString("en-US").toString()}</div>
+                        </div>
+                        <div style={{height: "10px"}}/>
                         <FlexRow gap={"10px"}>visibility: <Icon img={version.locked ? "lock" : "ok"}/></FlexRow>
                         <FlexRow gap={"10px"}>valid: <Icon img={version.valid ? "ok" : "blocked"}/></FlexRow>
                         <span>roads count: {version.roads.length}</span>

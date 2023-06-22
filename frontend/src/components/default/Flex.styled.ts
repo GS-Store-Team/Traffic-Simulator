@@ -8,9 +8,9 @@ export const FlexColumn = styled.div<{ gap?: Property.Gap, width?: Property.Widt
     gap: ${({ gap }) => gap || '1em'};
 `;
 
-export const FlexRow = styled.div<{ gap?: Property.Gap, justifyContent?: Property.JustifyContent, margin?: Property.Margin}>`
+export const FlexRow = styled.div<{ gap?: Property.Gap, $justifyContent?: Property.JustifyContent, margin?: Property.Margin}>`
     display: flex;
-    justify-content: ${({ justifyContent }) => justifyContent };
+    justify-content: ${({ $justifyContent }) => $justifyContent };
     gap: ${({ gap }) => gap};
     margin: ${({ margin }) => margin};
     

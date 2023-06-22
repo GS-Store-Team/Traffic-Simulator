@@ -7,3 +7,4 @@ export const MIN_FPS = 1
 export const MAX_FPS = 10
 export const CELL_GRID = 10
 export const BUILDING_WIDTH = 50
+export const BUILDING_ICON_SIZE = 25

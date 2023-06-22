@@ -5,10 +5,7 @@ import com.traffic_simulator.dto.SimulationStateDTO;
 import com.traffic_simulator.interfaces.SimulationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -20,12 +17,8 @@ public class SimulationController {
     private SimulationProvider simulationProvider;
 
     @PostMapping("/run")
-    public void run(Map<Long, Long> areaIdVersionId) {
-        var map = new HashMap<Long, Long>();
-        map.put(0L, 0L);
-        System.out.println("Hello!");
+    public void run(@RequestBody Map<Long, Long> map) {
         simulationProvider.run(map);
-        System.out.println("after hello");
     }
 
     @PostMapping("/stop")
