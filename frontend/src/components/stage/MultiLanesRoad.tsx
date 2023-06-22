@@ -32,9 +32,10 @@ interface MultiLanesRoadProps{
     end: Coordinates
     forward: number
     reverse: number
+    fill: string
 }
 
-export const MultiLanesRoad : FC<MultiLanesRoadProps> = ({start, end, forward, reverse}) => {
+export const MultiLanesRoad : FC<MultiLanesRoadProps> = ({start, end, forward, reverse, fill}) => {
 
     const points: Points = calcPointsForAdditionalLanes(start, end);
 
@@ -48,14 +49,9 @@ export const MultiLanesRoad : FC<MultiLanesRoadProps> = ({start, end, forward, r
                   points={[shape.p1.x, shape.p1.y,shape.p2.x, shape.p2.y,shape.p3.x, shape.p3.y,shape.p4.x, shape.p4.y]} stroke={"black"}
                   strokeWidth={0}
                   closed={true}
-                  fill={"gray"}
-                  // onMouseEnter={() => setVisible(true)}
-                  // onMouseLeave={() => setVisible(false)}
+                  fill={fill}
             />
-
-            <Line x={0} y={0} points={[start.x, start.y, end.x, end.y]} stroke={"white"} strokeWidth={0.2}
-                  // onMouseEnter={() => setVisible(true)}
-            />
+            <Line x={0} y={0} points={[start.x, start.y, end.x, end.y]} stroke={"white"} strokeWidth={0.2}/>
 
             {forward > 1 && <Line x={0} y={0} points={[points.forward.first.start.x,points.forward.first.start.y,points.forward.first.end.x,points.forward.first.end.y]} stroke={"white"} strokeWidth={0.2} dash={dash}/>}
             {forward > 2 && <Line x={0} y={0} points={[points.forward.second.start.x,points.forward.second.start.y,points.forward.second.end.x,points.forward.second.end.y]} stroke={"white"} strokeWidth={0.2} dash={dash}/>}

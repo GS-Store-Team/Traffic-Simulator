@@ -52,10 +52,8 @@ const VersionInfo = styled.div`
   bottom: 10px;
   right: 10px;
   background-color: rgba(0,0,0,.2);
-  width: 220px;
-  height: 160px;
   z-index: 1;
-  padding: 20px 10px;
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
@@ -91,6 +89,29 @@ const AreaConfigHeading = styled.span`
   white-space: nowrap;
 `
 
+const PreviewBlock = styled.div`
+  min-width: 250px;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background-color: rgba(0,0,0,.2);
+  border-radius: 5px;
+  padding:  10px 20px;
+  z-index: 1;
+`
+
+const PreviewCoords = styled.div`
+  position: absolute;
+  left: 10px;
+  top: ${HEIGHT_SHIFT + 10}px;
+  background-color: rgba(0,0,0,.2);
+  border-radius: 5px;
+  padding:  10px 20px;
+  z-index: 1;
+  display: flex;
+  gap: 1em;
+`
+
 export const Styled = {
     Header,
     HeaderTitle,
@@ -101,4 +122,6 @@ export const Styled = {
     AreaHeading,
     Slider,
     AreaConfigHeading,
+    PreviewBlock,
+    PreviewCoords,
 }
