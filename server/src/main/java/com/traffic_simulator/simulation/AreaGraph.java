@@ -16,6 +16,7 @@ public class AreaGraph {
 
     public AreaGraph(AreaVersion version) {
         this.version = version;
+        this.roads = version.getRoads().stream().map(SRoad::new).toList();
     }
 }
 

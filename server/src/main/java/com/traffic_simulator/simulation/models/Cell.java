@@ -5,10 +5,9 @@ import lombok.Data;
 @Data
 public class Cell {
     private final Coordinate coordinates;
-    private CellState state;
+    private Car car = null;
 
     public Cell(Coordinate coordinates) {
         this.coordinates = coordinates;
-        this.state = CellState.FREE;
     }
 }

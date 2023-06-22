@@ -2,6 +2,7 @@ package com.traffic_simulator.utils;
 
 import com.traffic_simulator.dto.*;
 import com.traffic_simulator.models.AreaVersion;
+import com.traffic_simulator.models.Point;
 import com.traffic_simulator.simulation.models.Car;
 import com.traffic_simulator.simulation.models.Coordinate;
 import com.traffic_simulator.simulation.models.SBuilding;
@@ -37,7 +38,12 @@ public class Converters {
         return new PointDTO(coordinate);
     }
 
+
     public static Coordinate pointToCoordinates(PointDTO pointDTO) {
         return new Coordinate(pointDTO.x(), pointDTO.y());
+    }
+
+    public static Coordinate pointToCoordinates(Point point) {
+        return new Coordinate(point.getX(), point.getY());
     }
 }

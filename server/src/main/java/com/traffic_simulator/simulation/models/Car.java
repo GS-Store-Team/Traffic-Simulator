@@ -6,8 +6,11 @@ import lombok.ToString;
 @Data
 @ToString
 public class Car {
-    private final long id = 0;
+    //private final long id = 0;
     private float velocity;
+    //private Coordinate coordinate;
     public Car() {
+
     }
+
 }
