@@ -10,7 +10,7 @@ export const Car : FC<CarProps> = ({car}) => {
     return(
         <Circle x={car.coordinates.x}
                 y={car.coordinates.y}
-                radius={6}
+                radius={1}
                 fill={"red"}
         />
     )
