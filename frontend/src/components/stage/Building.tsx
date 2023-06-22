@@ -51,7 +51,7 @@ export const Building : FC<BuildingProps> = ({building, readonly}) => {
     const handleDrag = useCallback((e: KonvaEventObject<DragEvent>) => {
         version &&
             restClient
-                .addBuilding(version.areaId, {...building, location:{id: building.location.id, x: e.target.attrs.x, y: e.target.attrs.y}})
+                .addBuilding(version.id, {...building, location:{id: building.location.id, x: e.target.attrs.x, y: e.target.attrs.y}})
                 .then(setMap)
     }, [building, setMap, version])
 

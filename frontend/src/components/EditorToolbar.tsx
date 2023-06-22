@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, {useCallback, useContext, useState} from "react";
 import {Styled as S} from "./Components.styled";
 import {Styled as S1} from "./default/modal/Modal.styled";
 import {EditorContext} from "../pages/Editor";
@@ -71,7 +71,7 @@ export const EditorToolbar = () => {
                         <Btn info onClick={handleAddRoad}><FlexRow gap={"7px"}><Icon img={"plus"}/>ADD ROAD</FlexRow></Btn>
                         <Btn secondary onClick={configure}><Icon img={"settings"}/></Btn>
                         { version.locked ?
-                            <Btn danger onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"lock"}/>LOCKED</FlexRow></Btn>
+                            <Btn danger onClick={handlePublishVersion} disabled={!version.valid && version.locked}><FlexRow gap={"7px"}><Icon img={"lock"}/>LOCKED</FlexRow></Btn>
                             : <Btn success onClick={handlePublishVersion}><FlexRow gap={"7px"}><Icon img={"ok"} />PUBLISHED</FlexRow></Btn>
                         }
                         <Btn danger onClick={handleDeleteVersion}><FlexRow gap={"7px"}><Icon img={"trash-bin"}/>DELETE VERSION</FlexRow></Btn>
