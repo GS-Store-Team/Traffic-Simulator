@@ -1,5 +1,5 @@
 import {createContext, FC, PropsWithChildren, useCallback, useState} from "react";
-import {BuildingDTO, FullMapDTO, RoadDTO} from "../../api/rest-client";
+import {BuildingDTO, FullMapDTO, PointDTO, RoadDTO} from "../../api/rest-client";
 import {Modal} from "../default/modal/Modal";
 import {Styled as S} from "../Components.styled";
 import {Styled as S1} from "../default/modal/Modal.styled";
@@ -15,6 +15,7 @@ type ElementsConfigContextType = {
     configureRoad(road?: RoadDTO):void
     viewBuilding(building?: BuildingDTO): void,
     viewRoad(road?: RoadDTO):void,
+    viewPoint(point?: PointDTO): void,
 }
 
 export const ElementsConfigContext = createContext<ElementsConfigContextType>({
@@ -22,6 +23,7 @@ export const ElementsConfigContext = createContext<ElementsConfigContextType>({
     configureRoad() {},
     viewBuilding() {},
     viewRoad() {},
+    viewPoint(){}
 })
 
 interface ElementsConfigProps{
@@ -34,6 +36,7 @@ export const ElementsConfigProvider : FC<PropsWithChildren<ElementsConfigProps>>
     const [configureRoad, setConfigureRoad] = useState<RoadDTO>()
     const [viewBuilding, setViewBuilding] = useState<BuildingDTO>()
     const [viewRoad, setViewRoad] = useState<RoadDTO>()
+    const [viewPoint, setViewPoint] = useState<PointDTO>()
 
     const handleAcceptBuilding = useCallback(() => {
         if(configureBuilding && areaVersionId !== undefined) {
@@ -41,17 +44,29 @@ export const ElementsConfigProvider : FC<PropsWithChildren<ElementsConfigProps>>
         }
         setConfigureBuilding(undefined)
     }, [areaVersionId, configureBuilding, setMap])
-    const handleAcceptRoad = useCallback(() => configureRoad && areaVersionId && restClient.addRoad(areaVersionId, configureRoad).then(setMap), [areaVersionId, configureRoad, setMap])
+    const handleAcceptRoad = useCallback(() => {
+        if(configureRoad && areaVersionId !== undefined) {
+            restClient.addRoad(areaVersionId, configureRoad).then(setMap)
+        }
+        setConfigureRoad(undefined)
+    }, [areaVersionId, configureRoad, setMap])
     const handleDeclineBuilding = useCallback(() => setConfigureBuilding(undefined), [])
     const handleDeclineRoad = useCallback(() => setConfigureRoad(undefined), [])
     const handleRemoveBuilding = useCallback(() => {
-        if(configureBuilding?.id !== undefined) {
+        if(configureBuilding?.id) {
             restClient.deleteBuilding(configureBuilding.id).then(setMap)
         }
         setConfigureBuilding(undefined)
     }, [configureBuilding, setMap])
 
-    const context: ElementsConfigContextType = {configureBuilding: setConfigureBuilding, configureRoad: setConfigureRoad, viewBuilding: setViewBuilding, viewRoad:setViewRoad}
+    const handleRemoveRoad = useCallback(() => {
+        if(configureRoad?.id) {
+            restClient.deleteRoad(configureRoad.id).then(setMap)
+        }
+        setConfigureRoad(undefined)
+    }, [configureRoad, setMap])
+
+    const context: ElementsConfigContextType = {configureBuilding: setConfigureBuilding, configureRoad: setConfigureRoad, viewBuilding: setViewBuilding, viewRoad:setViewRoad, viewPoint:setViewPoint}
 
     return (
         <ElementsConfigContext.Provider value={context}>
@@ -69,7 +84,7 @@ export const ElementsConfigProvider : FC<PropsWithChildren<ElementsConfigProps>>
                 <Modal onAccept={handleAcceptRoad} onDecline={handleDeclineRoad}>
                     <S1.Title>CONFIGURE ROAD</S1.Title>
                     <S1.Body>
-
+                        <S1.Row><FlexRow $justifyContent={"flex-end"}><Btn onClick={handleRemoveRoad} danger><Icon img={"trash-bin"}/></Btn></FlexRow></S1.Row>
                         <RoadConfig road={configureRoad} onchange={setConfigureRoad}/>
                     </S1.Body>
                 </Modal>
@@ -88,7 +103,31 @@ export const ElementsConfigProvider : FC<PropsWithChildren<ElementsConfigProps>>
             }
             {viewRoad &&
                 <S.PreviewBlock>
+                    <FlexRow gap={"1em"}>Road <Icon img={viewRoad.valid ? "ok" : "blocked"}/></FlexRow>
+                    <FlexRow $justifyContent={"space-between"}>
+                        start:
+                        <FlexRow $justifyContent={"flex-end"}>
+                            <div style={{width: "60px"}}>x: {viewRoad.start.x}</div>
+                            <div style={{width: "60px"}}>y: {viewRoad.start.y}</div>
+                        </FlexRow>
+                    </FlexRow>
+                    <FlexRow $justifyContent={"space-between"}>
+                        end:
+                        <FlexRow $justifyContent={"flex-end"}>
+                            <div style={{width: "60px"}}>x: {viewRoad.end.x}</div>
+                            <div style={{width: "60px"}}>y: {viewRoad.end.y}</div>
+                        </FlexRow>
+                    </FlexRow>
+                    <div style={{height: "20px"}} />
+                    <FlexRow $justifyContent={"space-between"}><div>forward lanes:</div><div>{viewRoad.forward}</div></FlexRow>
+                    <FlexRow $justifyContent={"space-between"}><div>reverse lanes:</div><div>{viewRoad.reverse}</div></FlexRow>
                 </S.PreviewBlock>
+            }
+            {viewPoint &&
+                <S.PreviewCoords>
+                    <span>x: {viewPoint.x}</span>
+                    <span>y: {viewPoint.y}</span>
+                </S.PreviewCoords>
             }
         </ElementsConfigContext.Provider>
     )

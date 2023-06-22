@@ -9,7 +9,7 @@ import {Elements} from "../components/stage/Elements";
 
 type EditorContextType = {
     map: FullMapDTO | null
-    setMap(map: FullMapDTO, soft?: boolean): void;
+    setMap(map: FullMapDTO, hard?: boolean): void;
     area?: AreaDTO
     setAreaId(id?: number): void
     version?: AreaVersionDTO
@@ -52,13 +52,12 @@ export const Editor = () => {
     }, [map])
     const handleSelectVersion = useCallback((id: number) => area && setVersion(area.versions.find(v => v.id === id)), [area])
 
-    const handleSetMap = useCallback((map: FullMapDTO, soft?: boolean) => {
+    const handleSetMap = useCallback((map: FullMapDTO, hard: boolean = false) => {
         setMap(map)
-        if (soft) {
-            return
+        if (hard) {
+            setArea(map.areas.find(a => a.id === area?.id))
+            setVersion(undefined)
         }
-        setArea(map.areas.find(a => a.id === area?.id))
-        setVersion(undefined)
     }, [area])
 
     const context: EditorContextType = {

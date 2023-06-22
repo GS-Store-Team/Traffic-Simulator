@@ -100,6 +100,18 @@ const PreviewBlock = styled.div`
   z-index: 1;
 `
 
+const PreviewCoords = styled.div`
+  position: absolute;
+  left: 10px;
+  top: ${HEIGHT_SHIFT + 10}px;
+  background-color: rgba(0,0,0,.2);
+  border-radius: 5px;
+  padding:  10px 20px;
+  z-index: 1;
+  display: flex;
+  gap: 1em;
+`
+
 export const Styled = {
     Header,
     HeaderTitle,
@@ -110,5 +122,6 @@ export const Styled = {
     AreaHeading,
     Slider,
     AreaConfigHeading,
-    PreviewBlock
+    PreviewBlock,
+    PreviewCoords,
 }

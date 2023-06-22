@@ -14,9 +14,13 @@ import play from "../../ui/play.png"
 import pause from "../../ui/pause.png"
 import redSquare from "../../ui/redSquare.png"
 import arrow from "../../ui/arrow.png"
+import work from "../../ui/work.png"
+import shop from "../../ui/shop.png"
+import entertainment from "../../ui/entertainment.png"
 
 export type IconType =
-    "home" | "minus" | "plus" | "settings" | "trash-bin" | "lock" | "publish" | "ok" | "blocked" | "reset" | "play" | "pause" | "red-square" | "arrow"
+    "home" | "minus" | "plus" | "settings" | "trash-bin" | "lock" | "publish" | "ok" | "blocked" |
+    "reset" | "play" | "pause" | "red-square" | "arrow" | "work" | "shop" | "entertainment"
 
 function getPng(title : IconType){
     switch (title){
@@ -34,6 +38,9 @@ function getPng(title : IconType){
         case "reset": return reset
         case "red-square": return redSquare
         case "arrow": return arrow
+        case "work": return work
+        case "shop": return shop
+        case "entertainment": return entertainment
     }
 }
 

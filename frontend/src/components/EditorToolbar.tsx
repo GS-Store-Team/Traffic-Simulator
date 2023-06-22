@@ -18,20 +18,13 @@ export const EditorToolbar = () => {
 
     const [newVersionDialog, setNewVersionDialog] = useState<boolean>(false)
     const [value, setValue] = useState<string>('')
-    const [versionAsync, setVersionAsync] = useState<{id: number}>()
-
-    useEffect(() => {
-        if(versionAsync){
-            setVersionId(versionAsync.id)
-        }
-    }, [setVersionId, versionAsync])
 
     const handleAddVersion = useCallback(() => setNewVersionDialog(true), [])
     const handleDeclineAddVersion = useCallback(() => setNewVersionDialog(false), [])
     const addVersion = useCallback(() => {
         setNewVersionDialog(false)
         if(area) {
-            restClient.addAreaVersion(area.id, value).then(setMap)
+            restClient.addAreaVersion(area.id, value).then(res => setMap(res, true))
         }
     }, [area, setMap, value])
     const handleChangeInput = useCallback((e: React.FormEvent<HTMLInputElement>) => setValue(e.currentTarget.value), [])
@@ -44,14 +37,11 @@ export const EditorToolbar = () => {
         if(!version) {
             return
         }
-        restClient.configureAreaVersion(version.id, !version.locked).then(response => {
-            setMap(response)
-            setVersionAsync({id: version.id})
-        })
+        restClient.configureAreaVersion(version.id, !version.locked).then(setMap)
     }, [setMap, version])
 
-    const handleAddBuilding = useCallback(() => version && restClient.addBuilding(version.id, dBuilding).then(res => setMap(res, true)), [dBuilding, setMap, version])
-    const handleAddRoad = useCallback(() => version && restClient.addRoad(version.id, dRoad).then(res => setMap(res, true)), [dRoad, setMap, version])
+    const handleAddBuilding = useCallback(() => version && restClient.addBuilding(version.id, dBuilding).then(setMap), [dBuilding, setMap, version])
+    const handleAddRoad = useCallback(() => version && restClient.addRoad(version.id, dRoad).then(setMap), [dRoad, setMap, version])
 
     if(!map){
         return <S.Toolbar/>

@@ -7,7 +7,7 @@ import {RoadConfig} from "../supportive/RoadConfig";
 
 const dRoad: RoadDTO = {
     start: {x: 0, y: 0},
-    end: {x: 0, y: 0},
+    end: {x: 100, y: 0},
     forward: 1,
     reverse: 1,
     valid: true
